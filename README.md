@@ -127,6 +127,8 @@ https://www.youtube.com/watch?v=yOgIncKp0BE
 
 ### SDF Contour
 
+SDF Generator: https://catlikecoding.com/sdf-toolkit/docs/texture-generator/
+
 子区域美化
 
 ### Wave Function Collapse (WFC)
