@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MarchingSquareUtil {
+namespace CityWallGeneratorUtil {
 
     /// <summary>
     /// Node base class
@@ -92,6 +92,37 @@ namespace MarchingSquareUtil {
                 }
             }
 
+        }
+    }
+
+    struct Triangle {
+        public int vertexIndexA;
+        public int vertexIndexB;
+        public int vertexIndexC;
+
+        public Triangle(int a, int b, int c) {
+            vertexIndexA = a;
+            vertexIndexB = b;
+            vertexIndexC = c;
+        }
+
+        public int this[int i] {
+            get {
+                if (i == 0) {
+                    return vertexIndexA;
+                } else if (i == 1) {
+                    return vertexIndexB;
+                } else if (i == 2) {
+                    return vertexIndexC;
+                } else {
+                    throw new System.Exception("Index out of range.");
+                }
+            }
+        }
+
+
+        public bool Contains(int vertexIndex) {
+            return vertexIndex == vertexIndexA || vertexIndex == vertexIndexB || vertexIndex == vertexIndexC;
         }
     }
 
