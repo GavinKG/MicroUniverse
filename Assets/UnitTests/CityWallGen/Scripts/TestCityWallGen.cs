@@ -24,7 +24,7 @@ namespace MicroUniverse {
 
         public void Generate() {
 
-            RenderTexture rt;
+            RenderTexture rt, prevRT;
 
             int newWidth = cityTex.width, newHeight = cityTex.height;
 
@@ -43,7 +43,10 @@ namespace MicroUniverse {
             }
 
             rt = new RenderTexture(newWidth, newHeight, 0);
+            prevRT = RenderTexture.active;
             Graphics.Blit(cityTex, rt);
+            RenderTexture.active = prevRT;
+
             bool[,] map = Util.Tex2BoolMap(rt);
 
             MeshFilter meshFilter = GetComponent<MeshFilter>();
@@ -60,6 +63,8 @@ namespace MicroUniverse {
             wallGO.GetComponent<MeshFilter>().mesh = cityWallGenerator.WallMesh;
 
             rt.Release();
+
+            print("Success.");
 
         }
 
