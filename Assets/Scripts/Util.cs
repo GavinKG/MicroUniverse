@@ -6,7 +6,7 @@ namespace MicroUniverse {
 
     public static class Util {
 
-        public static Texture2D GetRTPixels(RenderTexture rt) {
+        public static Texture2D RT2Tex(RenderTexture rt) {
             RenderTexture currentActiveRT = RenderTexture.active;
             RenderTexture.active = rt;
             Texture2D tex = new Texture2D(rt.width, rt.height);
@@ -25,7 +25,7 @@ namespace MicroUniverse {
         }
 
         public static bool[,] Tex2BoolMap(RenderTexture rt) {
-            Texture2D texture = GetRTPixels(rt);
+            Texture2D texture = RT2Tex(rt);
             bool[,] ret = new bool[texture.width, texture.height];
             Color[] pix = texture.GetPixels();
             for (int i = 0; i < pix.Length; ++i) {
