@@ -16,7 +16,7 @@ namespace MicroUniverse {
 
             if (GUILayout.Button("Generate!")) {
                 testCityWallGen.Generate();
-                EditorUtility.DisplayDialog("TestCityWallGen", "Generate finished.", "Dismiss");
+                // EditorUtility.DisplayDialog("TestCityWallGen", "Generate finished.", "Dismiss");
 
             }
 
