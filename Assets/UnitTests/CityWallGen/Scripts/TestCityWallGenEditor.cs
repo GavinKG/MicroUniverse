@@ -3,20 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(TestCityWallGen))]
-public class TestCityWallGenEditor : Editor {
+namespace MicroUniverse {
 
-    public override void OnInspectorGUI() {
+    [CustomEditor(typeof(TestCityWallGen))]
+    public class TestCityWallGenEditor : Editor {
 
-        DrawDefaultInspector();
+        public override void OnInspectorGUI() {
 
-        TestCityWallGen testCityWallGen = target as TestCityWallGen;
+            DrawDefaultInspector();
 
-        if (GUILayout.Button("Generate!")) {
-            testCityWallGen.Generate();
-            EditorUtility.DisplayDialog("TestCityWallGen", "Generate finished.", "Dismiss");
+            TestCityWallGen testCityWallGen = target as TestCityWallGen;
 
+            if (GUILayout.Button("Generate!")) {
+                testCityWallGen.Generate();
+                // EditorUtility.DisplayDialog("TestCityWallGen", "Generate finished.", "Dismiss");
+
+            }
+
+            if (testCityWallGen.cityTex != null) {
+                GUILayout.Label("Texture resolution: " + testCityWallGen.cityTex.width.ToString() + "x" + testCityWallGen.cityTex.height.ToString());
+            }
         }
+
     }
 
 }
+
+
