@@ -13,7 +13,7 @@ public class CityWallGenerator {
     // Wall mesh:
     public Mesh WallMesh { get; private set; }
     List<Vector3> wallVertices;
-    List<int> wallTriangles;
+    List<int> wallIndices;
 
     // Helper:
     HashSet<int> checkedVertices = new HashSet<int>(); // indices that are checked in outline finding process.
@@ -33,7 +33,7 @@ public class CityWallGenerator {
         // Main grid
         SquareGrid squareGrid = new SquareGrid(map, squareSize);
 
-        // Cover mesh generation
+        // Cover generation
         coverVertices = new List<Vector3>();
         coverIndices = new List<int>();
         for (int x = 0; x < squareGrid.squares.GetLength(0); x++) {
@@ -42,15 +42,15 @@ public class CityWallGenerator {
             }
         }
 
-        CoverMesh = new Mesh();
-        CoverMesh.vertices = coverVertices.ToArray();
-        CoverMesh.triangles = coverIndices.ToArray();
-        CoverMesh.RecalculateNormals();
-
-        // Wall mesh generation
+        // Outline generation & smoothen (3-pass)
         CalculateMeshOutlines();
+        SmoothOutline();
+        SmoothOutline();
+        SmoothOutline();
+
+        // Wall Generation
         wallVertices = new List<Vector3>();
-        wallTriangles = new List<int>();
+        wallIndices = new List<int>();
         foreach (List<int> outline in outlineIndices) {
             for (int i = 0; i < outline.Count - 1; i++) {
                 int startIndex = wallVertices.Count;
@@ -59,19 +59,41 @@ public class CityWallGenerator {
                 wallVertices.Add(coverVertices[outline[i]] - Vector3.up * wallHeight); // bottom left
                 wallVertices.Add(coverVertices[outline[i + 1]] - Vector3.up * wallHeight); // bottom right
 
-                wallTriangles.Add(startIndex + 0);
-                wallTriangles.Add(startIndex + 2);
-                wallTriangles.Add(startIndex + 3);
+                wallIndices.Add(startIndex + 0);
+                wallIndices.Add(startIndex + 2);
+                wallIndices.Add(startIndex + 3);
 
-                wallTriangles.Add(startIndex + 3);
-                wallTriangles.Add(startIndex + 1);
-                wallTriangles.Add(startIndex + 0);
+                wallIndices.Add(startIndex + 3);
+                wallIndices.Add(startIndex + 1);
+                wallIndices.Add(startIndex + 0);
             }
         }
 
+        // Generate actual Mesh
+        CoverMesh = new Mesh();
+        CoverMesh.vertices = coverVertices.ToArray();
+        CoverMesh.triangles = coverIndices.ToArray();
+        CoverMesh.RecalculateNormals();
+
         WallMesh = new Mesh();
         WallMesh.vertices = wallVertices.ToArray();
-        WallMesh.triangles = wallTriangles.ToArray();
+        WallMesh.triangles = wallIndices.ToArray();
+    }
+
+    /// <summary>
+    /// Interpolate vertices in coverVertices for all outline lists to form a smooth outline.
+    /// </summary>
+    void SmoothOutline() {
+        foreach (List<int> outlineList in outlineIndices) {
+            for (int i = 1; i < outlineList.Count - 1; ++i) {
+                Vector3 lhs = coverVertices[outlineList[i - 1]];
+                Vector3 rhs = coverVertices[outlineList[i + 1]];
+                Vector3 midpoint = (lhs + rhs) / 2;
+                Vector3 curr = coverVertices[outlineList[i]];
+                curr = (curr + midpoint) / 2;
+                coverVertices[outlineList[i]] = curr;
+            }
+        }
     }
 
 
