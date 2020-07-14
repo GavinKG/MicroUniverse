@@ -10,20 +10,16 @@ namespace MicroUniverse {
         
         public int textureWH = 128;
 
-        public Texture2D Capture() {
+        public Texture2D Capture(FilterMode filterMode) {
             Camera orthoCam = GetComponent<Camera>();
             orthoCam.enabled = false;
             RenderTexture rt = new RenderTexture(textureWH, textureWH, 0); // get a temp rt
             orthoCam.targetTexture = rt;
-            Shader replacementShader = Shader.Find("Unlit/Color");
-            if (replacementShader == null) {
-                Debug.LogError("Cannot find unlit shader.");
-            }
-            orthoCam.RenderWithShader(replacementShader, "RenderType");
-            Texture2D captured = Util.RT2Tex(rt);
-            rt.Release();
+            orthoCam.Render(); // render with replacement material assigned in ForwardRendererMaskReplacement
+            Texture2D captured = Util.RT2Tex(rt, TextureFormat.RGBA32, filterMode);
             orthoCam.targetTexture = null;
-            print("Captured!");
+
+            rt.Release();
             return captured;
         }
     }

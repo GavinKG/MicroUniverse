@@ -6,10 +6,11 @@ namespace MicroUniverse {
 
     public static class Util {
 
-        public static Texture2D RT2Tex(RenderTexture rt, TextureFormat format = TextureFormat.RGBA32) {
+        public static Texture2D RT2Tex(RenderTexture rt, TextureFormat format = TextureFormat.RGBA32, FilterMode filterMode = FilterMode.Bilinear) {
             RenderTexture currentActiveRT = RenderTexture.active;
             RenderTexture.active = rt;
             Texture2D tex = new Texture2D(rt.width, rt.height, format, false, true);
+            tex.filterMode = filterMode;
             tex.ReadPixels(new Rect(0, 0, tex.width, tex.height), 0, 0); // read pixel info from active RT
             RenderTexture.active = currentActiveRT;
             tex.Apply();

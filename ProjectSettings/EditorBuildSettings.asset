@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/UnitTests/SlingshotBall/Scenes/SlingshotBallConcept.unity
+    path: Assets/Scenes/UnitTests/SlingshotBallConcept.unity
     guid: d942d18e73455da4aacced0cecd5d36f
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: b394e8884730e52409278b54d628ce2d,
