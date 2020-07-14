@@ -26,7 +26,7 @@ namespace MicroUniverse {
             public int Y { get { return row; } }
         }
 
-        public class FillInfo {
+        public class FillResult {
 
             public List<Point> filledPoints = new List<Point>();
             public int borderColMin = int.MaxValue, borderColMax = int.MinValue, borderRowMin = int.MaxValue, borderRowMax = int.MinValue;
@@ -35,7 +35,7 @@ namespace MicroUniverse {
 
             private readonly int col, row;
 
-            public FillInfo(in bool[,] map) {
+            public FillResult(in bool[,] map) {
                 row = map.GetLength(0);
                 col = map.GetLength(1);
             }
@@ -98,9 +98,9 @@ namespace MicroUniverse {
         /// </summary>
         /// <param name="map">Map to be filled. Changes will write back to this map</param>
         /// <param name="fillValue">value to be filled, like an empty land region (with fillValue == true) surrounded by a border (with fillValue == false).</param>
-        public FillInfo Fill(ref bool[,] map, int row, int col, bool fillValue, bool recordInfo = true) {
+        public FillResult Fill(ref bool[,] map, int row, int col, bool fillValue, bool recordInfo = true) {
 
-            FillInfo fillInfo = new FillInfo(map);
+            FillResult fillInfo = new FillResult(map);
 
             int rowCount = map.GetLength(0), colCount = map.GetLength(1);
 
@@ -135,18 +135,18 @@ namespace MicroUniverse {
         /// <summary>
         /// Scans in scanline fashion, that is, top->bottom(left->right)
         /// </summary>
-        public List<FillInfo> FindAndFill(ref bool[,] map, bool fillValue) {
-            List<FillInfo> infos = new List<FillInfo>();
+        public List<FillResult> FindAndFill(ref bool[,] map, bool fillValue) {
+            List<FillResult> infos = new List<FillResult>();
             int rowCount = map.GetLength(0), colCount = map.GetLength(1);
             for (int r = 0; r < rowCount; ++r) {
                 for (int c = 0; c < colCount; ++c) {
                     if (map[r, c] == fillValue) {
-                        FillInfo info = Fill(ref map, r, c, fillValue, recordInfo: true);
+                        FillResult info = Fill(ref map, r, c, fillValue, recordInfo: true);
                         infos.Add(info);
                         if (OnPreviewFloodProcess != null) {
                             bool shouldContinue = OnPreviewFloodProcess.Invoke(in map);
                             if (!shouldContinue) {
-                                return new List<FillInfo>();
+                                return new List<FillResult>();
                             }
                         }
 

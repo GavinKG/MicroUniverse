@@ -12,7 +12,7 @@ namespace MicroUniverse {
 
         private int currPass = -1;
 
-        private List<FloodFill.FillInfo> floodInfos;
+        private List<FloodFill.FillResult> floodInfos;
 
         public void FloodFill() {
             currPass = -1;
