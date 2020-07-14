@@ -47,7 +47,7 @@ namespace MicroUniverse {
             Graphics.Blit(cityTex, rt);
             RenderTexture.active = prevRT;
 
-            bool[,] map = Util.Tex2BoolMap(rt);
+            bool[,] map = Util.Tex2BoolMap(rt, brighterEquals: false);
 
             MeshFilter meshFilter = GetComponent<MeshFilter>();
 
