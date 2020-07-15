@@ -57,7 +57,7 @@ Loading 期间屏幕不产生任何变动，摄像机直接 Culling = 0，按照
 * 对墙顶生成 Mask，用 Flood Fill 拆出内部区域，算出中心点，保留所有区域的 Texture 用来做灯光 Mask；
 * 用最小生成树算出一条连通路径，同时算出路径和墙壁的交汇点，用挖空材质挖出通道（不真正动模型）;
 * 每个内部区域变换到条带空间（极坐标空间）；
-* 对于每个变换后的内部区域，从交汇点开始用搜索 Agent 挖出路网；
+* 对于每个变换后的内部区域，从交汇点开始用【算法待定】挖出路网；
 * 路网生成水平 Mesh （用于上纹理）和垂直 Mesh（用于变换回去以后给碰撞器）；
 * 对于剩余的内部区域，用 WFC 算出“电容器建筑”布局；
 * 将建筑和路网 Mesh 变换回笛卡尔坐标系（顶点数量大的话可以用 Compute Shader）；
@@ -65,8 +65,8 @@ Loading 期间屏幕不产生任何变动，摄像机直接 Culling = 0，按照
 * Top-down 渲染整个场景（或者只用整个场景的 Albedo 做 Replacement Material 渲染），高斯模糊做 GI 采样图；
 * 手动配置 Light Probe 阵列，对于每个 Probe 用上面的 GI 采样图配置 SH 参数；
 * 将变换后的路网 Mesh 赋予 Mesh Collider；
-* Quasirandom 撒 Stub，然后迭代位置；
-* *用之前的Mask图生成SDF，绘制建筑物轮廓，并且用 Compute Shader 收束粒子到SDF生成附近的装饰物摆放位置。
+* Quasirandom 撒 Stub【算法待考量】，然后迭代位置；
+* *用之前的Mask图生成SDF，绘制建筑物轮廓【算法待考量】，并且用 Compute Shader 收束粒子到SDF生成附近的装饰物摆放位置。
 * 初始化剩余控制器。
 
 ### Loading 后
@@ -96,6 +96,8 @@ Loading 期间屏幕不产生任何变动，摄像机直接 Culling = 0，按照
 ## 技术要点
 
 ### 图案的绘制
+
+
 
 ### Ring2Stripe
 
@@ -131,7 +133,7 @@ https://wordsandbuttons.online/interactive_explanation_of_marching_cubes_and_dua
 
 SDF Generator: https://catlikecoding.com/sdf-toolkit/docs/texture-generator/
 
-子区域美化
+子区域美化，绘制轮廓
 
 ### Wave Function Collapse (WFC)
 
@@ -144,6 +146,8 @@ https://zhuanlan.zhihu.com/p/66416593
 ### Procedural Texture
 
 DDX/DDY wall tile
+
+程序化闪电。
 
 ### "Stub" Generation
 
@@ -186,3 +190,7 @@ DDX/DDY wall tile
 ### 万花筒
 
 ![image-20200702091501914](README.assets/image-20200702091501914.png)
+
+
+
+### 
