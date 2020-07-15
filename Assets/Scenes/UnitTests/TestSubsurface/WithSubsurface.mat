@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MicroUniverseLighting
-  m_Shader: {fileID: 4800000, guid: 9196e996c691c71408c187724b2d3ec3, type: 3}
+  m_Name: WithSubsurface
+  m_Shader: {fileID: 4800000, guid: f2f6b2e62a502724dbb479488e54e8c7, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -56,7 +56,6 @@ Material:
     - _Cutoff: 0.5
     - _DstBlend: 0
     - _EnvironmentReflections: 1
-    - _Flatten: 0
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -65,22 +64,20 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 0.5
-    - _Smoothness1: 0.5
     - _SmoothnessTextureChannel: 0
-    - _Specular: 1
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _SubsurfaceRadius: 3
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
+    - _radius: 1.5
     m_Colors:
-    - _BaseColor: {r: 1, g: 0.5754717, b: 0.5754717, a: 1}
+    - _BaseColor: {r: 1, g: 0.7372549, b: 0.7372549, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _SubsurfaceColor: {r: 0.7830189, g: 0, b: 0, a: 0}
---- !u!114 &412673893582511224
+    - _SubsurfaceColor: {r: 1, g: 0, b: 0, a: 0}
+--- !u!114 &1003389702944555092
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
