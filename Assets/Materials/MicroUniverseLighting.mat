@@ -70,16 +70,14 @@ Material:
     - _Specular: 1
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _SubsurfaceRadius: 3
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 0.5754717, b: 0.5754717, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _SubsurfaceColor: {r: 0.7830189, g: 0, b: 0, a: 0}
 --- !u!114 &412673893582511224
 MonoBehaviour:
   m_ObjectHideFlags: 11
