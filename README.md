@@ -153,6 +153,10 @@ DDX/DDY wall tile
 
 用来提供gameplay机制。
 
+### 装饰物摆放
+
+![image-20200715171932818](README.assets/image-20200715171932818.png)
+
 
 
 ## 艺术风格参考
