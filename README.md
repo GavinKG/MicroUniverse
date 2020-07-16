@@ -95,67 +95,65 @@ Loading 期间屏幕不产生任何变动，摄像机直接 Culling = 0，按照
 
 ## 技术要点
 
-### 图案的绘制
+- [ ] 万花筒图案绘制器
 
+- [ ] Stripe <-> Sector
 
+- [x] Gaussian Blur
 
-### Ring2Stripe
+- [x] Ball Controller
 
-将bitmap变换子区域到strip空间算路，算完之后把mesh变换回ring空间。
+- [x] Top-down capturer
 
-### Marching Square / Cube using Scalar Fields
+- [x] Marching Square
 
-http://thebigsmall.uk/uncategorized/part-1-contour-maps/
+  http://thebigsmall.uk/uncategorized/part-1-contour-maps/
 
-https://www.youtube.com/watch?v=yOgIncKp0BE
+  https://www.youtube.com/watch?v=yOgIncKp0BE
 
-用来生成城墙mesh。
+  用来生成城墙mesh。
 
-Why Marching Square instead of Dual Contouring?
+  Why Marching Square instead of Dual Contouring?
 
-https://www.boristhebrave.com/2018/04/15/dual-contouring-tutorial/
+  https://www.boristhebrave.com/2018/04/15/dual-contouring-tutorial/
 
-https://wordsandbuttons.online/interactive_explanation_of_marching_cubes_and_dual_contouring.html
+  https://wordsandbuttons.online/interactive_explanation_of_marching_cubes_and_dual_contouring.html
 
-### Flood Fill
+- [x] Flood Fill
 
-算中心，隔离出子区域范围。
+  算中心，隔离出子区域范围。
 
-### Minimum Spanning Tree (*MST*)
+- [ ] Minimum Spanning Tree (*MST*)
 
-算子区域联通路径，同时挖空bitmap。
+  算子区域联通路径，同时挖空bitmap。
 
-### Agent based Urban Road Generation
+- [ ] Urban Road Generation
 
-子区域算路，Agent-based solution。
+  子区域算路，Agent-based solution。
 
-### SDF Contour
+- [ ] SDF Contour
 
-SDF Generator: https://catlikecoding.com/sdf-toolkit/docs/texture-generator/
+  SDF Generator: https://catlikecoding.com/sdf-toolkit/docs/texture-generator/
 
-子区域美化，绘制轮廓
+  子区域美化，绘制轮廓
 
-### Wave Function Collapse (WFC)
+- [ ] WFC
 
-https://www.youtube.com/watch?v=0bcZb-SsnrA
+  https://www.youtube.com/watch?v=0bcZb-SsnrA
 
-https://zhuanlan.zhihu.com/p/66416593
+  https://zhuanlan.zhihu.com/p/66416593
 
-波函数坍缩用来做连续楼房的布局
+  波函数坍缩用来做连续楼房的布局
 
-### Procedural Texture
+- [ ] Procedural Texture
 
-DDX/DDY wall tile
+  DDX/DDY wall tile
 
-程序化闪电。
+  程序化闪电。
 
+- [ ] "Stub" 放置
 
-
-### "Stub" Generation
-
-用来提供gameplay机制。
-
-### 装饰物摆放
+- [ ] 装饰物摆放
 
 ![image-20200715171932818](README.assets/image-20200715171932818.png)
 
