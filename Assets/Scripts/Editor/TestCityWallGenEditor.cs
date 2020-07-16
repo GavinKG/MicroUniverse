@@ -23,6 +23,13 @@ namespace MicroUniverse {
             if (testCityWallGen.cityTex != null) {
                 GUILayout.Label("Texture resolution: " + testCityWallGen.cityTex.width.ToString() + "x" + testCityWallGen.cityTex.height.ToString());
             }
+
+            if (GUILayout.Button("Clear!")) {
+                testCityWallGen.coverGO.GetComponent<MeshFilter>().mesh = null;
+                testCityWallGen.wallGO.GetComponent<MeshFilter>().mesh = null;
+                EditorUtility.SetDirty(testCityWallGen.coverGO);
+                EditorUtility.SetDirty(testCityWallGen.wallGO);
+            }
         }
 
     }
