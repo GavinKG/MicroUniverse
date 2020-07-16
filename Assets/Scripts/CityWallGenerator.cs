@@ -74,11 +74,13 @@ namespace MicroUniverse {
 
             // Generate actual Mesh
             CoverMesh = new Mesh();
+            CoverMesh.hideFlags = HideFlags.HideAndDontSave;
             CoverMesh.vertices = coverVertices.ToArray();
             CoverMesh.triangles = coverIndices.ToArray();
             CoverMesh.RecalculateNormals();
 
             WallMesh = new Mesh();
+            WallMesh.hideFlags = HideFlags.HideAndDontSave;
             WallMesh.vertices = wallVertices.ToArray();
             WallMesh.triangles = wallIndices.ToArray();
         }
