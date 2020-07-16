@@ -39,7 +39,8 @@ namespace MicroUniverse {
                 print("index out of range.");
                 return;
             }
-            previewImage.texture = Util.BoolMap2Tex(floodInfos[index].GenerateSubMap(), brighterEquals: true);
+            RegionInfo regionInfo = new RegionInfo(floodInfos[index]);
+            previewImage.texture = Util.BoolMap2Tex(regionInfo.GenerateSubMap(), brighterEquals: true);
         }
     }
 }

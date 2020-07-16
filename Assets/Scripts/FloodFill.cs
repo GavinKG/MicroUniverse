@@ -3,93 +3,66 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace MicroUniverse {
+
+    /// <summary>
+    /// All Vector2 (point) used should be represented as (row, col), not (x, y)
+    /// </summary>
     public class FloodFill {
 
         public delegate bool PreviewFloodProcessDelegate(in bool[,] map);
 
         public PreviewFloodProcessDelegate OnPreviewFloodProcess;
 
-        // Keep this a struct!!
-        // x and y should stick to row / col according to bool map, not x, y in texture coords.
-        public struct Point {
-            public int row;
-            public int col;
-            public Point(int _r, int _c) {
-                row = _r;
-                col = _c;
-            }
-            public void Accumulate(in Point other) {
-                row += other.row;
-                col += other.col;
-            }
-            public int X { get { return col; } }
-            public int Y { get { return row; } }
-        }
-
         public class FillResult {
 
-            public List<Point> filledPoints = new List<Point>();
-            public int borderColMin = int.MaxValue, borderColMax = int.MinValue, borderRowMin = int.MaxValue, borderRowMax = int.MinValue;
-            public Point accPoint = new Point(0, 0);
+            public List<Vector2Int> FilledPoints { get; private set; } = new List<Vector2Int>();
+
+            public int BorderColMin { get; private set; } = int.MaxValue;
+            public int BorderColMax { get; private set; } = int.MinValue;
+            public int BorderRowMin { get; private set; } = int.MaxValue;
+            public int BorderRowMax { get; private set; } = int.MinValue;
 
 
-            private readonly int col, row;
+            public Vector2Int FilledAreaCenterPoint { get; private set; }
+            public Vector2Int MapCenterPoint { get { return new Vector2Int(col / 2, row / 2); } }
+
+            public bool Finished { get; private set; } = false;
+
+
+            Vector2Int accPoint = Vector2Int.zero;
+            readonly int col, row;
 
             public FillResult(in bool[,] map) {
                 row = map.GetLength(0);
                 col = map.GetLength(1);
             }
 
-            public void ExpandSquareBorder(in Point p) {
-                if (borderColMin > p.col) {
-                    borderColMin = p.col;
-                } else if (borderColMax < p.col) {
-                    borderColMax = p.col;
+            public void FinishFill() {
+                if (Finished) {
+                    throw new System.Exception("Already finished.");
                 }
-                if (borderRowMin > p.row) {
-                    borderRowMin = p.row;
-                } else if (borderRowMax < p.row) {
-                    borderRowMax = p.row;
+                FilledAreaCenterPoint = new Vector2Int(accPoint.x / FilledPoints.Count, accPoint.y / FilledPoints.Count);
+                Finished = true;
+            }
+
+            public void ExpandSquareBorder(in Vector2Int p) {
+                if (BorderColMin > p.y) {
+                    BorderColMin = p.y;
+                } else if (BorderColMax < p.y) {
+                    BorderColMax = p.y;
+                }
+                if (BorderRowMin > p.x) {
+                    BorderRowMin = p.x;
+                } else if (BorderRowMax < p.x) {
+                    BorderRowMax = p.x;
                 }
             }
 
-            public void ExpandSectorBorder(in Point p) {
-
-            }
-
-            public void AddPoint(in Point p) {
-                filledPoints.Add(p);
-                accPoint.Accumulate(p);
+            public void AddPoint(in Vector2Int p) {
+                FilledPoints.Add(p);
+                accPoint += p;
                 ExpandSquareBorder(p);
-                ExpandSectorBorder(p);
             }
-
-            public bool[,] GenerateSubMap(bool fillValue = true) {
-                int subWidth = borderColMax - borderColMin + 1;
-                int subHeight = borderRowMax - borderRowMin + 1;
-                bool[,] subMap = new bool[subHeight, subWidth];
-
-                for (int r = 0; r < subHeight; ++r) {
-                    for (int c = 0; c < subWidth; ++c) {
-                        subMap[r, c] = !fillValue;
-                    }
-                }
-
-                foreach (Point p in filledPoints) {
-                    int subRow = p.row - borderRowMin;
-                    int subCol = p.col - borderColMin;
-                    subMap[subRow, subCol] = fillValue;
-                }
-
-                return subMap;
-            }
-
-            public Point CenterPoint {
-                get {
-                    return new Point(accPoint.row / filledPoints.Count, accPoint.col / filledPoints.Count);
-                }
-            }
-
         }
 
 
@@ -108,27 +81,28 @@ namespace MicroUniverse {
                 throw new System.Exception("Start point is a border!");
             }
 
-            Queue<Point> q = new Queue<Point>();
-            q.Enqueue(new Point(row, col));
+            Queue<Vector2Int> q = new Queue<Vector2Int>();
+            q.Enqueue(new Vector2Int(row, col));
 
             while (q.Count != 0) {
-                Point p = q.Dequeue();
-                if (p.row < 0 || p.row >= rowCount || p.col < 0 || p.col >= colCount || map[p.row, p.col] == !fillValue) {
+                Vector2Int p = q.Dequeue();
+                if (p.x < 0 || p.x >= rowCount || p.y < 0 || p.y >= colCount || map[p.x, p.y] == !fillValue) {
                     continue;
                 }
 
                 // actual fill w/ callback:
-                map[p.row, p.col] = !fillValue;
+                map[p.x, p.y] = !fillValue;
                 if (recordInfo) {
                     fillInfo.AddPoint(p);
                 }
 
-                q.Enqueue(new Point(p.row, p.col + 1));
-                q.Enqueue(new Point(p.row, p.col - 1));
-                q.Enqueue(new Point(p.row + 1, p.col));
-                q.Enqueue(new Point(p.row - 1, p.col));
+                q.Enqueue(new Vector2Int(p.x, p.y + 1));
+                q.Enqueue(new Vector2Int(p.x, p.y - 1));
+                q.Enqueue(new Vector2Int(p.x + 1, p.y));
+                q.Enqueue(new Vector2Int(p.x - 1, p.y));
             }
 
+            fillInfo.FinishFill();
             return fillInfo;
         }
 

@@ -4,6 +4,30 @@ using UnityEngine;
 
 namespace MicroUniverse {
 
+    
+    //// Keep this a struct!!
+    //// x and y should stick to row / col according to bool map, not x, y in texture coords.
+    //public struct Point {
+    //    public int row;
+    //    public int col;
+    //    public Point(int _r, int _c) {
+    //        row = _r;
+    //        col = _c;
+    //    }
+    //    public void Accumulate(in Point other) {
+    //        row += other.row;
+    //        col += other.col;
+    //    }
+    //    public int X { get { return col; } }
+    //    public int Y { get { return row; } }
+
+    //    public float DistanceTo(in Point other) {
+    //        return Mathf.Sqrt(Mathf.Pow(row - other.row, 2) + Mathf.Pow(col - other.col, 2));
+    //    }
+    //}
+
+
+
     public static class Util {
 
         // Bool map: row major!
@@ -53,6 +77,20 @@ namespace MicroUniverse {
             return tex;
         }
 
+    }
+
+    public static class Vector2Extension {
+
+        public static Vector2 Rotate(this Vector2 v, float degrees) {
+            float sin = Mathf.Sin(degrees * Mathf.Deg2Rad);
+            float cos = Mathf.Cos(degrees * Mathf.Deg2Rad);
+
+            float tx = v.x;
+            float ty = v.y;
+            v.x = (cos * tx) - (sin * ty);
+            v.y = (sin * tx) + (cos * ty);
+            return v;
+        }
     }
 
 
