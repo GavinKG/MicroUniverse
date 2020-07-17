@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: CityMat
   m_Shader: {fileID: 4800000, guid: 9196e996c691c71408c187724b2d3ec3, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: _EMISSION_ON _JELLYSUBSURFACE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -56,14 +56,20 @@ Material:
     - _Cull: 2
     - _Cutoff: 0.5
     - _DstBlend: 0
+    - _Emission: 1
     - _EnvironmentReflections: 1
     - _Flatten: 0
+    - _FlattenHalfLambert: 0
+    - _FlipNormal: 0
     - _Float4: 0.31
     - _Gloss: 0.3
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossinessSource: 0
     - _GlossyReflections: 0
+    - _JSIntensity: 1
+    - _JSMaxDistance: 12.69
+    - _JellySubsurface: 1
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _QueueOffset: 0
@@ -76,6 +82,7 @@ Material:
     - _SpecSource: 0
     - _Specular: 0
     - _SpecularHighlights: 1
+    - _SpecularIntensity: 1
     - _SrcBlend: 1
     - _Surface: 0
     - _WorkflowMode: 1
@@ -84,7 +91,9 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor1: {r: 1, g: 1, b: 1, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Diffuse: {r: 1, g: 1, b: 1, a: 0}
+    - _EmissionColor: {r: 0.6603774, g: 0, b: 0, a: 1}
+    - _ObjectCenterWS: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _SpecularColor: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
 --- !u!114 &5120178642416855787

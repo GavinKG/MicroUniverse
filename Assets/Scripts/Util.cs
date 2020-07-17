@@ -4,30 +4,6 @@ using UnityEngine;
 
 namespace MicroUniverse {
 
-    
-    //// Keep this a struct!!
-    //// x and y should stick to row / col according to bool map, not x, y in texture coords.
-    //public struct Point {
-    //    public int row;
-    //    public int col;
-    //    public Point(int _r, int _c) {
-    //        row = _r;
-    //        col = _c;
-    //    }
-    //    public void Accumulate(in Point other) {
-    //        row += other.row;
-    //        col += other.col;
-    //    }
-    //    public int X { get { return col; } }
-    //    public int Y { get { return row; } }
-
-    //    public float DistanceTo(in Point other) {
-    //        return Mathf.Sqrt(Mathf.Pow(row - other.row, 2) + Mathf.Pow(col - other.col, 2));
-    //    }
-    //}
-
-
-
     public static class Util {
 
         // Bool map: row major!
@@ -69,12 +45,36 @@ namespace MicroUniverse {
             int rowCount = map.GetLength(0), colCount = map.GetLength(1);
             for (int r = 0; r < rowCount; ++r) {
                 for (int c = 0; c < colCount; ++c) {
-                    tex.SetPixel(c, r, map[r, c] == brighterEquals ? Color.white : Color.black);
+                    tex.SetPixel(c, r, map[r, c] == brighterEquals ? Color.white : Color.black); // IMPORTANT: c, r -> x, y
                 }
             }
             tex.Apply();
             Debug.Log("BoolMap2Tex generates a " + tex.width.ToString() + "x" + tex.height.ToString() + " texture.");
             return tex;
+        }
+
+        public static bool[,] PlotPointsToBoolMap(List<Vector2> points, int rowSize, int colSize, bool pointEquals = true) {
+            bool[,] ret = new bool[rowSize, colSize];
+            foreach (Vector2 point in points) {
+                float r = Mathf.Clamp(point.x, 0f, rowSize);
+                float c = Mathf.Clamp(point.y, 0f, colSize);
+                int r1 = Mathf.FloorToInt(r), r2 = Mathf.CeilToInt(r), c1 = Mathf.FloorToInt(c), c2 = Mathf.CeilToInt(c); // "Conservative rasterization"
+                if (r2 == rowSize) --r2;
+                if (c2 == colSize) --c2;
+                ret[r1, c1] = pointEquals;
+                ret[r1, c2] = pointEquals;
+                ret[r2, c1] = pointEquals;
+                ret[r2, c2] = pointEquals;
+            }
+            return ret;
+        }
+
+        public static bool[,] PlotPointsToBoolMap(List<Vector2Int> points, int rowSize, int colSize, bool pointEquals = true) {
+            bool[,] ret = new bool[rowSize, colSize];
+            foreach (Vector2Int point in points) {
+                ret[point.x, point.y] = pointEquals;
+            }
+            return ret;
         }
 
     }

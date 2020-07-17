@@ -8,7 +8,7 @@ namespace MicroUniverse {
     [CustomEditor(typeof(TestFloodFill))]
     public class TestFloodFillEditor : Editor {
 
-        string previewIndex = "";
+        string previewIndex = "1";
 
         public override void OnInspectorGUI() {
 
@@ -21,11 +21,29 @@ namespace MicroUniverse {
             }
             
             previewIndex = GUILayout.TextField(previewIndex);
-            
-            if (GUILayout.Button("Preview")) {
+
+            if (GUILayout.Button("Generate RegionInfo")) {
                 int index = int.Parse(previewIndex);
-                testFloodFill.Preview(index);
+                testFloodFill.Generate(index);
             }
+
+            if (GUILayout.Button("Preview Map")) {
+                testFloodFill.PreviewMap();
+            }
+
+            if (GUILayout.Button("Preview SubMap")) {
+                testFloodFill.PreviewSubMap();
+            }
+
+            if (GUILayout.Button("Preview FlattenedMap")) {
+                testFloodFill.PreviewFlattenedMap();
+            }
+
+            /*
+            if (GUILayout.Button("Preview debugTex1")) {
+                testFloodFill.PreviewDebug1();
+            }
+            */
 
         }
 

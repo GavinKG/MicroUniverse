@@ -6,13 +6,13 @@ namespace MicroUniverse {
 
     public class TestCityWallGen : MonoBehaviour {
 
-        public enum ShrinkSize {
+        public enum DownsampleSize {
             One, Two, Four, Eight, Sixteen
         }
 
 
         public Texture2D cityTex;
-        public ShrinkSize shrink;
+        public DownsampleSize downsampleSize;
 
         public GameObject coverGO;
         public GameObject wallGO;
@@ -28,16 +28,16 @@ namespace MicroUniverse {
 
             int newWidth = cityTex.width, newHeight = cityTex.height;
 
-            if (shrink == ShrinkSize.Two) {
+            if (downsampleSize == DownsampleSize.Two) {
                 newWidth = cityTex.width / 2;
                 newHeight = cityTex.height / 2;
-            } else if (shrink == ShrinkSize.Four) {
+            } else if (downsampleSize == DownsampleSize.Four) {
                 newWidth = cityTex.width / 4;
                 newHeight = cityTex.height / 4;
-            } else if (shrink == ShrinkSize.Eight) {
+            } else if (downsampleSize == DownsampleSize.Eight) {
                 newWidth = cityTex.width / 8;
                 newHeight = cityTex.height / 8;
-            } else if (shrink == ShrinkSize.Sixteen) {
+            } else if (downsampleSize == DownsampleSize.Sixteen) {
                 newWidth = cityTex.width / 16;
                 newHeight = cityTex.height / 16;
             }

@@ -14,6 +14,8 @@ namespace MicroUniverse {
 
         private List<FloodFill.FillResult> floodInfos;
 
+        RegionInfo regionInfo;
+
         public void FloodFill() {
             currPass = -1;
             FloodFill floodFiller = new FloodFill();
@@ -34,14 +36,32 @@ namespace MicroUniverse {
             }
         }
 
-        public void Preview(int index) {
-            if (index < 0 || index >= floodInfos.Count) {
-                print("index out of range.");
-                return;
-            }
-            RegionInfo regionInfo = new RegionInfo(floodInfos[index]);
-            previewImage.texture = Util.BoolMap2Tex(regionInfo.GenerateSubMap(), brighterEquals: true);
+        public void Generate(int index) {
+            regionInfo = new RegionInfo(floodInfos[index]);
+            print("done");
         }
+
+        public void PreviewMap() {
+            previewImage.texture = regionInfo.MapTex;
+            previewImage.SetNativeSize();
+        }
+
+        public void PreviewSubMap() {
+            previewImage.texture = regionInfo.SubMapTex;
+            previewImage.SetNativeSize();
+        }
+
+        public void PreviewFlattenedMap() {
+            previewImage.texture = regionInfo.FlattenedMapTex;
+            previewImage.SetNativeSize();
+        }
+
+        /*
+        public void PreviewDebug1() {
+            previewImage.texture = regionInfo.debugTex1;
+            previewImage.SetNativeSize();
+        }
+        */
     }
 }
 
