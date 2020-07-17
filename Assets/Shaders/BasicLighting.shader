@@ -5,11 +5,14 @@ Shader "MicroUniverse/BasicLighting"
 	Properties
 	{
 		[HideInInspector] _AlphaCutoff("Alpha Cutoff ", Range(0, 1)) = 0.5
-		[HideInInspector] _EmissionColor("Emission Color", Color) = (1,1,1,1)
-		_BaseColor("BaseColor", Color) = (1,1,1,0)
+		[Toggle(_SPECULAR_ON)] _Specular("Specular", Float) = 0
+		[Toggle(_FLIPNORMAL_ON)] _FlipNormal("FlipNormal", Float) = 0
+		[Toggle(_EMISSION_ON)] _Emission("Emission", Float) = 0
+		_BaseColor("Base Color", Color) = (1,1,1,0)
+		_EmissionColor("Emission Color", Color) = (0,0,0,0)
 		_Smoothness("Smoothness", Range( 0 , 1)) = 0.5
-		_Specular("Specular", Range( 0 , 1)) = 0
-		_Flatten("Flatten", Range( 0 , 1)) = 0
+		_SpecularIntensity("Specular Intensity", Range( 0 , 1)) = 0
+		_FlattenHalfLambert("Flatten (Half Lambert)", Range( 0 , 1)) = 0
 
 		//_TessPhongStrength( "Tess Phong Strength", Range( 0, 1 ) ) = 0.5
 		//_TessValue( "Tess Max Tessellation", Range( 1, 32 ) ) = 16
@@ -167,11 +170,14 @@ Shader "MicroUniverse/BasicLighting"
 			#define ASE_NEEDS_VERT_NORMAL
 			#define ASE_NEEDS_FRAG_WORLD_POSITION
 			#define ASE_NEEDS_FRAG_SHADOWCOORDS
+			#pragma shader_feature_local _FLIPNORMAL_ON
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
 			#pragma multi_compile _ _SHADOWS_SOFT
 			#pragma multi_compile _ DIRLIGHTMAP_COMBINED
 			#pragma multi_compile _ LIGHTMAP_ON
+			#pragma shader_feature_local _SPECULAR_ON
+			#pragma shader_feature_local _EMISSION_ON
 			#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
 			#pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
 
@@ -207,9 +213,10 @@ Shader "MicroUniverse/BasicLighting"
 
 			CBUFFER_START(UnityPerMaterial)
 			half4 _BaseColor;
-			half _Flatten;
+			half4 _EmissionColor;
+			half _FlattenHalfLambert;
 			half _Smoothness;
-			half _Specular;
+			half _SpecularIntensity;
 			#ifdef TESSELLATION_ON
 				float _TessPhongStrength;
 				float _TessValue;
@@ -400,32 +407,47 @@ Shader "MicroUniverse/BasicLighting"
 						ShadowCoords = TransformWorldToShadowCoord( WorldPosition );
 					#endif
 				#endif
-				half3 temp_output_81_0_g17 = (_Flatten).xxx;
+				half3 temp_output_81_0_g35 = (_FlattenHalfLambert).xxx;
 				half3 ase_worldTangent = IN.ase_texcoord3.xyz;
 				half3 ase_worldNormal = IN.ase_texcoord4.xyz;
 				float3 ase_worldBitangent = IN.ase_texcoord5.xyz;
 				half3 tanToWorld0 = float3( ase_worldTangent.x, ase_worldBitangent.x, ase_worldNormal.x );
 				half3 tanToWorld1 = float3( ase_worldTangent.y, ase_worldBitangent.y, ase_worldNormal.y );
 				half3 tanToWorld2 = float3( ase_worldTangent.z, ase_worldBitangent.z, ase_worldNormal.z );
-				float3 tanNormal117_g17 = float3(0,0,1);
-				half3 worldNormal117_g17 = normalize( float3(dot(tanToWorld0,tanNormal117_g17), dot(tanToWorld1,tanNormal117_g17), dot(tanToWorld2,tanNormal117_g17)) );
-				half dotResult124_g17 = dot( _MainLightPosition.xyz , worldNormal117_g17 );
+				float3 tanNormal117_g35 = float3(0,0,1);
+				half3 worldNormal117_g35 = normalize( float3(dot(tanToWorld0,tanNormal117_g35), dot(tanToWorld1,tanNormal117_g35), dot(tanToWorld2,tanNormal117_g35)) );
+				#ifdef _FLIPNORMAL_ON
+				half3 staticSwitch157_g35 = ( worldNormal117_g35 * float3( -1,-1,-1 ) );
+				#else
+				half3 staticSwitch157_g35 = worldNormal117_g35;
+				#endif
+				half dotResult124_g35 = dot( _MainLightPosition.xyz , staticSwitch157_g35 );
 				float ase_lightAtten = 0;
 				Light ase_lightAtten_mainLight = GetMainLight( ShadowCoords );
 				ase_lightAtten = ase_lightAtten_mainLight.distanceAttenuation * ase_lightAtten_mainLight.shadowAttenuation;
-				half3 temp_output_107_0_g17 = ( _MainLightColor.rgb * ase_lightAtten );
-				half3 bakedGI143_g17 = ASEIndirectDiffuse( IN.lightmapUVOrVertexSH.xy, ase_worldNormal);
-				half3 normalizeResult116_g17 = normalize( _MainLightPosition.xyz );
+				half3 temp_output_107_0_g35 = ( _MainLightColor.rgb * ase_lightAtten );
+				half3 bakedGI143_g35 = ASEIndirectDiffuse( IN.lightmapUVOrVertexSH.xy, ase_worldNormal);
+				half3 normalizeResult116_g35 = normalize( _MainLightPosition.xyz );
 				float3 ase_worldViewDir = ( _WorldSpaceCameraPos.xyz - WorldPosition );
 				ase_worldViewDir = normalize(ase_worldViewDir);
-				half3 normalizeResult128_g17 = normalize( ( normalizeResult116_g17 + ase_worldViewDir ) );
-				half dotResult86_g17 = dot( normalizeResult128_g17 , worldNormal117_g17 );
-				half3 WorldPosition8_g18 = WorldPosition;
-				half3 localAdditionalLightsFlat8_g18 = AdditionalLightsFlat( WorldPosition8_g18 );
+				half3 normalizeResult128_g35 = normalize( ( normalizeResult116_g35 + ase_worldViewDir ) );
+				half dotResult86_g35 = dot( normalizeResult128_g35 , staticSwitch157_g35 );
+				#ifdef _SPECULAR_ON
+				half3 staticSwitch158_g35 = ( temp_output_107_0_g35 * pow( max( dotResult86_g35 , 0.0 ) , exp2( ( ( _Smoothness * 10.0 ) + 1.0 ) ) ) * _SpecularIntensity );
+				#else
+				half3 staticSwitch158_g35 = float3( 0,0,0 );
+				#endif
+				half3 WorldPosition8_g36 = WorldPosition;
+				half3 localAdditionalLightsFlat8_g36 = AdditionalLightsFlat( WorldPosition8_g36 );
+				#ifdef _EMISSION_ON
+				half4 staticSwitch155_g35 = _EmissionColor;
+				#else
+				half4 staticSwitch155_g35 = float4( 0,0,0,0 );
+				#endif
 				
 				float3 BakedAlbedo = 0;
 				float3 BakedEmission = 0;
-				float3 Color = ( ( ( ( ( temp_output_81_0_g17 + ( ( 1.0 - temp_output_81_0_g17 ) * dotResult124_g17 ) ) * temp_output_107_0_g17 ) + bakedGI143_g17 ) * _BaseColor.rgb ) + ( temp_output_107_0_g17 * pow( max( dotResult86_g17 , 0.0 ) , exp2( ( ( _Smoothness * 10.0 ) + 1.0 ) ) ) * _Specular ) + localAdditionalLightsFlat8_g18 );
+				float3 Color = ( half4( ( ( ( ( temp_output_81_0_g35 + ( ( 1.0 - temp_output_81_0_g35 ) * dotResult124_g35 ) ) * temp_output_107_0_g35 ) + bakedGI143_g35 ) * _BaseColor.rgb ) , 0.0 ) + half4( staticSwitch158_g35 , 0.0 ) + half4( localAdditionalLightsFlat8_g36 , 0.0 ) + staticSwitch155_g35 ).rgb;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 
@@ -500,9 +522,10 @@ Shader "MicroUniverse/BasicLighting"
 
 			CBUFFER_START(UnityPerMaterial)
 			half4 _BaseColor;
-			half _Flatten;
+			half4 _EmissionColor;
+			half _FlattenHalfLambert;
 			half _Smoothness;
-			half _Specular;
+			half _SpecularIntensity;
 			#ifdef TESSELLATION_ON
 				float _TessPhongStrength;
 				float _TessValue;
@@ -733,9 +756,10 @@ Shader "MicroUniverse/BasicLighting"
 
 			CBUFFER_START(UnityPerMaterial)
 			half4 _BaseColor;
-			half _Flatten;
+			half4 _EmissionColor;
+			half _FlattenHalfLambert;
 			half _Smoothness;
-			half _Specular;
+			half _SpecularIntensity;
 			#ifdef TESSELLATION_ON
 				float _TessPhongStrength;
 				float _TessValue;
@@ -907,21 +931,23 @@ Shader "MicroUniverse/BasicLighting"
 }
 /*ASEBEGIN
 Version=18200
-0;0;2560;1379;1750.282;328.3846;1;True;False
-Node;AmplifyShaderEditor.ColorNode;6;-567,-13.5;Inherit;False;Property;_BaseColor;BaseColor;0;0;Create;True;0;0;False;0;False;1,1,1,0;1,1,1,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;14;-634.2821,171.6154;Inherit;False;Property;_Specular;Specular;2;0;Create;True;0;0;False;0;False;0;1;0;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;7;-633,259.5;Inherit;False;Property;_Smoothness;Smoothness;1;0;Create;True;0;0;False;0;False;0.5;0.5;0;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;23;-634.2821,344.6154;Inherit;False;Property;_Flatten;Flatten;3;0;Create;True;0;0;False;0;False;0;0;0;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.FunctionNode;25;-289,86.5;Inherit;False;MicroUniverseLightingModel;-1;;17;0fd6531708adcfd4c87a8ba343e6afa7;2,144,1,146,0;5;108;FLOAT3;0,0,0;False;120;FLOAT3;0,0,0;False;113;FLOAT;0;False;121;FLOAT;0;False;84;FLOAT;0;False;1;FLOAT3;65
+462;72.66667;1669;1287;1292.344;464.015;1;True;False
+Node;AmplifyShaderEditor.RangedFloatNode;23;-634.2821,344.6154;Inherit;False;Property;_FlattenHalfLambert;Flatten (Half Lambert);8;0;Create;True;0;0;False;0;False;0;0;0;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;14;-634.2821,171.6154;Inherit;False;Property;_SpecularIntensity;Specular Intensity;7;0;Create;True;0;0;False;0;False;0;1;0;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;7;-633,259.5;Inherit;False;Property;_Smoothness;Smoothness;6;0;Create;True;0;0;False;0;False;0.5;0.5;0;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;36;-581.3444,-211.015;Inherit;False;Property;_EmissionColor;Emission Color;5;0;Create;True;0;0;False;0;False;0,0,0,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.ColorNode;6;-575,-15.5;Inherit;False;Property;_BaseColor;Base Color;4;0;Create;True;0;0;False;0;False;1,1,1,0;1,1,1,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.FunctionNode;37;-289,86.5;Inherit;False;MicroUniverseLightingModel;0;;35;0fd6531708adcfd4c87a8ba343e6afa7;0;6;159;COLOR;0,0,0,0;False;108;FLOAT3;0,0,0;False;120;FLOAT3;0,0,0;False;113;FLOAT;0;False;121;FLOAT;0;False;84;FLOAT;0;False;1;COLOR;65
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;0;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;3;New Amplify Shader;2992e84f91cbeb14eab234972e07ea9d;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;True;1;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;True;0;False;-1;True;True;True;True;True;0;False;-1;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;0;False;0;Hidden/InternalErrorShader;0;0;Standard;0;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;2;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;3;New Amplify Shader;2992e84f91cbeb14eab234972e07ea9d;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;False;True;1;LightMode=ShadowCaster;False;0;Hidden/InternalErrorShader;0;0;Standard;0;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;3;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;3;New Amplify Shader;2992e84f91cbeb14eab234972e07ea9d;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;True;False;False;False;False;0;False;-1;False;False;False;False;True;1;False;-1;False;False;True;1;LightMode=DepthOnly;False;0;Hidden/InternalErrorShader;0;0;Standard;0;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;4;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;3;New Amplify Shader;2992e84f91cbeb14eab234972e07ea9d;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;0;Hidden/InternalErrorShader;0;0;Standard;0;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1;4,87;Half;False;True;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;3;MicroUniverse/BasicLighting;2992e84f91cbeb14eab234972e07ea9d;True;Forward;0;1;Forward;7;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;True;1;1;False;-1;0;False;-1;1;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=UniversalForward;False;0;Hidden/InternalErrorShader;0;0;Standard;21;Surface;0;  Blend;0;Two Sided;1;Cast Shadows;1;Receive Shadows;1;GPU Instancing;1;LOD CrossFade;0;Built-in Fog;0;Meta Pass;0;DOTS Instancing;0;Extra Pre Pass;0;Tessellation;0;  Phong;0;  Strength;0.5,False,-1;  Type;0;  Tess;16,False,-1;  Min;10,False,-1;  Max;25,False,-1;  Edge Length;16,False,-1;  Max Displacement;25,False,-1;Vertex Position,InvertActionOnDeselection;1;0;5;False;True;True;True;False;False;;0
-WireConnection;25;108;6;0
-WireConnection;25;113;14;0
-WireConnection;25;121;7;0
-WireConnection;25;84;23;0
-WireConnection;1;2;25;65
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1;4,88;Half;False;True;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;3;MicroUniverse/BasicLighting;2992e84f91cbeb14eab234972e07ea9d;True;Forward;0;1;Forward;7;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;True;1;1;False;-1;0;False;-1;1;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=UniversalForward;False;0;Hidden/InternalErrorShader;0;0;Standard;21;Surface;0;  Blend;0;Two Sided;1;Cast Shadows;1;Receive Shadows;1;GPU Instancing;1;LOD CrossFade;0;Built-in Fog;0;Meta Pass;0;DOTS Instancing;0;Extra Pre Pass;0;Tessellation;0;  Phong;0;  Strength;0.5,False,-1;  Type;0;  Tess;16,False,-1;  Min;10,False,-1;  Max;25,False,-1;  Edge Length;16,False,-1;  Max Displacement;25,False,-1;Vertex Position,InvertActionOnDeselection;1;0;5;False;True;True;True;False;False;;0
+WireConnection;37;159;36;0
+WireConnection;37;108;6;0
+WireConnection;37;113;14;0
+WireConnection;37;121;7;0
+WireConnection;37;84;23;0
+WireConnection;1;2;37;65
 ASEEND*/
-//CHKSM=E31B8C8DBC1EC0C74F758A2E35F3693CF484CB82
+//CHKSM=357328B183C06B096CCEB41B7229B5304CEDBA62
