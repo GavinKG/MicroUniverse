@@ -97,11 +97,11 @@ Loading 期间屏幕不产生任何变动，摄像机直接 Culling = 0，按照
 
 - [ ] 万花筒图案绘制器
 
-- [ ] Stripe <-> Sector
+- [x] Rect <-> Ring <->Flatten Map
 
 - [x] Gaussian Blur
 
-- [x] Ball Controller
+- [x] 核心玩法 Player Controller
 
 - [x] Top-down capturer
 
@@ -156,6 +156,8 @@ Loading 期间屏幕不产生任何变动，摄像机直接 Culling = 0，按照
 - [ ] 装饰物摆放
 
 ![image-20200715171932818](README.assets/image-20200715171932818.png)
+
+- [ ] 挖洞材质
 
 
 
