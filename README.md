@@ -57,16 +57,17 @@ Loading 期间屏幕不产生任何变动，摄像机直接 Culling = 0，按照
 * 用最小生成树算出一条连通路径，算出路径和各个区域墙壁的交汇点并记录;
 * 使用 Marching Square 生成城墙顶和四周的墙壁，并且结合轮廓生成塔楼和UV（UV1存放局部贴图UV，UV2存世界级别的UV）；
 * 将每个内部区域变换到 Flatten 空间上；
-* 对于每个变换后的内部区域，从交汇点开始（可能有多个交汇点）用【算法待定】挖出路网；
+* 对于每个变换后的内部区域，从交汇点开始（可能有多个交汇点）用 WFC 算出路网/建筑布局；
 * 路网生成水平 Mesh （用于上纹理）和垂直 Mesh（用于变换回去以后给碰撞器）；
-* 对于剩余的内部区域，用 WFC 算出“电容器建筑”布局；
 * 将建筑和路网 Mesh 变换回笛卡尔坐标系（顶点数量大的话可以用 Compute Shader）；
-* 将墙壁和建筑生成 Mask，高斯模糊，用来做AO；
+* 将墙壁和建筑生成 Mask，高斯模糊，用来做 AO；
 * Top-down 渲染整个场景（或者只用整个场景的 Albedo 做 Replacement Material 渲染），高斯模糊做 GI 采样图；
 * 手动配置 Light Probe 阵列，对于每个 Probe 用上面的 GI 采样图配置 SH 参数；
 * 将变换后的路网 Mesh 赋予 Mesh Collider；
-* Quasirandom 撒 Stub【算法待考量】，然后迭代位置；
-* *用之前的Mask图生成SDF（可以考虑用高斯模糊替代真正的距离场），绘制建筑物轮廓，并且用 Compute Shader 收束粒子到SDF生成附近的装饰物摆放位置。
+* 生成墙壁/建筑物 SDF（可以考虑用高斯模糊替代真正的距离场，即可以直接用AO图）；
+* 使用 SDF 渲染绘制路网/建筑物轮廓；
+* 用 Compute Shader 收束粒子到 SDF 生成附近的装饰物摆放位置。
+* Quasirandom + SDF 撒 Stub，然后迭代位置；
 * 初始化剩余控制器。
 
 ### Loading 后
@@ -83,7 +84,7 @@ Loading 期间屏幕不产生任何变动，摄像机直接 Culling = 0，按照
 
 ### 结束界面
 
-游玩结束后，镜头逐渐拉远并垂直朝向地面（可以同时调小FOV，但是会有种希区柯克式变焦的感觉，不太喜欢），一段时间后上一个风格化后处理，继续上推，再过一段时间，之前开始界面的UI飞回场景中，按钮显示“已上色”。
+游玩结束后，镜头逐渐拉远并垂直朝向地面（可以同时调小 FOV，但是会有种希区柯克式变焦的感觉，不太喜欢），一段时间后上一个风格化后处理，继续上推，再过一段时间，之前开始界面的UI飞回场景中，按钮显示“已上色”。
 
 一段时间过后，场景整体模糊，显示游戏的Logo“The Micro Universe”，背景淡出，流程结束。
 
@@ -127,15 +128,11 @@ Loading 期间屏幕不产生任何变动，摄像机直接 Culling = 0，按照
 
   算子区域连通路径。
 
-- [ ] Urban Road Generation
-
-  子区域算路，Agent-based solution。
-
 - [ ] SDF Contour
 
   SDF Generator: https://catlikecoding.com/sdf-toolkit/docs/texture-generator/
 
-  子区域美化，绘制轮廓
+  子区域美化，绘制墙壁/建筑物边界，路网边界
 
 - [ ] WFC
 
@@ -143,7 +140,9 @@ Loading 期间屏幕不产生任何变动，摄像机直接 Culling = 0，按照
 
   https://zhuanlan.zhihu.com/p/66416593
 
-  波函数坍缩用来做连续楼房的布局
+  https://github.com/marian42/wavefunctioncollapse
+
+  波函数坍缩用来做区域中路网/建筑的生成。
 
 - [ ] Procedural Texture
 
@@ -153,11 +152,13 @@ Loading 期间屏幕不产生任何变动，摄像机直接 Culling = 0，按照
 
 - [ ] "Stub" 放置
 
-- [ ] 装饰物摆放
+- [ ] SDF 装饰物摆放
 
 ![image-20200715171932818](README.assets/image-20200715171932818.png)
 
-- [ ] 挖洞材质
+- [ ] 挖洞材质（Greater Equals）
+
+这些技术要点满足之后，可以完全达到程序化生成关卡/模型/纹理/游玩机制的要求。
 
 
 
@@ -205,5 +206,3 @@ Loading 期间屏幕不产生任何变动，摄像机直接 Culling = 0，按照
 ![image-20200702091501914](README.assets/image-20200702091501914.png)
 
 
-
-### 
