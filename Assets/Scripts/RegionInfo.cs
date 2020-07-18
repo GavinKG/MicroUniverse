@@ -9,6 +9,8 @@ namespace MicroUniverse {
         public Vector2Int Center { get { return fillResult.FilledAreaCenterPoint; } }
         public int TileCount { get { return fillResult.FilledPoints.Count; } }
 
+        // TODO: Lazy fetch!!!!!
+
         // Ring border
         public float BorderSectorLeftAngle { get; private set; } = float.MaxValue; // Angle is in degrees, with range (-180, 180)
         public float BorderSectorRightAngle { get; private set; } = float.MinValue; // Angle is in degrees, with range (-180, 180)
@@ -24,6 +26,8 @@ namespace MicroUniverse {
         public Texture2D MapTex { get; private set; }
         public Texture2D SubMapTex { get; private set; }
         public Texture2D FlattenedMapTex { get; private set; }
+
+        public List<RegionInfo> ConnectedRegion { get; private set; } = new List<RegionInfo>();
 
         /*
         public Texture2D debugTex1;
@@ -172,7 +176,7 @@ namespace MicroUniverse {
         }
 
         public void RegisterConnected(IGraphNode other) {
-            throw new System.NotImplementedException();
+            ConnectedRegion.Add(other as RegionInfo);
         }
     }
 

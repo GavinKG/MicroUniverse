@@ -187,6 +187,8 @@ namespace MicroUniverse {
                 }
             }
 
+            Debug.Log("MST Finished.");
+
             return nodes[treeRootIndex];
 
         }
