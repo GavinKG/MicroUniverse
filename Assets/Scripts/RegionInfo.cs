@@ -103,9 +103,6 @@ namespace MicroUniverse {
                 transformed.Add(fillResult.FilledPoints[i]);
             }
 
-            // DEBUG--------
-            List<Vector2> debug1 = new List<Vector2>(fillResult.FilledPoints.Count);
-
 
             // Pass 1: Iterate all points in 2D world space inside a ring, transform them to radial coord and find out flattened texture's width and height.
             for (int i = 0; i < fillResult.FilledPoints.Count; ++i) {
@@ -128,8 +125,6 @@ namespace MicroUniverse {
                 // move to the right:
                 transformed[i] += right * length;
 
-                debug1.Add(transformed[i] + mapCenter);
-
                 // step.3: Calc left/right angle boundary.
                 float angle = Vector2.SignedAngle(right, transformed[i]); // in degrees
                 if (angle > BorderSectorRightAngle) {
@@ -146,10 +141,12 @@ namespace MicroUniverse {
             // debugTex1 = Util.BoolMap2Tex(Util.PlotPointsToBoolMap(debug1, fillResult.RowSize, fillResult.ColSize, true), true);
 
             // double check
+            /*
             Debug.Log("BorderSectorNearRadius: " + BorderSectorNearRadius.ToString());
             Debug.Log("BorderSectorFarRadius: " + BorderSectorFarRadius.ToString());
             Debug.Log("BorderSectorLeftAngle: " + BorderSectorLeftAngle.ToString());
             Debug.Log("BorderSectorRightAngle: " + BorderSectorRightAngle.ToString());
+            */
             if (BorderSectorNearRadius >= BorderSectorFarRadius || BorderSectorLeftAngle >= BorderSectorRightAngle || BorderSectorLeftAngle >= 0f || BorderSectorRightAngle <= 0f) {
                 throw new System.Exception("Something went wrong...");
             }

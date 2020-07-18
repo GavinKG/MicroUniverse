@@ -79,7 +79,8 @@ namespace MicroUniverse {
             int rowCount = map.GetLength(0), colCount = map.GetLength(1);
 
             if (map[row, col] == !fillValue) {
-                throw new System.Exception("Start point is a border!");
+                Debug.Log("Start point is a border, quitting...");
+                return null;
             }
 
             Queue<Vector2Int> q = new Queue<Vector2Int>();

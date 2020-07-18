@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MicroUniverse {
     public class LoadingJob : MonoBehaviour {
@@ -12,6 +13,9 @@ namespace MicroUniverse {
 
         [Header("Step.2")]
         public int smallRegionThreshold = 20;
+
+        public RawImage debugImage;
+
 
         #endregion
 
@@ -27,7 +31,14 @@ namespace MicroUniverse {
 
         #endregion
 
+        void DebugTex(Texture tex) {
+            debugImage.texture = tex;
+            print("DebugTex gets a texture: " + tex.width.ToString() + "x" + tex.height.ToString());
+        }
 
+        void DebugTex(bool[,] map) {
+            DebugTex(Util.BoolMap2Tex(map, true));
+        }
 
         public void Load() {
 
@@ -41,7 +52,7 @@ namespace MicroUniverse {
             print("Step.1: binarize, downsample.");
 
             Texture afterBinarize = Util.Binarize(source, 0.5f);
-            texAfterStep1 = Util.Downsample(afterBinarize, 16); // should be from 2048x2048 to 128x128
+            texAfterStep1 = Util.Downsample(afterBinarize, 8); // should be from 1024x1024 to 128x128
             // stroke should be in white, background black.
 
 
@@ -58,6 +69,7 @@ namespace MicroUniverse {
             floodFiller.Fill(ref fillMap, 0, fillMapColCount - 1, fillValue: false);
             floodFiller.Fill(ref fillMap, fillMapRowCount - 1, 0, fillValue: false);
             floodFiller.Fill(ref fillMap, fillMapRowCount - 1, fillMapColCount - 1, fillValue: false);
+            floodFiller.Fill(ref fillMap, fillMapRowCount / 2, fillMapColCount / 2, fillValue: false);
 
             List<FloodFill.FillResult> fillResults = floodFiller.FindAndFill(ref fillMap, false);
             regionInfos = new List<RegionInfo>();
@@ -68,6 +80,7 @@ namespace MicroUniverse {
             }
             print("RegionInfo list contains " + regionInfos.Count.ToString() + " regions");
 
+            // ----------
             // Step.3
             print("Step.3: MST.");
             List<IGraphNode> graphNodes = new List<IGraphNode>(regionInfos.Count);
