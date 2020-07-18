@@ -21,7 +21,7 @@ namespace MicroUniverse {
             FloodFill floodFiller = new FloodFill();
             floodFiller.OnPreviewFloodProcess += OnPreviewFloodProcess;
             bool[,] map = Util.Tex2BoolMap(fillTex, brighterEquals: true);
-            floodInfos = floodFiller.FindAndFill(ref map, fillValue: true);
+            floodInfos = floodFiller.FindAndFill(ref map, fillValue: false);
             floodFiller.OnPreviewFloodProcess -= OnPreviewFloodProcess;
         }
 

@@ -105,6 +105,23 @@ namespace MicroUniverse {
             return ret;
         }
 
+        public static Texture2D Binarize(Texture src, float threshold) {
+            Shader thresholdShader = Shader.Find("MicroUniverse/Threshold");
+            if (thresholdShader == null) {
+                throw new Exception("Threshold shader not found.");
+            }
+            Material mat = new Material(thresholdShader);
+            mat.SetFloat("_Threshold", threshold);
+            RenderTexture rt, prevRT;
+            rt = RenderTexture.GetTemporary(src.width, src.height, 0);
+            prevRT = RenderTexture.active;
+            Graphics.Blit(src, rt);
+            RenderTexture.active = prevRT;
+            Texture2D ret = RT2Tex(rt);
+            RenderTexture.ReleaseTemporary(rt);
+            return ret;
+        }
+
     }
 
     public static class Vector2Extension {

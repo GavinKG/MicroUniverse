@@ -72,7 +72,7 @@ namespace MicroUniverse {
         /// </summary>
         /// <param name="map">Map to be filled. Changes will write back to this map</param>
         /// <param name="fillValue">value to be filled, like an empty land region (with fillValue == true) surrounded by a border (with fillValue == false).</param>
-        public FillResult Fill(ref bool[,] map, int row, int col, bool fillValue, bool recordInfo = true) {
+        public FillResult Fill(ref bool[,] map, int row, int col, bool fillValue) {
 
             FillResult fillInfo = new FillResult(map);
 
@@ -93,9 +93,7 @@ namespace MicroUniverse {
 
                 // actual fill w/ callback:
                 map[p.x, p.y] = !fillValue;
-                if (recordInfo) {
-                    fillInfo.AddPoint(p);
-                }
+                fillInfo.AddPoint(p);
 
                 q.Enqueue(new Vector2Int(p.x, p.y + 1));
                 q.Enqueue(new Vector2Int(p.x, p.y - 1));
@@ -116,7 +114,7 @@ namespace MicroUniverse {
             for (int r = 0; r < rowCount; ++r) {
                 for (int c = 0; c < colCount; ++c) {
                     if (map[r, c] == fillValue) {
-                        FillResult info = Fill(ref map, r, c, fillValue, recordInfo: true);
+                        FillResult info = Fill(ref map, r, c, fillValue);
                         infos.Add(info);
                         if (OnPreviewFloodProcess != null) {
                             bool shouldContinue = OnPreviewFloodProcess.Invoke(in map);
