@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1144,11 +1144,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cityTex: {fileID: 2800000, guid: f5003aed03da5c342a954e728903b435, type: 3}
-  downsampleSize: 2
+  downsampleRatio: 4
   coverGO: {fileID: 458918097}
   wallGO: {fileID: 1803199501}
   wallLength: 20
-  wallHeight: 2
+  wallHeight: 0.5
   smoothCount: 4
 --- !u!4 &2096096697
 Transform:

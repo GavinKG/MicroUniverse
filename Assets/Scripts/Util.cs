@@ -90,6 +90,21 @@ namespace MicroUniverse {
             return ret;
         }
 
+
+        public static Texture2D Downsample(Texture src, int downsampleRatio) {
+            RenderTexture rt, prevRT;
+            int newWidth = src.width / downsampleRatio, newHeight = src.height / downsampleRatio; // not error prone!!
+            rt = RenderTexture.GetTemporary(newWidth, newHeight, 0);
+            // rt = new RenderTexture(newWidth, newHeight, 0);
+            prevRT = RenderTexture.active;
+            Graphics.Blit(src, rt);
+            RenderTexture.active = prevRT;
+            Texture2D ret = RT2Tex(rt);
+            RenderTexture.ReleaseTemporary(rt);
+            // rt.Release();
+            return ret;
+        }
+
     }
 
     public static class Vector2Extension {

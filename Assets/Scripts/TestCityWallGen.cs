@@ -12,7 +12,7 @@ namespace MicroUniverse {
 
 
         public Texture2D cityTex;
-        public DownsampleSize downsampleSize;
+        public int downsampleRatio = 4;
 
         public GameObject coverGO;
         public GameObject wallGO;
@@ -23,36 +23,19 @@ namespace MicroUniverse {
         public int smoothCount = 2;
 
         public void Generate() {
-
-            RenderTexture rt, prevRT;
-
-            int newWidth = cityTex.width, newHeight = cityTex.height;
-
-            if (downsampleSize == DownsampleSize.Two) {
-                newWidth = cityTex.width / 2;
-                newHeight = cityTex.height / 2;
-            } else if (downsampleSize == DownsampleSize.Four) {
-                newWidth = cityTex.width / 4;
-                newHeight = cityTex.height / 4;
-            } else if (downsampleSize == DownsampleSize.Eight) {
-                newWidth = cityTex.width / 8;
-                newHeight = cityTex.height / 8;
-            } else if (downsampleSize == DownsampleSize.Sixteen) {
-                newWidth = cityTex.width / 16;
-                newHeight = cityTex.height / 16;
+            Texture2D downsampled;
+            if (downsampleRatio != 1) {
+                downsampled = Util.Downsample(cityTex, downsampleRatio);
+            } else {
+                downsampled = cityTex;
             }
-
-            rt = new RenderTexture(newWidth, newHeight, 0);
-            prevRT = RenderTexture.active;
-            Graphics.Blit(cityTex, rt);
-            RenderTexture.active = prevRT;
-
-            bool[,] map = Util.Tex2BoolMap(rt, brighterEquals: false);
+            
+            bool[,] map = Util.Tex2BoolMap(downsampled, brighterEquals: false);
 
             MeshFilter meshFilter = GetComponent<MeshFilter>();
 
             CityWallGenerator cityWallGenerator = new CityWallGenerator();
-            cityWallGenerator.GenerateMesh(map, wallLength / newWidth, wallHeight, smoothCount);
+            cityWallGenerator.GenerateMesh(map, wallLength / (cityTex.width / downsampleRatio), wallHeight, smoothCount);
 
             coverGO.transform.position = Vector3.zero;
             coverGO.transform.rotation = Quaternion.identity;
@@ -61,8 +44,6 @@ namespace MicroUniverse {
 
             coverGO.GetComponent<MeshFilter>().mesh = cityWallGenerator.CoverMesh;
             wallGO.GetComponent<MeshFilter>().mesh = cityWallGenerator.WallMesh;
-
-            rt.Release();
 
             print("Success.");
 
