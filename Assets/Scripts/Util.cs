@@ -1,9 +1,22 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace MicroUniverse {
 
+    /// <summary>
+    /// A basic graph node interface.
+    /// Currently used in MST generation.
+    /// </summary>
+    public interface IGraphNode {
+        Vector2Int Center { get; }
+        void RegisterConnected(IGraphNode other);
+    }
+
+    /// <summary>
+    /// Static utility wrapper class.
+    /// </summary>
     public static class Util {
 
         // Bool map: row major!

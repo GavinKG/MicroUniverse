@@ -4,7 +4,10 @@ using UnityEngine;
 
 namespace MicroUniverse {
 
-    public class RegionInfo {
+    public class RegionInfo : IGraphNode {
+
+        public Vector2Int Center { get { return fillResult.FilledAreaCenterPoint; } }
+        public int TileCount { get { return fillResult.FilledPoints.Count; } }
 
         // Ring border
         public float BorderSectorLeftAngle { get; private set; } = float.MaxValue; // Angle is in degrees, with range (-180, 180)
@@ -171,6 +174,9 @@ namespace MicroUniverse {
 
         }
 
+        public void RegisterConnected(IGraphNode other) {
+            throw new System.NotImplementedException();
+        }
     }
 
 }

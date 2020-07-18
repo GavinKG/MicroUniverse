@@ -121,11 +121,11 @@ Loading 期间屏幕不产生任何变动，摄像机直接 Culling = 0，按照
 
 - [x] Flood Fill
 
-  算中心，隔离出子区域范围。
+  算中心，隔离出子区域范围，提供玩法保障。
 
-- [ ] Minimum Spanning Tree (*MST*)
+- [x] Minimum Spanning Tree (*MST*)
 
-  算子区域联通路径，同时挖空bitmap。
+  算子区域连通路径。
 
 - [ ] Urban Road Generation
 
