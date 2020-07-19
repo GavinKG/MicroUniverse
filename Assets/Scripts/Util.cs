@@ -62,15 +62,15 @@ namespace MicroUniverse {
                 }
             }
             tex.Apply();
-            Debug.Log("BoolMap2Tex generates a " + tex.width.ToString() + "x" + tex.height.ToString() + " texture.");
+            // Debug.Log("BoolMap2Tex generates a " + tex.width.ToString() + "x" + tex.height.ToString() + " texture.");
             return tex;
         }
 
         public static bool[,] PlotPointsToBoolMap(List<Vector2> points, int rowSize, int colSize, bool pointEquals = true) {
             bool[,] ret = new bool[rowSize, colSize];
             foreach (Vector2 point in points) {
-                float r = Mathf.Clamp(point.x, 0f, rowSize);
-                float c = Mathf.Clamp(point.y, 0f, colSize);
+                float r = Mathf.Clamp(point.x, 0f, rowSize - 1f);
+                float c = Mathf.Clamp(point.y, 0f, colSize - 1f);
                 int r1 = Mathf.FloorToInt(r), r2 = Mathf.CeilToInt(r), c1 = Mathf.FloorToInt(c), c2 = Mathf.CeilToInt(c); // "Conservative rasterization"
                 if (r2 == rowSize) --r2;
                 if (c2 == colSize) --c2;
