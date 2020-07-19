@@ -1143,8 +1143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b047686069cf8924e94df8ff48a70547, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cityTex: {fileID: 2800000, guid: f5003aed03da5c342a954e728903b435, type: 3}
-  downsampleRatio: 4
+  cityTex: {fileID: 2800000, guid: 270e137a561f79149bc72029a6a003ae, type: 3}
+  downsampleRatio: 1
   coverGO: {fileID: 458918097}
   wallGO: {fileID: 1803199501}
   wallLength: 20

@@ -30,9 +30,7 @@ namespace MicroUniverse {
                 downsampled = cityTex;
             }
             
-            bool[,] map = Util.Tex2BoolMap(downsampled, brighterEquals: false);
-
-            MeshFilter meshFilter = GetComponent<MeshFilter>();
+            bool[,] map = Util.Tex2BoolMap(downsampled, brighterEquals: true);
 
             CityWallGenerator cityWallGenerator = new CityWallGenerator();
             cityWallGenerator.GenerateMesh(map, wallLength / (cityTex.width / downsampleRatio), wallHeight, smoothCount);
