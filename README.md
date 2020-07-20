@@ -182,6 +182,8 @@ LS/L 控制驱动力方向；RS/R 控制冲刺方向；RB/R1 控制连接，按�
 
 - [ ] "Stub" 放置
 
+  First run a Monte-Carlo method to find a point close to a global optimum and then run a gradient descent from that point for greater accuracy.
+
 - [ ] SDF 装饰物摆放
 
 ![image-20200715171932818](README.assets/image-20200715171932818.png)
