@@ -82,7 +82,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     - _dWSCandyEffect: 1
-    - _dWSIntensity: 2
+    - _dWSIntensity: 5
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
