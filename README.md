@@ -170,7 +170,11 @@ LS/L 控制驱动力方向；RS/R 控制冲刺方向；RB/R1 控制连接，按�
 
   https://zhuanlan.zhihu.com/p/66416593
 
+  https://github.com/mxgmn/WaveFunctionCollapse
+
   https://github.com/marian42/wavefunctioncollapse
+
+  https://gridbugs.org/wave-function-collapse/
 
   波函数坍缩用来做区域中路网/建筑的生成。
 
