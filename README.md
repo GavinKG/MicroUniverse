@@ -174,9 +174,22 @@ LS/L 控制驱动力方向；RS/R 控制冲刺方向；RB/R1 控制连接，按�
 
   https://github.com/marian42/wavefunctioncollapse
 
-  https://gridbugs.org/wave-function-collapse/
-
   波函数坍缩用来做区域中路网/建筑的生成。
+
+  > Based on: https://gridbugs.org/wave-function-collapse/
+  >
+  > * Image Preprocessing (can be done offline)
+  >   * NxN scan with rotation and reflection
+  >   * Generating Adjacency rules based on overlapping model
+  >   * Generating Frequency Hints
+  > * Core
+  >   * Supports pre-collapsed tile / not-grid-like map
+  >   * Entropy calculation with Caching
+  >   * Collapse chooser
+  >   * Collapsing and Contradictions
+  >   * Propagating with enablers (supporters) and cascade removal
+  > * Image Postprocessing
+  >   * Convert tile index to final color
 
 - [ ] Procedural Texture
 
