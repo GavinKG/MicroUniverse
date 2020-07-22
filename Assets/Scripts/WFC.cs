@@ -7,6 +7,11 @@ namespace MicroUniverse {
 
     class WFC {
 
+        // Useful LUTs
+        protected static int[] DX = { -1, 0, 1, 0 };
+        protected static int[] DY = { 0, 1, 0, -1 };
+        static int[] opposite = { 2, 3, 0, 1 };
+
         // Baked Info (by ctor): 
         int N; // tile size
         byte[][] patterns; // D1: patterns, D2: a flattened pattern with length NxN
@@ -54,14 +59,14 @@ namespace MicroUniverse {
                     int i = 0;
                     foreach (var c in colors) {
                         if (c == color) break;
-                        i++;
+                        ++i;
                     }
 
                     if (i == colors.Count) colors.Add(color);
                 }
             }
 
-            long W = Stuff.Power(colors.Count, N * N);
+            long W = Util.PowerInt(colors.Count, N * N);
 
             byte[] Flatten(Func<int, int, byte> GridGetter) {
                 byte[] result = new byte[N * N];
@@ -144,7 +149,7 @@ namespace MicroUniverse {
                 }
             }
 
-            Debug.Log("WFC loaded and baked from given sample.");
+            Debug.Log("WFC loaded and baked from given sample. " + patternCount.ToString() + " pattern(s) generated.");
         }
         
 
@@ -152,7 +157,7 @@ namespace MicroUniverse {
         /// --- WFC Core entry point. ---
         /// use give random seed if != 0
         /// </summary>
-        public bool Run(int outputWidth, int outputHeight, int seed) {
+        public byte[,] Run(int outputWidth, int outputHeight, int seed) {
 
             this.outputWidth = outputWidth;
             this.outputHeight = outputHeight;
@@ -170,19 +175,41 @@ namespace MicroUniverse {
                 randomNumberGenerator = new System.Random(seed);
             }
 
-            while (true) { // wow...self confidence!
-                bool? result = Collapse();
-                if (result != null) {
-                    if (result.Value) {
-                        Debug.Log("WFC: succesfully generated an output pattern.");
-                        return true;
-                    } else {
-                        Debug.Log("WFC: A contradiction has occured...");
-                        return false;
-                    }
+            // try collapse - propagate loop until it yields a useful data.
+            bool shouldRun = true;
+            int deadCounter = 0;
+            while (shouldRun) {
+                ++deadCounter;
+                if (deadCounter == 5) {
+                    Debug.Log("WFC: Okay I failed...CHANGE INPUT PATTERN!!!");
+                    return null;
                 }
-                Propagate();
+                while (true) { // collapse - propagate loop
+                    bool? result = Collapse();
+                    if (result != null) {
+                        if (result.Value) {
+                            Debug.Log("WFC: succesfully generated an output pattern.");
+                            shouldRun = false;
+                            break;
+                        } else {
+                            Debug.Log("WFC: A contradiction has occured...but I will not give up!");
+                            shouldRun = true;
+                            break;
+                        }
+                    }
+                    Propagate();
+                }
             }
+
+            // prepare output bytemap:
+            byte[,] ret = new byte[outputWidth, outputHeight];
+            for (int y = 0; y < outputHeight; ++y) {
+                for (int x = 0; x < outputWidth; ++x) {
+                    ret[x, y] = ResultSampler(x, y);
+                }
+            }
+
+            return ret;
         }
 
 
@@ -228,9 +255,10 @@ namespace MicroUniverse {
         }
 
         /// <summary>
-        /// Sample from Grid.
+        /// Sample from finished wave map. Should be called after collapsing.
+        /// if not collapsed return 99 (for debugging purpose only, will not returning 99 if you run WFC from outer code).
         /// </summary>
-        public byte Sampler(int x, int y) {
+        byte ResultSampler(int x, int y) {
             bool found = false;
             byte ret = (byte)99;
             for (int t = 0; t < patternCount; t++) {
@@ -312,7 +340,7 @@ namespace MicroUniverse {
                 if (IsOnBoundary(i % outputWidth, i / outputWidth)) continue;
 
                 int amount = sumsOfOnes[i];
-                if (amount == 0) return false; // we failed.
+                if (amount == 0) return false; // we failed. nothing to choose. dead end.
 
                 double entropy = entropies[i];
                 if (amount > 1 && entropy <= min) {
@@ -417,8 +445,6 @@ namespace MicroUniverse {
             }
         }
 
-        protected static int[] DX = { -1, 0, 1, 0 };
-        protected static int[] DY = { 0, 1, 0, -1 };
-        static int[] opposite = { 2, 3, 0, 1 };
+
     }
 }

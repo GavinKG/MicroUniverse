@@ -122,6 +122,12 @@ namespace MicroUniverse {
             return ret;
         }
 
+        public static long PowerInt(int a, int n) {
+            long product = 1;
+            for (int i = 0; i < n; i++) product *= a;
+            return product;
+        }
+
     }
 
     public static class Vector2Extension {
