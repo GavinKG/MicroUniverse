@@ -26,7 +26,7 @@ namespace MicroUniverse {
 
         [Header("Step.3: Recapture")]
         public CaptureOverviewMask capturer;
-        
+
         [Header("Step.4: Flood Fill")]
         public int smallRegionThreshold = 20;
 
@@ -68,31 +68,35 @@ namespace MicroUniverse {
             DebugTex(Util.BoolMap2Tex(map, true));
         }
 
-        void OutputTime() {
-            print("--- Current UpTime: " + Time.realtimeSinceStartup.ToString());
+        float firstStamp = -1;
+        string Timestamp {
+            get {
+                if (firstStamp == -1) {
+                    firstStamp = Time.realtimeSinceStartup;
+                }
+                return " [t=" + (Time.realtimeSinceStartup - firstStamp).ToString() + "]";
+            }
         }
 
         // --------------------
 
         public void Load() {
 
-            
+
             print("[LoadingJob] Loading Level...");
 
 
             // ----------
             // Step.0
             print("Step.0: Sanity Check.");
-            OutputTime();
             if (source.width != 1024 || source.height != 1024) {
                 throw new System.Exception("Source texture should be in 1024x1024!");
             }
-            
+
 
             // ----------
             // Step.1
-            print("Step.1: binarize, downsample.");
-            OutputTime();
+            print("Step.1: binarize, downsample." + Timestamp);
             Texture afterBinarize = Util.Binarize(source, 0.5f);
             texAfterPrepare = Util.Downsample(afterBinarize, 8); // should be from 1024x1024 to 128x128, stroke should be in white, background black.
             wallMap = Util.Tex2BoolMap(texAfterPrepare, true);
@@ -100,8 +104,7 @@ namespace MicroUniverse {
 
             // ----------
             // Step.2
-            print("Step.2: Marching Square");
-            OutputTime();
+            print("Step.2: Marching Square" + Timestamp);
             CityWallGenerator cityWallGenerator = new CityWallGenerator();
             cityWallGenerator.GenerateMesh(wallMap, wallLength / wallMap.GetLength(0), wallHeight, smoothCount);
 
@@ -111,15 +114,13 @@ namespace MicroUniverse {
 
             // ----------
             // Step.3
-            print("Recapture");
-            OutputTime();
+            print("Recapture" + Timestamp);
             texAfterRecapture = capturer.Capture(FilterMode.Point);
 
 
             // ----------
             // Step.4
-            print("Step.4: flood fill.");
-            OutputTime();
+            print("Step.4: flood fill." + Timestamp);
             bool[,] fillMap = Util.Tex2BoolMap(texAfterRecapture, brighterEquals: true);
             int fillMapRowCount = fillMap.GetLength(0), fillMapColCount = fillMap.GetLength(1);
             FloodFill floodFiller = new FloodFill();
@@ -145,8 +146,7 @@ namespace MicroUniverse {
 
             // ----------
             // Step.5
-            print("Step.5: MST.");
-            OutputTime();
+            print("Step.5: MST." + Timestamp);
             List<IGraphNode> graphNodes = new List<IGraphNode>(regionInfos.Count);
             foreach (RegionInfo regionInfo in regionInfos) {
                 graphNodes.Add(regionInfo as IGraphNode);
@@ -156,8 +156,7 @@ namespace MicroUniverse {
 
             // ----------
             // Step.6
-            print("Step.6: WFC.");
-            OutputTime();
+            print("Step.6: WFC." + Timestamp);
 
             // ID rules:
             // Empty = 0
@@ -175,11 +174,12 @@ namespace MicroUniverse {
 
 
 
+
+
             // ----------
 
 
-            print("[LoadingJob] Loading finished.");
-            OutputTime();
+            print("[LoadingJob] Loading finished." + Timestamp);
         }
 
     }
