@@ -11,18 +11,19 @@ class OverlappingModel {
     public List<byte> colors; // all colors (block types) occured in input (`sample` var)
 
     // BASE:
-    protected bool[][] wave; // D1: each output (flattened), D2: pattern
+    protected bool[][] wave; // D1: each output (flattened), D2: each pattern can be selected or not
 
     protected int[][][] propagator; // D1: 4 propagate directions, D2: Possible patterns, D3: possible accompany patterns
     int[][][] compatible;
-    protected int[] observed;
+
+    protected int[] collapsed; // return value
 
     protected bool init = false;
 
     Tuple<int, int>[] stack;
     int stacksize;
 
-    protected System.Random random;
+    protected System.Random randomNumberGenerator;
     protected int outputWidth, outputHeight, patternCount;
     protected bool periodic;
 
@@ -264,6 +265,7 @@ class OverlappingModel {
 
 
 
+    // -------------------------------
 
 
 
@@ -273,9 +275,12 @@ class OverlappingModel {
 
 
 
-
-    // CORE:
-    bool? Observe() {
+    /// <summary>
+    /// return true:  FINISHED!
+    /// return false: FAILED!
+    /// return null:  COLLAPSED ONE PIXEL.
+    /// </summary>
+    bool? Collapse() {
         double min = 1000;
         int minIndex = -1;
 
@@ -283,11 +288,11 @@ class OverlappingModel {
             if (IsOnBoundary(i % outputWidth, i / outputWidth)) continue;
 
             int amount = sumsOfOnes[i];
-            if (amount == 0) return false;
+            if (amount == 0) return false; // we failed.
 
             double entropy = entropies[i];
             if (amount > 1 && entropy <= min) {
-                double entropyNoise = 1E-6 * random.NextDouble();
+                double entropyNoise = 1E-6 * randomNumberGenerator.NextDouble();
                 if (entropy + entropyNoise < min) {
                     min = entropy + entropyNoise;
                     minIndex = i;
@@ -296,26 +301,26 @@ class OverlappingModel {
         }
 
         if (minIndex == -1) {
-            observed = new int[outputWidth * outputHeight];
+            collapsed = new int[outputWidth * outputHeight];
             for (int i = 0; i < wave.Length; i++) {
                 for (int t = 0; t < patternCount; t++) {
                     if (wave[i][t]) {
-                        observed[i] = t;
+                        collapsed[i] = t;
                         break;
                     }
                 }
             }
-            return true;
+            return true; // we are done!!
         }
 
         double[] distribution = new double[patternCount];
         for (int t = 0; t < patternCount; t++) distribution[t] = wave[minIndex][t] ? weights[t] : 0;
-        int r = distribution.Random(random.NextDouble());
+        int r = distribution.Random(randomNumberGenerator.NextDouble());
 
         bool[] w = wave[minIndex];
         for (int t = 0; t < patternCount; t++) if (w[t] != (t == r)) Ban(minIndex, t);
 
-        return null;
+        return null; // successfully collapsed one pixel. (like yield null in enumerator)
     }
 
     protected void Propagate() {
@@ -352,6 +357,9 @@ class OverlappingModel {
         }
     }
 
+    /// <summary>
+    /// WFC Core entry point.
+    /// </summary>
     public bool Run(int seed, int limit) {
         if (wave == null) Init();
 
@@ -361,18 +369,18 @@ class OverlappingModel {
         }
 
         if (seed == 0) {
-            random = new System.Random();
+            randomNumberGenerator = new System.Random();
         } else {
-            random = new System.Random(seed);
+            randomNumberGenerator = new System.Random(seed);
         }
 
         for (int l = 0; l < limit || limit == 0; l++) {
-            bool? result = Observe();
+            bool? result = Collapse();
             if (result != null) return (bool)result;
             Propagate();
         }
 
-        return true;
+        return true; // reaches limit
     }
 
     protected void Ban(int i, int t) {

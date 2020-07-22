@@ -112,7 +112,9 @@ class OverlapWFC : MonoBehaviour{
         if (undrawn == false) { return; }
         if (model.Run(seed, iterations)){
 			Draw();
-		}
+		} else {
+            print("Fuck! Contradiction detected! Please re-gen!");
+        }
 	}
 
 	public GameObject GetTile(int x, int y){
