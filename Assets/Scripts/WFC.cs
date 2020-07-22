@@ -41,7 +41,7 @@ namespace MicroUniverse {
         /// Ctor. Will bake a give bytemap sample.
         /// symmetry should be in 1~7
         /// </summary>
-        public WFC(byte[,] sample, int N, bool inputRepeatable, bool outputRepeatable, int symmetryVariantCount, int ground) {
+        public WFC(byte[,] sample, int N, bool inputRepeatable, bool outputRepeatable, int symmetryVariantCount) {
 
             this.N = N;
             makeOutputRepeatable = outputRepeatable;
