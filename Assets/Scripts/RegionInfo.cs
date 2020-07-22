@@ -227,6 +227,10 @@ namespace MicroUniverse {
             }
             return ret;
         }
+
+        public void MarchingSquareRoadnetwork() {
+
+        }
     }
 
 }

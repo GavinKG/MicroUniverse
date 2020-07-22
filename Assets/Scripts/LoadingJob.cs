@@ -104,7 +104,7 @@ namespace MicroUniverse {
 
             // ----------
             // Step.2
-            print("Step.2: Marching Square" + Timestamp);
+            print("Step.2: Marching Square for city wall" + Timestamp);
             CityWallGenerator cityWallGenerator = new CityWallGenerator();
             cityWallGenerator.GenerateMesh(wallMap, wallLength / wallMap.GetLength(0), wallHeight, smoothCount);
 
@@ -173,7 +173,9 @@ namespace MicroUniverse {
             }
 
 
-
+            // ----------
+            // Step.7
+            print("Step.7: Marching Square for road network." + Timestamp);
 
 
             // ----------
