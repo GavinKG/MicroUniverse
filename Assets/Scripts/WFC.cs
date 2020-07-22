@@ -190,7 +190,7 @@ namespace MicroUniverse {
                     bool? result = Collapse();
                     if (result != null) {
                         if (result.Value) {
-                            Debug.Log("WFC: succesfully generated an output pattern.");
+                            Debug.Log("WFC: succesfully generated an output pattern in " + outputWidth.ToString() + "x" + outputHeight.ToString());
                             shouldRun = false;
                             break;
                         } else {
