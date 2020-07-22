@@ -71,8 +71,8 @@ class OverlappingModel {
 
     public OverlappingModel(byte[,] sample, int N, int width, int height, bool periodicInput, bool periodicOutput, int symmetry, int ground) {
 
-        outputWidth = width;
-        outputHeight = height;
+        outputWidth = width + N - 1;
+        outputHeight = height + N - 1;
 
         this.N = N;
         periodic = periodicOutput;
