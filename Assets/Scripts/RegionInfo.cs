@@ -22,7 +22,8 @@ namespace MicroUniverse {
 
         public bool[,] Map { get; private set; }
         public bool[,] SubMap { get; private set; } // clipped region area.
-        public bool[,] FlattenedMap { get; private set; }// flattened clipped region area.
+        public bool[,] FlattenedMap { get; private set; }// flattened clipped region area. true = ground, false = wall
+        public byte[,] FlattenedMapWFC { get; private set; }
         public Texture2D MapTex { get; private set; }
         public Texture2D SubMapTex { get; private set; }
         public Texture2D FlattenedMapTex { get; private set; }
@@ -110,7 +111,7 @@ namespace MicroUniverse {
 
             // Pass 1: Iterate all points in 2D world space inside a ring, transform them to radial coord and find out flattened texture's width and height.
             for (int i = 0; i < fillResult.FilledPoints.Count; ++i) {
-                
+
                 transformed[i] -= mapCenter; // let map center point be zero!
 
                 // step.1: update sector near/far radius.
@@ -175,8 +176,56 @@ namespace MicroUniverse {
 
         }
 
+        // used in MST
         public void RegisterConnected(IGraphNode other) {
             ConnectedRegion.Add(other as RegionInfo);
+        }
+
+        public void DoWFC(WFC wfc, int seed) {
+
+            // ID rules:
+            // Empty = 0
+            // Road = 1
+            // FountainRoad = 2
+            // PillarRoad = 3
+            // *Wall = 4
+            FlattenedMapWFC = wfc.Run(flattenedTexHeight, flattenedTexWidth, seed); // here we follow (row, col) convension
+            // expand road alongside border
+            byte[,] mask = ExpandRoad(0, 1, 4);
+            // apply mask
+            for (int r = 0; r < flattenedTexHeight; ++r) {
+                for (int c = 0; c < flattenedTexWidth; ++c) {
+                    if (mask[r, c] != 0) { // mask not empty(0) -> use mask value
+                        FlattenedMapWFC[r, c] = mask[r, c];
+                    }
+                }
+            }
+
+            //debug:
+            // Debug.Log(Util.ByteMapWithSingleDigitToString(FlattenedMapWFC));
+        }
+
+        byte[,] ExpandRoad(byte emptyId, byte roadId, byte wallId) {
+            int rowSize = FlattenedMap.GetLength(0), colSize = FlattenedMap.GetLength(1);
+            byte[,] ret = new byte[rowSize, colSize];
+            for (int r = 0; r < FlattenedMap.GetLength(0); ++r) {
+                for (int c = 0; c < FlattenedMap.GetLength(1); ++c) {
+                    if (FlattenedMap[r, c]) { // ground
+                        if (r == 0 || r == rowSize - 1 || c == 0 || c == colSize - 1) { // on the edge
+                            ret[r, c] = roadId;
+                        } else {
+                            if (FlattenedMap[r - 1, c] && FlattenedMap[r + 1, c] && FlattenedMap[r, c-1] && FlattenedMap[r, c+1]) {
+                                ret[r, c] = emptyId;
+                            } else {
+                                ret[r, c] = roadId;
+                            }
+                        }
+                    } else { // wall
+                        ret[r, c] = wallId;
+                    }
+                }
+            }
+            return ret;
         }
     }
 

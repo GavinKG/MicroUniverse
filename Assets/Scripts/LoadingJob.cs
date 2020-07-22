@@ -13,6 +13,9 @@ namespace MicroUniverse {
         [Header("Source")]
         public Texture2D source;
 
+        [Header("Random Core")]
+        [Range(0, 100)] public int seed;
+
         [Header("Step.2: Marching Square")]
         public GameObject coverGO;
         public GameObject wallGO;
@@ -26,6 +29,12 @@ namespace MicroUniverse {
         
         [Header("Step.4: Flood Fill")]
         public int smallRegionThreshold = 20;
+
+        [Header("Step.N: WFC")]
+        public string sampleFilePath = "WFCSample.txt";
+        [Range(1, 3)] public int N = 3;
+        [Range(1, 7)] public int symmetryVariantCount = 7;
+
 
         [Header("Debug")]
         public RawImage debugImage;
@@ -44,6 +53,9 @@ namespace MicroUniverse {
 
         // Step.4:
         private RegionInfo rootRegion;
+
+        // Step.6:
+        private WFC wfc;
 
         // --------------------
 
@@ -96,6 +108,7 @@ namespace MicroUniverse {
             print("Recapture");
             texAfterRecapture = capturer.Capture(FilterMode.Point);
 
+
             // ----------
             // Step.4
             print("Step.4: flood fill.");
@@ -132,6 +145,23 @@ namespace MicroUniverse {
             rootRegion = MST.Run(graphNodes, registerBidirectional: false) as RegionInfo;
 
 
+            // ----------
+            // Step.6
+            print("Step.6: WFC.");
+
+            // ID rules:
+            // Empty = 0
+            // Road = 1
+            // FountainRoad = 2
+            // PillarRoad = 3
+            // *Wall = 4
+
+            string sampleString = Util.ReadStringFromResource(sampleFilePath);
+            byte[,] sample = Util.StringToByteMapWithSingleDigit(sampleString);
+            wfc = new WFC(sample, N, false, false, symmetryVariantCount);
+            foreach (RegionInfo regionInfo in regionInfos) {
+                regionInfo.DoWFC(wfc, seed);
+            }
 
 
 

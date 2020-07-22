@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MicroUniverse {
 
 
-    class WFC {
+    public class WFC {
 
         // Useful LUTs
         protected static int[] DX = { -1, 0, 1, 0 };
@@ -21,13 +21,12 @@ namespace MicroUniverse {
         int patternCount;
         int[][][] propagator; // D1: 4 propagate directions, D2: Possible patterns, D3: possible accompany patterns
 
-
         // Runtime info:
         int outputWidth, outputHeight;
         bool[][] wave; // D1: each output (flattened), D2: each pattern can be selected or not
         int[][][] compatible;
         int[] collapsed; // return value
-        bool init = false;
+        // bool init = false;
         Tuple<int, int>[] stack;
         int stacksize;
         System.Random randomNumberGenerator;
@@ -82,7 +81,7 @@ namespace MicroUniverse {
                 return Flatten((dx, dy) => { return sample[(x + dx) % sampleXSize, (y + dy) % sampleYSize]; });
             }
 
-            
+
             byte[] Rotate(byte[] p) {
                 return Flatten((x, y) => { return p[N - 1 - y + x * N]; });
             }
@@ -151,7 +150,7 @@ namespace MicroUniverse {
 
             Debug.Log("WFC loaded and baked from given sample. " + patternCount.ToString() + " pattern(s) generated.");
         }
-        
+
 
         /// <summary>
         /// --- WFC Core entry point. ---
@@ -162,12 +161,15 @@ namespace MicroUniverse {
             this.outputWidth = outputWidth + N - 1;
             this.outputHeight = outputHeight + N - 1;
 
-            if (wave == null) Init();
-
+            //if (wave == null) Init();
+            Init();
+            Clear();
+            /*
             if (!this.init) {
                 this.init = true;
                 this.Clear();
             }
+            */
 
             if (seed == 0) {
                 randomNumberGenerator = new System.Random();
