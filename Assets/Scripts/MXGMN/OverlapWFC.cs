@@ -127,7 +127,7 @@ class OverlapWFC : MonoBehaviour{
 			for (int y = 0; y < depth; y++){
 				for (int x = 0; x < width; x++){
 					if (rendering[x,y] == null){
-						int v = (int)model.Sample(x, y);
+						int v = (int)model.Sampler(x, y);
 						if (v != 99 && v < training.tiles.Length){
 							Vector3 pos = new Vector3(x*gridsize, y*gridsize, 0f);
 							int rot = (int)training.RS[v];

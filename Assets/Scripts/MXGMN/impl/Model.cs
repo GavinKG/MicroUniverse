@@ -1,19 +1,11 @@
-﻿/*
-The MIT License(MIT)
-Copyright(c) mxgmn 2016.
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-The software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.
-*/
-
-using System;
+﻿using System;
 
 public abstract class Model
 {
-	protected bool[][] wave;
+	protected bool[][] wave; // D1: each output (flattened), D2: pattern
 
-	protected int[][][] propagator;
-	int[][][] compatible;
+	protected int[][][] propagator; // D1: 4 propagate directions, D2: Possible patterns, D3: possible accompany patterns
+    int[][][] compatible;
 	protected int[] observed;
 
 	protected bool init = false;
@@ -22,52 +14,59 @@ public abstract class Model
 	int stacksize;
 
 	protected System.Random random;
-	protected int FMX, FMY, T;
+	protected int outputWidth, outputHeight, patternCount;
 	protected bool periodic;
 
 	protected double[] weights;
 	double[] weightLogWeights;
 
 	int[] sumsOfOnes;
-	double sumOfWeights, sumOfWeightLogWeights, startingEntropy;
+	double sumOfWeights, sumOfWlogW, startingEntropy;
 	double[] sumsOfWeights, sumsOfWeightLogWeights, entropies;
 
 	protected Model(int width, int height)
 	{
-		FMX = width;
-		FMY = height;
+		outputWidth = width;
+		outputHeight = height;
+
+        // other variables should be baked by derived class.
+        // can pre-bake these info and serialize them to disk.
 	}
 
+    /// <summary>
+    /// Init WFC Core.
+    /// </summary>
 	void Init()
 	{
-		wave = new bool[FMX * FMY][];
-		compatible = new int[wave.Length][][];
-		for (int i = 0; i < wave.Length; i++)
+        int outputSize = outputWidth * outputHeight;
+        wave = new bool[outputSize][]; // D1: each output (flattened), D2: pattern
+        compatible = new int[outputSize][][]; // D1: each output (flattened), D2: pattern D3: 4 directions
+        for (int i = 0; i < outputSize; i++)
 		{
-			wave[i] = new bool[T];
-			compatible[i] = new int[T][];
-			for (int t = 0; t < T; t++) compatible[i][t] = new int[4];
+			wave[i] = new bool[patternCount];
+			compatible[i] = new int[patternCount][];
+			for (int t = 0; t < patternCount; t++) compatible[i][t] = new int[4];
 		}
 
-		weightLogWeights = new double[T];
+		weightLogWeights = new double[patternCount]; // entropy w*log(w)
 		sumOfWeights = 0;
-		sumOfWeightLogWeights = 0;
+		sumOfWlogW = 0;
 
-		for (int t = 0; t < T; t++)
+		for (int t = 0; t < patternCount; t++)
 		{
-			weightLogWeights[t] = weights[t] * Math.Log(weights[t]);
-			sumOfWeights += weights[t];
-			sumOfWeightLogWeights += weightLogWeights[t];
+			weightLogWeights[t] = weights[t] * Math.Log(weights[t]); // actual w*log(w) calc
+            sumOfWeights += weights[t];
+			sumOfWlogW += weightLogWeights[t];
 		}
 
-		startingEntropy = Math.Log(sumOfWeights) - sumOfWeightLogWeights / sumOfWeights;
+		startingEntropy = Math.Log(sumOfWeights) - sumOfWlogW / sumOfWeights;
 
-		sumsOfOnes = new int[FMX * FMY];
-		sumsOfWeights = new double[FMX * FMY];
-		sumsOfWeightLogWeights = new double[FMX * FMY];
-		entropies = new double[FMX * FMY];
+		sumsOfOnes = new int[outputSize];
+		sumsOfWeights = new double[outputSize];
+		sumsOfWeightLogWeights = new double[outputSize];
+		entropies = new double[outputSize];
 		
-		stack = new Tuple<int, int>[wave.Length * T];
+		stack = new Tuple<int, int>[outputSize * patternCount];
 		stacksize = 0;
 	}
 
@@ -75,12 +74,12 @@ public abstract class Model
 
 	bool? Observe()
 	{
-		double min = 1E+3;
-		int argmin = -1;
+		double min = 1000;
+		int minIndex = -1;
 
 		for (int i = 0; i < wave.Length; i++)
 		{
-			if (OnBoundary(i % FMX, i / FMX)) continue;
+			if (IsOnBoundary(i % outputWidth, i / outputWidth)) continue;
 
 			int amount = sumsOfOnes[i];
 			if (amount == 0) return false;
@@ -88,28 +87,35 @@ public abstract class Model
 			double entropy = entropies[i];
 			if (amount > 1 && entropy <= min)
 			{
-				double noise = 1E-6 * random.NextDouble();
-				if (entropy + noise < min)
+				double entropyNoise = 1E-6 * random.NextDouble();
+				if (entropy + entropyNoise < min)
 				{
-					min = entropy + noise;
-					argmin = i;
+					min = entropy + entropyNoise;
+					minIndex = i;
 				}
 			}
 		}
 
-		if (argmin == -1)
+		if (minIndex == -1)
 		{
-			observed = new int[FMX * FMY];
-			for (int i = 0; i < wave.Length; i++) for (int t = 0; t < T; t++) if (wave[i][t]) { observed[i] = t; break; }
+			observed = new int[outputWidth * outputHeight];
+            for (int i = 0; i < wave.Length; i++) {
+                for (int t = 0; t < patternCount; t++) {
+                    if (wave[i][t]) {
+                        observed[i] = t;
+                        break;
+                    }
+                }
+            }
 			return true;
 		}
 
-		double[] distribution = new double[T];
-		for (int t = 0; t < T; t++) distribution[t] = wave[argmin][t] ? weights[t] : 0;
+		double[] distribution = new double[patternCount];
+		for (int t = 0; t < patternCount; t++) distribution[t] = wave[minIndex][t] ? weights[t] : 0;
 		int r = distribution.Random(random.NextDouble());
 		
-		bool[] w = wave[argmin];
-		for (int t = 0; t < T; t++)	if (w[t] != (t == r)) Ban(argmin, t);
+		bool[] w = wave[minIndex];
+		for (int t = 0; t < patternCount; t++)	if (w[t] != (t == r)) Ban(minIndex, t);
 
 		return null;
 	}
@@ -122,21 +128,21 @@ public abstract class Model
 			stacksize--;
 
 			int i1 = e1.Item1;
-			int x1 = i1 % FMX, y1 = i1 / FMX;
+			int x1 = i1 % outputWidth, y1 = i1 / outputWidth;
 			bool[] w1 = wave[i1];
 
 			for (int d = 0; d < 4; d++)
 			{
 				int dx = DX[d], dy = DY[d];
 				int x2 = x1 + dx, y2 = y1 + dy;
-				if (OnBoundary(x2, y2)) continue;
+				if (IsOnBoundary(x2, y2)) continue;
 
-				if (x2 < 0) x2 += FMX;
-				else if (x2 >= FMX) x2 -= FMX;
-				if (y2 < 0) y2 += FMY;
-				else if (y2 >= FMY) y2 -= FMY;
+				if (x2 < 0) x2 += outputWidth;
+				else if (x2 >= outputWidth) x2 -= outputWidth;
+				if (y2 < 0) y2 += outputHeight;
+				else if (y2 >= outputHeight) y2 -= outputHeight;
 
-				int i2 = x2 + y2 * FMX;
+				int i2 = x2 + y2 * outputWidth;
 				int[] p = propagator[d][e1.Item2];
 				int[][] compat = compatible[i2];
 
@@ -201,7 +207,7 @@ public abstract class Model
 	{
 		for (int i = 0; i < wave.Length; i++)
 		{
-			for (int t = 0; t < T; t++)
+			for (int t = 0; t < patternCount; t++)
 			{
 				wave[i][t] = true;
 				for (int d = 0; d < 4; d++) compatible[i][t][d] = propagator[opposite[d]][t].Length;
@@ -209,14 +215,14 @@ public abstract class Model
 
 			sumsOfOnes[i] = weights.Length;
 			sumsOfWeights[i] = sumOfWeights;
-			sumsOfWeightLogWeights[i] = sumOfWeightLogWeights;
+			sumsOfWeightLogWeights[i] = sumOfWlogW;
 			entropies[i] = startingEntropy;
 		}
 	}
 
-	protected abstract bool OnBoundary(int x, int y);
+	protected abstract bool IsOnBoundary(int x, int y);
 
-	protected static int[] DX = { -1, 0, 1, 0 };
-	protected static int[] DY = { 0, 1, 0, -1 };
+	protected static int[] DX = { -1,  0,  1,  0 };
+	protected static int[] DY = { 0 ,  1,  0, -1 };
 	static int[] opposite = { 2, 3, 0, 1 };
 }
