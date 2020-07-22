@@ -30,13 +30,17 @@ namespace MicroUniverse {
             wfc = new WFC(sample, N, false, false, symmetryVariantCount);
         }
 
-        public void Run() {
+        public byte[,] Run() {
             if (wfc == null) {
                 WFCWarmup();
             }
             byte[,] output = wfc.Run(outputWidth, outputHeight, randomSeed);
+            
+            // debug:
             string outputString = Util.ByteMapWithSingleDigitToString(output);
             print(outputString);
+
+            return output;
         }
     }
 
