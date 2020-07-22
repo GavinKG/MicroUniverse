@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace MicroUniverse {
@@ -102,6 +103,43 @@ namespace MicroUniverse {
                 }
             }
             return ret;
+        }
+
+        public static string ByteMapWithSingleDigitToString(byte[,] byteMap) {
+            int rowCount = byteMap.GetLength(0), colCount = byteMap.GetLength(1);
+            StringBuilder sb = new StringBuilder();
+            for (int r = 0; r < rowCount; ++r) {
+                for (int c = 0; c < colCount; ++c) {
+                    sb.Append(byteMap[r, c]);
+                }
+                sb.AppendLine();
+            }
+            return sb.ToString();
+        }
+
+        public static byte[,] StringToByteMapWithSingleDigit(string s) {
+
+            List<string> lines = new List<string>();
+            foreach (var line in s.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)) {
+                lines.Add(line);
+            }
+            int rowCount = lines.Count;
+            int colCount = lines[0].Length;
+            byte[,] ret = new byte[rowCount, colCount];
+            for (int r = 0; r < rowCount; ++r) {
+                for (int c = 0; c < colCount; ++c) {
+                    ret[r, c] = byte.Parse(lines[r][c].ToString());
+                }
+            }
+            return ret;
+        }
+
+        public static string ReadStringFromResource(string filePath) {
+            TextAsset asset = Resources.Load<TextAsset>(filePath);
+            if (asset == null) {
+                throw new Exception("Resource not found.");
+            }
+            return asset.text;
         }
 
 

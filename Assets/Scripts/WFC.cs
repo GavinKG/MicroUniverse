@@ -159,8 +159,8 @@ namespace MicroUniverse {
         /// </summary>
         public byte[,] Run(int outputWidth, int outputHeight, int seed) {
 
-            this.outputWidth = outputWidth;
-            this.outputHeight = outputHeight;
+            this.outputWidth = outputWidth + N - 1;
+            this.outputHeight = outputHeight + N - 1;
 
             if (wave == null) Init();
 

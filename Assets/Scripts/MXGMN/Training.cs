@@ -145,7 +145,9 @@ class Training : MonoBehaviour{
 		}
 		tiles = tiles.SubArray(0 , str_tile.Count+1);
 		RS = RS.SubArray(0 , str_tile.Count+1);
-	}
+        print(MicroUniverse.Util.ByteMapWithSingleDigitToString(sample));
+
+    }
 
 	void OnDrawGizmos(){
 		Gizmos.matrix = transform.localToWorldMatrix;
