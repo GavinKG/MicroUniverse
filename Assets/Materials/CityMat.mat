@@ -62,6 +62,9 @@ Material:
     - _FlattenHalfLambert: 0.1
     - _FlipNormal: 0
     - _Float4: 0.31
+    - _FloorAO: 0
+    - _FloorAOIntensity: 0.5705882
+    - _FloorAORadius: 0.1
     - _Gloss: 0.3
     - _GlossMapScale: 0
     - _Glossiness: 0

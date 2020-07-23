@@ -30,6 +30,7 @@ namespace MicroUniverse {
 
         public List<RegionInfo> ConnectedRegion { get; private set; } = new List<RegionInfo>();
 
+        // debug:
         public Texture2D debugTex1;
         public Texture2D debugTex2;
         public Texture2D debugTex3;
@@ -200,14 +201,42 @@ namespace MicroUniverse {
         public void DoWFC(WFC wfc, int seed) {
 
             // ID rules:
-            // Empty = 0
-            // Road = 1
-            // FountainRoad = 2
-            // PillarRoad = 3
-            // *Wall = 4
+            const int empty = 0;
+            const int road = 1;
+            const int fountainRoad = 2;
+            const int pillarRoad = 3;
+            const int wall = 4;
+
             FlattenedMapWFC = wfc.Run(flattenedTexHeight, flattenedTexWidth, seed); // here we follow (row, col) convension
-            // expand road alongside border
-            byte[,] mask = ExpandRoad(0, 1, 4);
+
+            // expand road alongside border (for safety reason)
+            int rowSize = FlattenedMap.GetLength(0), colSize = FlattenedMap.GetLength(1);
+            byte[,] mask = new byte[rowSize, colSize];
+            for (int r = 0; r < FlattenedMap.GetLength(0); ++r) {
+                for (int c = 0; c < FlattenedMap.GetLength(1); ++c) {
+                    if (FlattenedMap[r, c]) { // ground
+                        if (r == 0 || r == rowSize - 1 || c == 0 || c == colSize - 1) { // on the edge
+                            mask[r, c] = road;
+                        } else {
+                            if (FlattenedMap[r - 1, c] && 
+                                FlattenedMap[r + 1, c] && 
+                                FlattenedMap[r, c - 1] && 
+                                FlattenedMap[r, c + 1] &&
+                                FlattenedMap[r - 1, c + 1] &&
+                                FlattenedMap[r - 1, c - 1] &&
+                                FlattenedMap[r + 1, c + 1] &&
+                                FlattenedMap[r - 1, c + 1]) {
+                                mask[r, c] = empty;
+                            } else {
+                                mask[r, c] = road;
+                            }
+                        }
+                    } else { // wall
+                        mask[r, c] = wall;
+                    }
+                }
+            }
+
             // apply mask
             for (int r = 0; r < flattenedTexHeight; ++r) {
                 for (int c = 0; c < flattenedTexWidth; ++c) {
@@ -219,31 +248,14 @@ namespace MicroUniverse {
 
             //debug:
             // Debug.Log(Util.ByteMapWithSingleDigitToString(FlattenedMapWFC));
+            HashSet<int> maskSet = new HashSet<int>();
+            maskSet.Add(road);
+            maskSet.Add(fountainRoad);
+            maskSet.Add(pillarRoad);
+            debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
         }
 
-        byte[,] ExpandRoad(byte emptyId, byte roadId, byte wallId) {
-            int rowSize = FlattenedMap.GetLength(0), colSize = FlattenedMap.GetLength(1);
-            byte[,] ret = new byte[rowSize, colSize];
-            for (int r = 0; r < FlattenedMap.GetLength(0); ++r) {
-                for (int c = 0; c < FlattenedMap.GetLength(1); ++c) {
-                    if (FlattenedMap[r, c]) { // ground
-                        if (r == 0 || r == rowSize - 1 || c == 0 || c == colSize - 1) { // on the edge
-                            ret[r, c] = roadId;
-                        } else {
-                            if (FlattenedMap[r - 1, c] && FlattenedMap[r + 1, c] && FlattenedMap[r, c - 1] && FlattenedMap[r, c + 1]) {
-                                ret[r, c] = emptyId;
-                            } else {
-                                ret[r, c] = roadId;
-                            }
-                        }
-                    } else { // wall
-                        ret[r, c] = wallId;
-                    }
-                }
-            }
-            return ret;
-        }
-
+        /*
         public void MarchingSquareRoadnetwork(int upscaleFactor, float wallHeight, int smoothCount, float smoothRatio, float widthRatio) {
             HashSet<int> trueMask = new HashSet<int>();
             trueMask.Add(1);
@@ -265,12 +277,11 @@ namespace MicroUniverse {
             RoadNetworkCoverIndices = mc.CoverIndices;
             RoadNetworkWallIndices = mc.WallIndices;
 
-            /*
-            roadNetworkCoverMesh = mc.CoverMesh;
-            roadNetworkWallMesh = mc.WallMesh;
-            */
 
+            // roadNetworkCoverMesh = mc.CoverMesh;
+            // roadNetworkWallMesh = mc.WallMesh;
         }
+        */
 
         public void VertexTransformBack() {
 

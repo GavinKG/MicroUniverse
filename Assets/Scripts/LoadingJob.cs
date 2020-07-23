@@ -66,10 +66,13 @@ namespace MicroUniverse {
 
         // --------------------
 
-        void DebugTex(Texture tex) {
-            debugImage.texture = tex;
+        void DebugTex(Texture tex, bool shouldTerminate = false) {
+            debugImage.texture = tex ?? throw new Exception("Texture not generated!");
             debugImage.SetNativeSize();
             print("DebugTex gets a texture: " + tex.width.ToString() + "x" + tex.height.ToString());
+            if (shouldTerminate) {
+                throw new Exception("Debugging finished!");
+            }
         }
 
         void DebugTex(bool[,] map) {
@@ -152,6 +155,8 @@ namespace MicroUniverse {
             print("RegionInfo list contains " + regionInfos.Count.ToString() + " regions");
 
 
+            
+
             // ----------
             // Step.5
             print("Step.5: MST." + Timestamp);
@@ -179,29 +184,12 @@ namespace MicroUniverse {
             foreach (RegionInfo regionInfo in regionInfos) {
                 regionInfo.DoWFC(wfc, seed);
             }
+            DebugTex(regionInfos[0].debugTex1);
 
 
             // ----------
             // Step.7
-            print("Step.7: Marching Square for road network." + Timestamp);
-
-            foreach (RegionInfo regionInfo in regionInfos) {
-                regionInfo.MarchingSquareRoadnetwork(roadNetworkUpscale, 1f, roadNetworkSmoothCount, roadNetworkSmoothRatio, roadNetworkWidthRatio);
-            }
-
-
-
-            // ----------
-            // Step.8
-            print("Step.8: Road network transform back." + Timestamp);
-            foreach (RegionInfo regionInfo in regionInfos) {
-                regionInfo.VertexTransformBack();
-            }
-
-
-            RegionInfo debugRI = regionInfos[0];
-            debugGO.GetComponent<MeshFilter>().mesh = debugRI.RoadNetworkCoverMesh;
-            // DebugTex(debugRI.debugTex3);
+            print("Step.7: Plant props alongside road." + Timestamp);
 
 
             print("[LoadingJob] Loading finished." + Timestamp);
