@@ -17,9 +17,9 @@ namespace MicroUniverse {
         public List<int> WallIndices { get; private set; }
 
         // Helper:
-        HashSet<int> checkedVertices = new HashSet<int>(); // indices that are checked in outline finding process.
-        List<List<int>> outlineIndices = new List<List<int>>(); // outline indices (there might be multiple outlines)
-        Dictionary<int, List<Triangle>> triHashMap = new Dictionary<int, List<Triangle>>(); // index -> triangles containing this index
+        HashSet<int> checkedVertices; // indices that are checked in outline finding process.
+        List<List<int>> outlineIndices; // outline indices (there might be multiple outlines)
+        Dictionary<int, List<Triangle>> triHashMap; // index -> triangles containing this index
         
 
         /// <summary>
@@ -65,13 +65,27 @@ namespace MicroUniverse {
                     WallVertices.Add(CoverVertices[outline[i]] - Vector3.up * wallHeight); // bottom left
                     WallVertices.Add(CoverVertices[outline[i + 1]] - Vector3.up * wallHeight); // bottom right
 
-                    WallIndices.Add(startIndex + 0);
-                    WallIndices.Add(startIndex + 2);
-                    WallIndices.Add(startIndex + 3);
+                    if (wallFaceOutside) {
+                        WallIndices.Add(startIndex + 0);
+                        WallIndices.Add(startIndex + 2);
+                        WallIndices.Add(startIndex + 3);
 
-                    WallIndices.Add(startIndex + 3);
-                    WallIndices.Add(startIndex + 1);
-                    WallIndices.Add(startIndex + 0);
+                        WallIndices.Add(startIndex + 3);
+                        WallIndices.Add(startIndex + 1);
+                        WallIndices.Add(startIndex + 0);
+
+                    } else {
+
+                        WallIndices.Add(startIndex + 0);
+                        WallIndices.Add(startIndex + 1);
+                        WallIndices.Add(startIndex + 3);
+
+                        WallIndices.Add(startIndex + 3);
+                        WallIndices.Add(startIndex + 2);
+                        WallIndices.Add(startIndex + 0);
+                    }
+
+
                 }
             }
 
@@ -103,6 +117,10 @@ namespace MicroUniverse {
             checkedVertices = null;
             outlineIndices = null;
             triHashMap = null;
+
+            checkedVertices = new HashSet<int>(); // indices that are checked in outline finding process.
+            outlineIndices = new List<List<int>>(); // outline indices (there might be multiple outlines)
+            triHashMap = new Dictionary<int, List<Triangle>>(); // index -> triangles containing this index
         }
 
 

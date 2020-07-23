@@ -1150,6 +1150,7 @@ MonoBehaviour:
   wallLength: 20
   wallHeight: 0.5
   smoothCount: 4
+  faceOutside: 1
 --- !u!4 &2096096697
 Transform:
   m_ObjectHideFlags: 0

@@ -22,6 +22,8 @@ namespace MicroUniverse {
         [Range(0, 4)]
         public int smoothCount = 2;
 
+        public bool faceOutside = true;
+
         public void Generate() {
             Texture2D downsampled;
             if (downsampleRatio != 1) {
@@ -33,7 +35,7 @@ namespace MicroUniverse {
             bool[,] map = Util.Tex2BoolMap(downsampled, brighterEquals: true);
 
             MarchingSquare cityWallGenerator = new MarchingSquare();
-            cityWallGenerator.GenerateMesh(map, wallLength / (cityTex.width / downsampleRatio), wallHeight, smoothCount);
+            cityWallGenerator.GenerateMesh(map, wallLength / (cityTex.width / downsampleRatio), wallHeight, smoothCount, faceOutside);
 
             coverGO.transform.position = Vector3.zero;
             coverGO.transform.rotation = Quaternion.identity;
