@@ -232,14 +232,18 @@ namespace MicroUniverse {
             return ret;
         }
 
-        public void MarchingSquareRoadnetwork(float squareSize, float wallHeight, int smoothCount, float smoothRatio) {
+        public void MarchingSquareRoadnetwork(int upscaleFactor, float squareSize, float wallHeight, int smoothCount, float smoothRatio) {
             HashSet<int> trueMask = new HashSet<int>();
             trueMask.Add(1);
             trueMask.Add(2);
             trueMask.Add(3);
             bool[,] roadmap = Util.ByteMapToBoolMap(FlattenedMapWFC, trueMask); // mask road to bool map
+            bool[,] upscaled = roadmap;
+            if (upscaleFactor > 1) {
+                upscaled = Util.Upscale(roadmap, 2, 0f);
+            }
             MarchingSquare mc = new MarchingSquare();
-            mc.GenerateMesh(roadmap, squareSize, wallHeight, smoothCount, smoothRatio, false);
+            mc.GenerateMesh(upscaled, squareSize, wallHeight, smoothCount, smoothRatio, false);
             roadNetworkCover = mc.CoverMesh;
             roadNetworkWall = mc.WallMesh;
         }

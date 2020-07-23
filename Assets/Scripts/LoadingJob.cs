@@ -37,6 +37,7 @@ namespace MicroUniverse {
 
         [Header("Step:7 Gen road network")]
         public GameObject debugGO;
+        [Range(1, 4)] public int roadNetworkUpscale = 1;
         [Range(0, 4)] public int roadNetworkSmoothCount = 1;
         [Range(0, 1)] public float roadNetworkSmoothRatio = 0.1f;
 
@@ -183,7 +184,7 @@ namespace MicroUniverse {
             print("Step.7: Marching Square for road network." + Timestamp);
             //debug:
             RegionInfo debugRI = regionInfos[2];
-            debugRI.MarchingSquareRoadnetwork(1f, 1, roadNetworkSmoothCount, roadNetworkSmoothRatio);
+            debugRI.MarchingSquareRoadnetwork(roadNetworkUpscale, 1f, 1, roadNetworkSmoothCount, roadNetworkSmoothRatio);
             debugGO.GetComponent<MeshFilter>().mesh = debugRI.roadNetworkCover;
 
             // ----------

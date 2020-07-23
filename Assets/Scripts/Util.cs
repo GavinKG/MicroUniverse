@@ -144,14 +144,38 @@ namespace MicroUniverse {
             RenderTexture rt, prevRT;
             int newWidth = src.width / downsampleRatio, newHeight = src.height / downsampleRatio; // not error prone!!
             rt = RenderTexture.GetTemporary(newWidth, newHeight, 0);
-            // rt = new RenderTexture(newWidth, newHeight, 0);
             prevRT = RenderTexture.active;
             Graphics.Blit(src, rt);
             RenderTexture.active = prevRT;
             Texture2D ret = RT2Tex(rt);
             RenderTexture.ReleaseTemporary(rt);
-            // rt.Release();
             return ret;
+        }
+
+        public static Texture2D Upsample(Texture src, int upsampleRatio) {
+            RenderTexture rt, prevRT;
+            int newWidth = src.width * upsampleRatio, newHeight = src.height * upsampleRatio;
+            rt = RenderTexture.GetTemporary(newWidth, newHeight, 0);
+            prevRT = RenderTexture.active;
+            Graphics.Blit(src, rt);
+            RenderTexture.active = prevRT;
+            Texture2D ret = RT2Tex(rt);
+            RenderTexture.ReleaseTemporary(rt);
+            return ret;
+        }
+
+        public static bool[,] Upscale(bool[,] src, int upsampleRatio) {
+            Texture2D srcTex = BoolMap2Tex(src, true);
+            Texture2D upTex = Upsample(srcTex, upsampleRatio);
+            return Tex2BoolMap(upTex, true);
+        }
+
+        public static bool[,] Upscale(bool[,] src, int upsampleRatio, float threshold) {
+            Texture2D srcTex = BoolMap2Tex(src, true); // bilinear
+            srcTex.filterMode = FilterMode.Bilinear;
+            Texture2D upTex = Upsample(srcTex, upsampleRatio);
+            Texture2D finalTex = Binarize(upTex, threshold);
+            return Tex2BoolMap(upTex, true);
         }
 
         public static Texture2D Binarize(Texture src, float threshold) {
@@ -167,6 +191,7 @@ namespace MicroUniverse {
             Graphics.Blit(src, rt);
             RenderTexture.active = prevRT;
             Texture2D ret = RT2Tex(rt);
+            ret.filterMode = FilterMode.Point;
             RenderTexture.ReleaseTemporary(rt);
             return ret;
         }
