@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Lit
   m_Shader: {fileID: 4800000, guid: 9196e996c691c71408c187724b2d3ec3, type: 3}
-  m_ShaderKeywords: _EMISSION_ON _FLOORAO_ON _JELLYSUBSURFACE_ON _SPECULAR_ON _SURRARC_ON
+  m_ShaderKeywords: _EMISSION_ON _FLOORAO_ON _SPECULAR_ON _SURRARC_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -69,7 +69,7 @@ Material:
     - _JSIntensity: 2.5
     - _JSMaxDistance: 3
     - _JellyEffect: 0
-    - _JellySubsurface: 1
+    - _JellySubsurface: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _QueueOffset: 0

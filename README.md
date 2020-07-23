@@ -181,7 +181,7 @@ LS/L 控制驱动力方向；RS/R 控制冲刺方向；RB/R1 控制连接，按�
   >
   > * Image Preprocessing (can be done offline)
   >   * NxN scan with rotation and reflection (prebake module)
-  >   * Generating Adjacency rules based on **2x2 Overlapping Model** (for better accuracy)
+  >   * Generating Adjacency rules based on **3x3 Overlapping Model** (for better accuracy)
   >   * Generating Frequency Hints
   > * Core
   >   * Doesn't care whether you use overlapping model or simple tiled model in preprocessing.

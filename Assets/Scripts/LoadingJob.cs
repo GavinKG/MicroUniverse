@@ -184,12 +184,24 @@ namespace MicroUniverse {
             // ----------
             // Step.7
             print("Step.7: Marching Square for road network." + Timestamp);
-            //debug:
-            RegionInfo debugRI = regionInfos[2];
-            debugRI.MarchingSquareRoadnetwork(roadNetworkUpscale, 1f, 1, roadNetworkSmoothCount, roadNetworkSmoothRatio, roadNetworkWidthRatio);
-            debugGO.GetComponent<MeshFilter>().mesh = debugRI.roadNetworkCover;
-            DebugTex(debugRI.debugTex3);
+
+            foreach (RegionInfo regionInfo in regionInfos) {
+                regionInfo.MarchingSquareRoadnetwork(roadNetworkUpscale, 1f, roadNetworkSmoothCount, roadNetworkSmoothRatio, roadNetworkWidthRatio);
+            }
+
+
+
             // ----------
+            // Step.8
+            print("Step.8: Road network transform back." + Timestamp);
+            foreach (RegionInfo regionInfo in regionInfos) {
+                regionInfo.VertexTransformBack();
+            }
+
+
+            RegionInfo debugRI = regionInfos[0];
+            debugGO.GetComponent<MeshFilter>().mesh = debugRI.RoadNetworkCoverMesh;
+            // DebugTex(debugRI.debugTex3);
 
 
             print("[LoadingJob] Loading finished." + Timestamp);
