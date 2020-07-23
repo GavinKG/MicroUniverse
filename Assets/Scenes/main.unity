@@ -937,7 +937,7 @@ MonoBehaviour:
   wallHeight: 0.5
   smoothCount: 4
   capturer: {fileID: 67739326}
-  smallRegionThreshold: 20
+  smallRegionThreshold: 50
   sampleFilePath: WFCSample
   N: 3
   symmetryVariantCount: 7
