@@ -35,13 +35,6 @@ namespace MicroUniverse {
         [Range(1, 3)] public int N = 3;
         [Range(1, 7)] public int symmetryVariantCount = 7;
 
-        [Header("Step:7 Gen road network")]
-        public GameObject debugGO;
-        [Range(1, 4)] public int roadNetworkUpscale = 1;
-        [Range(0, 4)] public int roadNetworkSmoothCount = 1;
-        [Range(0, 1)] public float roadNetworkSmoothRatio = 0.1f;
-        [Range(0, 1)] public float roadNetworkWidthRatio = 0.5f;
-
 
         [Header("Debug")]
         public RawImage debugImage;
@@ -142,9 +135,7 @@ namespace MicroUniverse {
             floodFiller.Fill(ref fillMap, fillMapRowCount - 1, 0, fillValue: false);
             floodFiller.Fill(ref fillMap, fillMapRowCount - 1, fillMapColCount - 1, fillValue: false);
             floodFiller.Fill(ref fillMap, fillMapRowCount / 2, fillMapColCount / 2, fillValue: false);
-
-
-
+            
             List<FloodFill.FillResult> fillResults = floodFiller.FindAndFill(ref fillMap, false);
             regionInfos = new List<RegionInfo>();
             foreach (FloodFill.FillResult fillResult in fillResults) {
@@ -189,7 +180,7 @@ namespace MicroUniverse {
 
             // ----------
             // Step.7
-            print("Step.7: Plant props alongside road." + Timestamp);
+            print("Step.7: Plant props (like buildings) alongside road." + Timestamp);
 
 
             print("[LoadingJob] Loading finished." + Timestamp);

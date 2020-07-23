@@ -47,13 +47,15 @@ namespace MicroUniverse {
         readonly static Vector2 right = new Vector2(0, 1); // not Vector2.right!
         float moveRightLength;
 
-        // generated mesh vertices/indices
+        // generated mesh vertices/indices (deprecieated)
+        /*
         public List<Vector3> RoadNetworkCoverVertices { get; private set; }
         public List<Vector3> RoadNetworkWallVertices { get; private set; }
         public List<int> RoadNetworkCoverIndices { get; private set; }
         public List<int> RoadNetworkWallIndices { get; private set; }
         public Mesh RoadNetworkCoverMesh { get; private set; }
         public Mesh RoadNetworkWallMesh { get; private set; }
+        */
 
         public RegionInfo(FloodFill.FillResult _fillResult) {
             if (!_fillResult.Finished) {
@@ -61,6 +63,68 @@ namespace MicroUniverse {
             }
             fillResult = _fillResult;
             DoCalc();
+        }
+
+        // used in MST
+        public void RegisterConnected(IGraphNode other) {
+            ConnectedRegion.Add(other as RegionInfo);
+        }
+
+        public void DoWFC(WFC wfc, int seed) {
+
+            // ID rules:
+            const int empty = 0;
+            const int road = 1;
+            const int fountainRoad = 2;
+            const int pillarRoad = 3;
+            const int wall = 4;
+
+            FlattenedMapWFC = wfc.Run(flattenedTexHeight, flattenedTexWidth, seed); // here we follow (row, col) convension
+
+            // expand road alongside border (for safety reason)
+            int rowSize = FlattenedMap.GetLength(0), colSize = FlattenedMap.GetLength(1);
+            byte[,] mask = new byte[rowSize, colSize];
+            for (int r = 0; r < FlattenedMap.GetLength(0); ++r) {
+                for (int c = 0; c < FlattenedMap.GetLength(1); ++c) {
+                    if (FlattenedMap[r, c]) { // ground
+                        if (r == 0 || r == rowSize - 1 || c == 0 || c == colSize - 1) { // on the edge
+                            mask[r, c] = road;
+                        } else {
+                            if (FlattenedMap[r - 1, c] &&
+                                FlattenedMap[r + 1, c] &&
+                                FlattenedMap[r, c - 1] &&
+                                FlattenedMap[r, c + 1] &&
+                                FlattenedMap[r - 1, c + 1] &&
+                                FlattenedMap[r - 1, c - 1] &&
+                                FlattenedMap[r + 1, c + 1] &&
+                                FlattenedMap[r - 1, c + 1]) {
+                                mask[r, c] = empty;
+                            } else {
+                                mask[r, c] = road;
+                            }
+                        }
+                    } else { // wall
+                        mask[r, c] = wall;
+                    }
+                }
+            }
+
+            // apply mask
+            for (int r = 0; r < flattenedTexHeight; ++r) {
+                for (int c = 0; c < flattenedTexWidth; ++c) {
+                    if (mask[r, c] != 0) { // mask not empty(0) -> use mask value
+                        FlattenedMapWFC[r, c] = mask[r, c];
+                    }
+                }
+            }
+
+            //debug:
+            // Debug.Log(Util.ByteMapWithSingleDigitToString(FlattenedMapWFC));
+            HashSet<int> maskSet = new HashSet<int>();
+            maskSet.Add(road);
+            maskSet.Add(fountainRoad);
+            maskSet.Add(pillarRoad);
+            debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
         }
 
         void DoCalc() {
@@ -72,7 +136,7 @@ namespace MicroUniverse {
             FlattenedMapTex = Util.BoolMap2Tex(FlattenedMap, brighterEquals: true);
         }
 
-        public void GenerateSubMap(bool fillValue = true) {
+        void GenerateSubMap(bool fillValue = true) {
             int subWidth = fillResult.BorderColMax - fillResult.BorderColMin + 1;
             int subHeight = fillResult.BorderRowMax - fillResult.BorderRowMin + 1;
             SubMap = new bool[subHeight, subWidth];
@@ -90,7 +154,7 @@ namespace MicroUniverse {
             }
         }
 
-        public void GenerateMap(bool fillValue = true) {
+        void GenerateMap(bool fillValue = true) {
             Map = new bool[fillResult.RowSize, fillResult.ColSize];
             foreach (Vector2Int p in fillResult.FilledPoints) {
                 Map[p.x, p.y] = fillValue;
@@ -192,69 +256,8 @@ namespace MicroUniverse {
             FlattenedMap = Util.PlotPointsToBoolMap(transformed, flattenedTexHeight, flattenedTexWidth, true);
 
         }
-
-        // used in MST
-        public void RegisterConnected(IGraphNode other) {
-            ConnectedRegion.Add(other as RegionInfo);
-        }
-
-        public void DoWFC(WFC wfc, int seed) {
-
-            // ID rules:
-            const int empty = 0;
-            const int road = 1;
-            const int fountainRoad = 2;
-            const int pillarRoad = 3;
-            const int wall = 4;
-
-            FlattenedMapWFC = wfc.Run(flattenedTexHeight, flattenedTexWidth, seed); // here we follow (row, col) convension
-
-            // expand road alongside border (for safety reason)
-            int rowSize = FlattenedMap.GetLength(0), colSize = FlattenedMap.GetLength(1);
-            byte[,] mask = new byte[rowSize, colSize];
-            for (int r = 0; r < FlattenedMap.GetLength(0); ++r) {
-                for (int c = 0; c < FlattenedMap.GetLength(1); ++c) {
-                    if (FlattenedMap[r, c]) { // ground
-                        if (r == 0 || r == rowSize - 1 || c == 0 || c == colSize - 1) { // on the edge
-                            mask[r, c] = road;
-                        } else {
-                            if (FlattenedMap[r - 1, c] && 
-                                FlattenedMap[r + 1, c] && 
-                                FlattenedMap[r, c - 1] && 
-                                FlattenedMap[r, c + 1] &&
-                                FlattenedMap[r - 1, c + 1] &&
-                                FlattenedMap[r - 1, c - 1] &&
-                                FlattenedMap[r + 1, c + 1] &&
-                                FlattenedMap[r - 1, c + 1]) {
-                                mask[r, c] = empty;
-                            } else {
-                                mask[r, c] = road;
-                            }
-                        }
-                    } else { // wall
-                        mask[r, c] = wall;
-                    }
-                }
-            }
-
-            // apply mask
-            for (int r = 0; r < flattenedTexHeight; ++r) {
-                for (int c = 0; c < flattenedTexWidth; ++c) {
-                    if (mask[r, c] != 0) { // mask not empty(0) -> use mask value
-                        FlattenedMapWFC[r, c] = mask[r, c];
-                    }
-                }
-            }
-
-            //debug:
-            // Debug.Log(Util.ByteMapWithSingleDigitToString(FlattenedMapWFC));
-            HashSet<int> maskSet = new HashSet<int>();
-            maskSet.Add(road);
-            maskSet.Add(fountainRoad);
-            maskSet.Add(pillarRoad);
-            debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
-        }
-
+        
+        // depreciated.
         /*
         public void MarchingSquareRoadnetwork(int upscaleFactor, float wallHeight, int smoothCount, float smoothRatio, float widthRatio) {
             HashSet<int> trueMask = new HashSet<int>();
@@ -283,33 +286,12 @@ namespace MicroUniverse {
         }
         */
 
-        public void VertexTransformBack() {
-
-            // step.1: transform road network in-place
-            TransformBackInPlace(RoadNetworkWallVertices);
-            TransformBackInPlace(RoadNetworkCoverVertices);
-
-            // step.2: rebuild mesh:
-            RoadNetworkCoverMesh = new Mesh {
-                hideFlags = HideFlags.HideAndDontSave,
-                vertices = RoadNetworkCoverVertices.ToArray(),
-                triangles = RoadNetworkCoverIndices.ToArray()
-            };
-
-            RoadNetworkWallMesh = new Mesh {
-                hideFlags = HideFlags.HideAndDontSave,
-                vertices = RoadNetworkWallVertices.ToArray(),
-                triangles = RoadNetworkWallIndices.ToArray()
-            };
-        }
-
 
         private void TransformBackInPlace(List<Vector3> originals) {
             for (int i = 0; i < originals.Count; ++i) {
                 originals[i] = TransformBack(originals[i]);
             }
         }
-
 
         private List<Vector3> TransformBack(List<Vector3> originals) {
             List<Vector3> ret = new List<Vector3>(originals); // "deep copy"
