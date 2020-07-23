@@ -40,6 +40,7 @@ namespace MicroUniverse {
         [Range(1, 4)] public int roadNetworkUpscale = 1;
         [Range(0, 4)] public int roadNetworkSmoothCount = 1;
         [Range(0, 1)] public float roadNetworkSmoothRatio = 0.1f;
+        [Range(0, 1)] public float roadNetworkWidthRatio = 0.5f;
 
 
         [Header("Debug")]
@@ -67,6 +68,7 @@ namespace MicroUniverse {
 
         void DebugTex(Texture tex) {
             debugImage.texture = tex;
+            debugImage.SetNativeSize();
             print("DebugTex gets a texture: " + tex.width.ToString() + "x" + tex.height.ToString());
         }
 
@@ -184,9 +186,9 @@ namespace MicroUniverse {
             print("Step.7: Marching Square for road network." + Timestamp);
             //debug:
             RegionInfo debugRI = regionInfos[2];
-            debugRI.MarchingSquareRoadnetwork(roadNetworkUpscale, 1f, 1, roadNetworkSmoothCount, roadNetworkSmoothRatio);
+            debugRI.MarchingSquareRoadnetwork(roadNetworkUpscale, 1f, 1, roadNetworkSmoothCount, roadNetworkSmoothRatio, roadNetworkWidthRatio);
             debugGO.GetComponent<MeshFilter>().mesh = debugRI.roadNetworkCover;
-
+            DebugTex(debugRI.debugTex3);
             // ----------
 
 

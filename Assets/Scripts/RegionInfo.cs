@@ -33,13 +33,11 @@ namespace MicroUniverse {
         // debug:
         public Mesh roadNetworkCover;
         public Mesh roadNetworkWall;
-
-        /*
+        
         public Texture2D debugTex1;
         public Texture2D debugTex2;
         public Texture2D debugTex3;
         public Texture2D debugTex4;
-        */
 
         private int flattenedTexWidth, flattenedTexHeight; // float -> int
 
@@ -232,7 +230,7 @@ namespace MicroUniverse {
             return ret;
         }
 
-        public void MarchingSquareRoadnetwork(int upscaleFactor, float squareSize, float wallHeight, int smoothCount, float smoothRatio) {
+        public void MarchingSquareRoadnetwork(int upscaleFactor, float squareSize, float wallHeight, int smoothCount, float smoothRatio, float widthRatio) {
             HashSet<int> trueMask = new HashSet<int>();
             trueMask.Add(1);
             trueMask.Add(2);
@@ -240,7 +238,10 @@ namespace MicroUniverse {
             bool[,] roadmap = Util.ByteMapToBoolMap(FlattenedMapWFC, trueMask); // mask road to bool map
             bool[,] upscaled = roadmap;
             if (upscaleFactor > 1) {
-                upscaled = Util.Upscale(roadmap, 2, 0f);
+                debugTex1 = Util.BoolMap2Tex(roadmap, true);
+                debugTex2 = Util.Upsample(debugTex1, 2);
+                debugTex3 = Util.BoolMap2Tex(Util.Tex2BoolMap(debugTex2, true, widthRatio), true);
+                upscaled = Util.Upscale(roadmap, upscaleFactor, widthRatio);
             }
             MarchingSquare mc = new MarchingSquare();
             mc.GenerateMesh(upscaled, squareSize, wallHeight, smoothCount, smoothRatio, false);

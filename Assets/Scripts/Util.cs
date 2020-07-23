@@ -26,6 +26,7 @@ namespace MicroUniverse {
             RenderTexture currentActiveRT = RenderTexture.active;
             RenderTexture.active = rt;
             Texture2D tex = new Texture2D(rt.width, rt.height, format, false, true);
+            tex.wrapMode = TextureWrapMode.Clamp;
             tex.filterMode = filterMode;
             tex.ReadPixels(new Rect(0, 0, tex.width, tex.height), 0, 0); // read pixel info from active RT
             RenderTexture.active = currentActiveRT;
@@ -36,11 +37,11 @@ namespace MicroUniverse {
         /// <summary>
         /// Convert a Texture2D to a row-major bool map.
         /// </summary>
-        public static bool[,] Tex2BoolMap(Texture2D texture, bool brighterEquals) {
+        public static bool[,] Tex2BoolMap(Texture2D texture, bool brighterEquals, float brightThreshold = 0.5f) {
             bool[,] ret = new bool[texture.height, texture.width];
             Color[] pix = texture.GetPixels(); // left to right, bottom to top (i.e. row after row)
             for (int i = 0; i < pix.Length; ++i) {
-                ret[texture.height - 1 - i / texture.width, i % texture.width] = (pix[i].r > 0.5f ? brighterEquals : !brighterEquals);
+                ret[texture.height - 1 - i / texture.width, i % texture.width] = (pix[i].r > brightThreshold ? brighterEquals : !brighterEquals);
             }
             return ret;
         }
@@ -56,6 +57,7 @@ namespace MicroUniverse {
         /// <param name="map">row contains column, from top left.</param>
         public static Texture2D BoolMap2Tex(in bool[,] map, bool brighterEquals) {
             Texture2D tex = new Texture2D(map.GetLength(1), map.GetLength(0));
+            tex.wrapMode = TextureWrapMode.Clamp;
             int rowCount = map.GetLength(0), colCount = map.GetLength(1);
             for (int r = 0; r < rowCount; ++r) {
                 for (int c = 0; c < colCount; ++c) {
@@ -164,18 +166,12 @@ namespace MicroUniverse {
             return ret;
         }
 
-        public static bool[,] Upscale(bool[,] src, int upsampleRatio) {
-            Texture2D srcTex = BoolMap2Tex(src, true);
-            Texture2D upTex = Upsample(srcTex, upsampleRatio);
-            return Tex2BoolMap(upTex, true);
-        }
-
         public static bool[,] Upscale(bool[,] src, int upsampleRatio, float threshold) {
             Texture2D srcTex = BoolMap2Tex(src, true); // bilinear
             srcTex.filterMode = FilterMode.Bilinear;
             Texture2D upTex = Upsample(srcTex, upsampleRatio);
-            Texture2D finalTex = Binarize(upTex, threshold);
-            return Tex2BoolMap(upTex, true);
+            bool[,] ret = Tex2BoolMap(upTex, true, threshold);
+            return ret;
         }
 
         public static Texture2D Binarize(Texture src, float threshold) {
@@ -183,6 +179,8 @@ namespace MicroUniverse {
             if (thresholdShader == null) {
                 throw new Exception("Threshold shader not found.");
             }
+            FilterMode ogFilterMode = src.filterMode;
+            src.filterMode = FilterMode.Point;
             Material mat = new Material(thresholdShader);
             mat.SetFloat("_Threshold", threshold);
             RenderTexture rt, prevRT;
@@ -193,6 +191,7 @@ namespace MicroUniverse {
             Texture2D ret = RT2Tex(rt);
             ret.filterMode = FilterMode.Point;
             RenderTexture.ReleaseTemporary(rt);
+            // src.filterMode = ogFilterMode;
             return ret;
         }
 
