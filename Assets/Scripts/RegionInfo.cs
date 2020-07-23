@@ -134,7 +134,7 @@ namespace MicroUniverse {
 
         }
 
-        // ---------- public interface ----------
+        // ---------- public interface ---------- [END]
 
 
 

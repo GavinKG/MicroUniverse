@@ -13,7 +13,7 @@ namespace MicroUniverse {
 
         bool placed = false;
 
-        List<List<Vector3>> GetOriginalData() {
+        public List<List<Vector3>> GetOriginalData() {
 
             if (placed) {
                 Debug.LogError("Cannot get original data because props are already transformed.");
@@ -26,23 +26,54 @@ namespace MicroUniverse {
             }
 
             List<List<Vector3>> ret = new List<List<Vector3>>(dataSize);
+
+            if (dataSize == 0) {
+                return ret;
+            }
+
+            // pack:
+
             foreach (MeshFilter mf in meshesToTransform) {
                 ret.Add(mf.mesh.vertices.ToList());
             }
 
             // pack all single position in transformBackPositions together:
-            List<Vector3> packed = new List<Vector3>(positionsToTransform.Count);
-            foreach (Transform t in positionsToTransform) {
-                packed.Add(t.position);
+            if (positionsToTransform.Count != 0) {
+                List<Vector3> packed = new List<Vector3>(positionsToTransform.Count);
+                foreach (Transform t in positionsToTransform) {
+                    packed.Add(t.position);
+                }
+                ret.Add(packed);
             }
 
-            ret.Add(packed);
             return ret;
         }
 
-        void SetTransformedData(List<List<Vector3>> data) {
+        public void SetTransformedData(List<List<Vector3>> data) {
+
+            if (placed) {
+                throw new System.Exception("?");
+            }
+
+            // unpack:
+            
+            for (int i = 0; i < meshesToTransform.Count; ++i) {
+                meshesToTransform[i].mesh.SetVertices(data[i]);
+            }
+
+            if (positionsToTransform.Count != 0) {
+                for (int i = 0; i < positionsToTransform.Count; ++i) {
+                    positionsToTransform[i].position = data[data.Count - 1][i];
+                }
+            }
+
 
             placed = true;
+        }
+
+        private void OnDrawGizmos() {
+            Gizmos.matrix = transform.localToWorldMatrix;
+            Gizmos.DrawWireCube(Vector3.up * 0.5f, Vector3.one);
         }
     }
 }
