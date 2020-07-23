@@ -47,20 +47,7 @@ namespace MicroUniverse {
         readonly static Vector2 right = new Vector2(0, 1); // not Vector2.right!
         float moveRightLength;
 
-        // generated mesh vertices/indices (deprecieated)
-        /*
-        public List<Vector3> RoadNetworkCoverVertices { get; private set; }
-        public List<Vector3> RoadNetworkWallVertices { get; private set; }
-        public List<int> RoadNetworkCoverIndices { get; private set; }
-        public List<int> RoadNetworkWallIndices { get; private set; }
-        public Mesh RoadNetworkCoverMesh { get; private set; }
-        public Mesh RoadNetworkWallMesh { get; private set; }
-        */
-
-
-
         // ID rules:
-
         const int empty = 0;
         const int road = 1;
         const int fountainRoad = 2;
@@ -346,35 +333,6 @@ namespace MicroUniverse {
             FlattenedMap = Util.PlotPointsToBoolMap(transformed, flattenedTexHeight, flattenedTexWidth, true);
 
         }
-
-        // depreciated.
-        /*
-        public void MarchingSquareRoadnetwork(int upscaleFactor, float wallHeight, int smoothCount, float smoothRatio, float widthRatio) {
-            HashSet<int> trueMask = new HashSet<int>();
-            trueMask.Add(1);
-            trueMask.Add(2);
-            trueMask.Add(3);
-            bool[,] roadmap = Util.ByteMapToBoolMap(FlattenedMapWFC, trueMask); // mask road to bool map
-            bool[,] upscaled = roadmap;
-            if (upscaleFactor > 1) {
-                debugTex1 = Util.BoolMap2Tex(roadmap, true);
-                debugTex2 = Util.Upsample(debugTex1, 2);
-                debugTex3 = Util.BoolMap2Tex(Util.Tex2BoolMap(debugTex2, true, widthRatio), true);
-                upscaled = Util.Upscale(roadmap, upscaleFactor, widthRatio);
-            }
-            MarchingSquare mc = new MarchingSquare(); // feel the groove!
-            mc.GenerateMesh(upscaled, 1f / upscaleFactor, wallHeight, smoothCount, smoothRatio, false);
-
-            RoadNetworkCoverVertices = mc.CoverVertices;
-            RoadNetworkWallVertices = mc.WallVertices;
-            RoadNetworkCoverIndices = mc.CoverIndices;
-            RoadNetworkWallIndices = mc.WallIndices;
-
-
-            // roadNetworkCoverMesh = mc.CoverMesh;
-            // roadNetworkWallMesh = mc.WallMesh;
-        }
-        */
 
         /// <summary>
         /// Inverse transform of Ring2FlattenTransform
