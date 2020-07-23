@@ -30,11 +30,16 @@ namespace MicroUniverse {
         [Header("Step.4: Flood Fill")]
         public int smallRegionThreshold = 20;
 
-        [Header("Step.N: WFC")]
+        [Header("Step.6: WFC")]
         public string sampleFilePath = "WFCSample.txt";
         [Range(1, 3)] public int N = 3;
         [Range(1, 7)] public int symmetryVariantCount = 7;
 
+        [Header("Step.7: Planting")]
+        public GameObject fountainPrefab;
+        public GameObject buildingPrefab;
+        public GameObject pillarPrefab;
+        public Transform propRoot;
 
         [Header("Debug")]
         public RawImage debugImage;
@@ -175,13 +180,15 @@ namespace MicroUniverse {
             foreach (RegionInfo regionInfo in regionInfos) {
                 regionInfo.DoWFC(wfc, seed);
             }
-            DebugTex(regionInfos[0].debugTex1);
+            // DebugTex(regionInfos[0].debugTex1);
 
 
             // ----------
             // Step.7
-            print("Step.7: Plant props (like buildings) alongside road." + Timestamp);
-
+            print("Step.7: Plant props (fountain + pillar + building)." + Timestamp);
+            foreach (RegionInfo regionInfo in regionInfos) {
+                regionInfo.PlantProps(fountainPrefab, buildingPrefab, pillarPrefab, propRoot);
+            }
 
             print("[LoadingJob] Loading finished." + Timestamp);
         }

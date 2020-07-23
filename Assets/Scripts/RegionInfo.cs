@@ -57,6 +57,19 @@ namespace MicroUniverse {
         public Mesh RoadNetworkWallMesh { get; private set; }
         */
 
+
+
+        // ID rules:
+
+        const int empty = 0;
+        const int road = 1;
+        const int fountainRoad = 2;
+        const int pillarRoad = 3;
+        const int wall = 4;
+        const int building = 5;
+
+
+
         public RegionInfo(FloodFill.FillResult _fillResult) {
             if (!_fillResult.Finished) {
                 throw new System.Exception("Fill result not finished");
@@ -67,7 +80,7 @@ namespace MicroUniverse {
 
 
         // ---------- public interface ----------
-        
+
         // used in MST
         public void RegisterConnected(IGraphNode other) {
             ConnectedRegion.Add(other as RegionInfo);
@@ -75,12 +88,6 @@ namespace MicroUniverse {
 
         public void DoWFC(WFC wfc, int seed) {
 
-            // ID rules:
-            const int empty = 0;
-            const int road = 1;
-            const int fountainRoad = 2;
-            const int pillarRoad = 3;
-            const int wall = 4;
 
             FlattenedMapWFC = wfc.Run(flattenedTexHeight, flattenedTexWidth, seed); // here we follow (row, col) convension
 
@@ -123,15 +130,86 @@ namespace MicroUniverse {
 
             //debug:
             // Debug.Log(Util.ByteMapWithSingleDigitToString(FlattenedMapWFC));
-            HashSet<int> maskSet = new HashSet<int>();
-            maskSet.Add(road);
-            maskSet.Add(fountainRoad);
-            maskSet.Add(pillarRoad);
+            HashSet<int> maskSet = new HashSet<int> {
+                road,
+                fountainRoad,
+                pillarRoad
+            };
             debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
         }
 
-        public void PlantProps() {
+        public void PlantProps(GameObject fountainPrefab, GameObject buildingPrefab, GameObject pillarPrefab, Transform propRoot) {
 
+            // Step.1: analyze where to place building (alongside road):
+            int rowSize = FlattenedMapWFC.GetLength(0), colSize = FlattenedMapWFC.GetLength(1);
+            for (int r = 1; r < rowSize - 1; ++r) {
+                for (int c = 1; c < colSize - 1; ++c) {
+                    if (FlattenedMapWFC[r, c] == empty && (
+                        IsRoad(FlattenedMapWFC[r - 1, c]) || IsRoad(FlattenedMapWFC[r, c - 1]) || IsRoad(FlattenedMapWFC[r + 1, c]) || IsRoad(FlattenedMapWFC[r, c + 1]))) {
+                        FlattenedMapWFC[r, c] = building;
+                    }
+                }
+            }
+
+            // Step.2: place actual props (in FlattenedMap coord, 1 pixel = 1 unity unit):
+            List<CityProp> spawnedList = new List<CityProp>();
+            for (int r = 1; r < rowSize - 1; ++r) {
+                for (int c = 1; c < colSize - 1; ++c) {
+                    GameObject spawned = null;
+                    switch (FlattenedMapWFC[r, c]) {
+                        case fountainRoad:
+                            spawned = GameObject.Instantiate(fountainPrefab, new Vector3(c, 0, r), Quaternion.identity, propRoot);
+                            break;
+                        case building:
+                            spawned = GameObject.Instantiate(buildingPrefab, new Vector3(c, 0, r), Quaternion.identity, propRoot);
+                            break;
+                        case pillarRoad:
+                            spawned = GameObject.Instantiate(pillarPrefab, new Vector3(c, 0, r), Quaternion.identity, propRoot);
+                            break;
+                        default:
+                            break;
+                    }
+                    if (spawned != null) {
+                        spawned.hideFlags = HideFlags.DontSaveInEditor;
+                        spawnedList.Add(spawned.GetComponent<CityProp>());
+                    }
+                }
+            }
+
+            // Step.3: transform back:
+            foreach (CityProp prop in spawnedList) {
+
+                /*
+                List<Vector3[]> tempRingPosVerts = new List<Vector3[]>(prop.meshesToTransform.Count);
+                for (int i = 0; i < prop.meshesToTransform.Count; ++i) {
+                    Vector3[] modelVerts = prop.meshesToTransform[i].mesh.vertices;
+                    for (int j = 0; j < modelVerts.Length; ++j) {
+                        modelVerts[j] = prop.meshesToTransform[i].transform.TransformPoint(modelVerts[j]); // pre-process: local position -> flattenmap coord (also current world coord)
+                        modelVerts[j] = TransformBack(modelVerts[j]); // flattenmap coord -> ring coord (aka world position)
+                    }
+                    tempRingPosVerts.Add(modelVerts);
+                }
+                */
+
+                Vector3 newWorldPos = TransformBack(prop.transform.position);
+                prop.transform.position = newWorldPos; // for shader center point, uhhhhhhhh
+
+                /*
+                for (int i = 0; i < prop.meshesToTransform.Count; ++i) {
+                    Vector3[] verts = tempRingPosVerts[i];
+                    for (int j = 0; j < verts.Length; ++j) {
+                        verts[j] = prop.meshesToTransform[i].transform.InverseTransformPoint(verts[j]); // post-process: world (ring) position -> local position (with newly placed root)
+                    }
+                    prop.meshesToTransform[i].mesh.SetVertices(verts);
+                    prop.meshesToTransform[i].mesh.RecalculateNormals();
+                }
+                */
+            }
+
+        }
+
+        bool IsRoad(byte id) {
+            return id == road || id == fountainRoad || id == pillarRoad;
         }
 
         // ---------- public interface ---------- [END]
@@ -268,7 +346,7 @@ namespace MicroUniverse {
             FlattenedMap = Util.PlotPointsToBoolMap(transformed, flattenedTexHeight, flattenedTexWidth, true);
 
         }
-        
+
         // depreciated.
         /*
         public void MarchingSquareRoadnetwork(int upscaleFactor, float wallHeight, int smoothCount, float smoothRatio, float widthRatio) {
@@ -297,19 +375,6 @@ namespace MicroUniverse {
             // roadNetworkWallMesh = mc.WallMesh;
         }
         */
-
-
-        private void TransformBackInPlace(List<Vector3> originals) {
-            for (int i = 0; i < originals.Count; ++i) {
-                originals[i] = TransformBack(originals[i]);
-            }
-        }
-
-        private List<Vector3> TransformBack(List<Vector3> originals) {
-            List<Vector3> ret = new List<Vector3>(originals); // "deep copy"
-            TransformBackInPlace(ret);
-            return ret;
-        }
 
         /// <summary>
         /// Inverse transform of Ring2FlattenTransform

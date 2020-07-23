@@ -5,14 +5,13 @@ using System.Linq;
 
 
 namespace MicroUniverse {
-    public class CityProps : MonoBehaviour {
+    public class CityProp : MonoBehaviour {
 
         public List<MeshFilter> meshesToTransform;
-        public List<Transform> positionsToTransform;
-
 
         bool placed = false;
 
+        /*
         public List<List<Vector3>> GetOriginalData() {
 
             if (placed) {
@@ -70,8 +69,9 @@ namespace MicroUniverse {
 
             placed = true;
         }
+        */
 
-        private void OnDrawGizmos() {
+        private void OnDrawGizmosSelected() {
             Gizmos.matrix = transform.localToWorldMatrix;
             Gizmos.DrawWireCube(Vector3.up * 0.5f, Vector3.one);
         }
