@@ -271,16 +271,30 @@ namespace MicroUniverse {
         /// Interpolate vertices in coverVertices for all outline lists to form a smooth outline.
         /// </summary>
         void SmoothOutline(float ratio) {
+            List<Vector3> smoothedCoverVertices = new List<Vector3>(CoverVertices); // "deep copy"
             foreach (List<int> outlineList in outlineIndices) {
-                for (int i = 1; i < outlineList.Count - 1; ++i) {
-                    Vector3 lhs = CoverVertices[outlineList[i - 1]];
-                    Vector3 rhs = CoverVertices[outlineList[i + 1]];
+
+                for (int i = 0; i < outlineList.Count; ++i) {
+                    Vector3 lhs;
+                    if (i == 0) {
+                        lhs = CoverVertices[outlineList[outlineList.Count - 1]];
+                    } else {
+                        lhs = CoverVertices[outlineList[i - 1]];
+                    }
+                    Vector3 rhs;
+                    if (i == outlineList.Count-1) {
+                        rhs = CoverVertices[outlineList[0]];
+                    } else {
+                        rhs = CoverVertices[outlineList[i + 1]];
+                    }
+                    
                     Vector3 midpoint = (lhs + rhs) / 2;
                     Vector3 curr = CoverVertices[outlineList[i]];
                     curr += (midpoint - curr) * ratio;
-                    CoverVertices[outlineList[i]] = curr;
+                    smoothedCoverVertices[outlineList[i]] = curr;
                 }
             }
+            CoverVertices = smoothedCoverVertices;
         }
 
 

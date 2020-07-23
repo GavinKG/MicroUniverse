@@ -22,7 +22,7 @@ namespace MicroUniverse {
         public float wallLength = 20f;
         public float wallHeight = 2f;
         [Range(0, 4)] public int cityWallSmoothCount = 4;
-        [Range(0, 1)] public float cityWallSmoothRatio = 0.5f;
+        [Range(0, 1)] public float cityWallSmoothRatio = 0.5f; // 1: shrink, -1: expand
 
         [Header("Step.3: Recapture")]
         public CaptureOverviewMask capturer;
