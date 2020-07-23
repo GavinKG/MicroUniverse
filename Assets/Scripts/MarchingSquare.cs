@@ -20,11 +20,7 @@ namespace MicroUniverse {
         HashSet<int> checkedVertices = new HashSet<int>(); // indices that are checked in outline finding process.
         List<List<int>> outlineIndices = new List<List<int>>(); // outline indices (there might be multiple outlines)
         Dictionary<int, List<Triangle>> triHashMap = new Dictionary<int, List<Triangle>>(); // index -> triangles containing this index
-
-
-
-
-        // Public Interface:
+        
 
         /// <summary>
         /// Main function to convert a map to the "wall" like mesh. Meshes are stored in public property "CoverMesh" and "WallMesh"
@@ -36,6 +32,8 @@ namespace MicroUniverse {
         /// <param name="wallHeight">The height (+Y) of the wall mesh.</param>
         /// <param name="wallFaceOutside">Whether wall's facing is towards empty area.</param>
         public void GenerateMesh(bool[,] map, float squareSize, float wallHeight, float smoothCount, bool wallFaceOutside = true) {
+
+            Clear();
 
             // Main grid
             SquareGrid squareGrid = new SquareGrid(map, squareSize);
@@ -88,6 +86,23 @@ namespace MicroUniverse {
             WallMesh.hideFlags = HideFlags.HideAndDontSave;
             WallMesh.vertices = WallVertices.ToArray();
             WallMesh.triangles = WallIndices.ToArray();
+        }
+
+        /// <summary>
+        /// Reset all variables to give it a fresh start.
+        /// </summary>
+        void Clear() {
+            CoverMesh = null;
+            CoverIndices = null;
+            CoverVertices = null;
+
+            WallMesh = null;
+            WallVertices = null;
+            CoverIndices = null;
+
+            checkedVertices = null;
+            outlineIndices = null;
+            triHashMap = null;
         }
 
 
