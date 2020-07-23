@@ -21,6 +21,7 @@ namespace MicroUniverse {
         public float wallHeight = 2f;
         [Range(0, 4)]
         public int smoothCount = 2;
+        [Range(0, 1)] public float smoothRatio = 0.5f;
 
         public bool faceOutside = true;
 
@@ -35,7 +36,7 @@ namespace MicroUniverse {
             bool[,] map = Util.Tex2BoolMap(downsampled, brighterEquals: true);
 
             MarchingSquare cityWallGenerator = new MarchingSquare();
-            cityWallGenerator.GenerateMesh(map, wallLength / (cityTex.width / downsampleRatio), wallHeight, smoothCount, faceOutside);
+            cityWallGenerator.GenerateMesh(map, wallLength / (cityTex.width / downsampleRatio), wallHeight, smoothCount, smoothRatio, faceOutside);
 
             coverGO.transform.position = Vector3.zero;
             coverGO.transform.rotation = Quaternion.identity;

@@ -21,8 +21,8 @@ namespace MicroUniverse {
         public GameObject wallGO;
         public float wallLength = 20f;
         public float wallHeight = 2f;
-        [Range(0, 4)]
-        public int smoothCount = 2;
+        [Range(0, 4)] public int cityWallSmoothCount = 4;
+        [Range(0, 1)] public float cityWallSmoothRatio = 0.5f;
 
         [Header("Step.3: Recapture")]
         public CaptureOverviewMask capturer;
@@ -34,6 +34,11 @@ namespace MicroUniverse {
         public string sampleFilePath = "WFCSample.txt";
         [Range(1, 3)] public int N = 3;
         [Range(1, 7)] public int symmetryVariantCount = 7;
+
+        [Header("Step:7 Gen road network")]
+        public GameObject debugGO;
+        [Range(0, 4)] public int roadNetworkSmoothCount = 1;
+        [Range(0, 1)] public float roadNetworkSmoothRatio = 0.1f;
 
 
         [Header("Debug")]
@@ -106,7 +111,7 @@ namespace MicroUniverse {
             // Step.2
             print("Step.2: Marching Square for city wall" + Timestamp);
             MarchingSquare cityWallGenerator = new MarchingSquare();
-            cityWallGenerator.GenerateMesh(wallMap, wallLength / wallMap.GetLength(0), wallHeight, smoothCount);
+            cityWallGenerator.GenerateMesh(wallMap, wallLength / wallMap.GetLength(0), wallHeight, cityWallSmoothCount, cityWallSmoothRatio);
 
             coverGO.GetComponent<MeshFilter>().mesh = cityWallGenerator.CoverMesh;
             wallGO.GetComponent<MeshFilter>().mesh = cityWallGenerator.WallMesh;
@@ -176,7 +181,10 @@ namespace MicroUniverse {
             // ----------
             // Step.7
             print("Step.7: Marching Square for road network." + Timestamp);
-
+            //debug:
+            RegionInfo debugRI = regionInfos[2];
+            debugRI.MarchingSquareRoadnetwork(1f, 1, roadNetworkSmoothCount, roadNetworkSmoothRatio);
+            debugGO.GetComponent<MeshFilter>().mesh = debugRI.roadNetworkCover;
 
             // ----------
 

@@ -91,12 +91,12 @@ namespace MicroUniverse {
             return ret;
         }
 
-        public static bool[,] ByteMapToBoolMap(byte[,] byteMap, int trueValue) {
+        public static bool[,] ByteMapToBoolMap(byte[,] byteMap, HashSet<int> trueMask) {
             int rowCount = byteMap.GetLength(0), colCount = byteMap.GetLength(1);
             bool[,] ret = new bool[rowCount, colCount];
             for (int r = 0; r < rowCount; ++r) {
                 for (int c = 0; c < colCount; ++c) {
-                    ret[r, c] = byteMap[r, c] == trueValue ? true : false;
+                    ret[r, c] = trueMask.Contains(byteMap[r, c]) ? true : false;
                 }
             }
             return ret;

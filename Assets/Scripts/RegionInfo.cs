@@ -30,6 +30,10 @@ namespace MicroUniverse {
 
         public List<RegionInfo> ConnectedRegion { get; private set; } = new List<RegionInfo>();
 
+        // debug:
+        public Mesh roadNetworkCover;
+        public Mesh roadNetworkWall;
+
         /*
         public Texture2D debugTex1;
         public Texture2D debugTex2;
@@ -228,10 +232,16 @@ namespace MicroUniverse {
             return ret;
         }
 
-        public void MarchingSquareRoadnetwork() {
-            bool[,] roadmap = Util.ByteMapToBoolMap(FlattenedMapWFC, 1); // mask road to bool map
+        public void MarchingSquareRoadnetwork(float squareSize, float wallHeight, int smoothCount, float smoothRatio) {
+            HashSet<int> trueMask = new HashSet<int>();
+            trueMask.Add(1);
+            trueMask.Add(2);
+            trueMask.Add(3);
+            bool[,] roadmap = Util.ByteMapToBoolMap(FlattenedMapWFC, trueMask); // mask road to bool map
             MarchingSquare mc = new MarchingSquare();
-            mc.GenerateMesh(roadmap, 1, 1, 4, false);
+            mc.GenerateMesh(roadmap, squareSize, wallHeight, smoothCount, smoothRatio, false);
+            roadNetworkCover = mc.CoverMesh;
+            roadNetworkWall = mc.WallMesh;
         }
     }
 

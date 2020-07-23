@@ -60,7 +60,8 @@ namespace MicroUniverse {
         /// <param name="squareSize">Square resolution.</param>
         /// <param name="wallHeight">The height (+Y) of the wall mesh.</param>
         /// <param name="wallFaceOutside">Whether wall's facing is towards empty area.</param>
-        public void GenerateMesh(bool[,] map, float squareSize, float wallHeight, float smoothCount, bool wallFaceOutside = true) {
+        /// <param name="smoothRatio">how much should a vertex care about neighbouring vertices, from 0 to 1!</param>
+        public void GenerateMesh(bool[,] map, float squareSize, float wallHeight, int smoothCount, float smoothRatio, bool wallFaceOutside = true) {
 
             Clear();
 
@@ -79,7 +80,7 @@ namespace MicroUniverse {
             // Outline generation & smoothen (3-pass)
             CalculateMeshOutlines();
             for (int i = 0; i < smoothCount; ++i) {
-                SmoothOutline();
+                SmoothOutline(smoothRatio);
             }
 
 
@@ -269,14 +270,14 @@ namespace MicroUniverse {
         /// <summary>
         /// Interpolate vertices in coverVertices for all outline lists to form a smooth outline.
         /// </summary>
-        void SmoothOutline() {
+        void SmoothOutline(float ratio) {
             foreach (List<int> outlineList in outlineIndices) {
                 for (int i = 1; i < outlineList.Count - 1; ++i) {
                     Vector3 lhs = CoverVertices[outlineList[i - 1]];
                     Vector3 rhs = CoverVertices[outlineList[i + 1]];
                     Vector3 midpoint = (lhs + rhs) / 2;
                     Vector3 curr = CoverVertices[outlineList[i]];
-                    curr = (curr + midpoint) / 2;
+                    curr += (midpoint - curr) * ratio;
                     CoverVertices[outlineList[i]] = curr;
                 }
             }
