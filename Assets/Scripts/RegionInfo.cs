@@ -65,6 +65,9 @@ namespace MicroUniverse {
             DoCalc();
         }
 
+
+        // ---------- public interface ----------
+        
         // used in MST
         public void RegisterConnected(IGraphNode other) {
             ConnectedRegion.Add(other as RegionInfo);
@@ -126,6 +129,15 @@ namespace MicroUniverse {
             maskSet.Add(pillarRoad);
             debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
         }
+
+        public void PlantProps() {
+
+        }
+
+        // ---------- public interface ----------
+
+
+
 
         void DoCalc() {
             GenerateMap();
