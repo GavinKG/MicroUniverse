@@ -8,13 +8,13 @@ namespace MicroUniverse {
 
         // Cover mesh:
         public Mesh CoverMesh { get; private set; }
-        List<Vector3> coverVertices;
-        List<int> coverIndices;
+        public List<Vector3> CoverVertices { get; private set; }
+        public List<int> CoverIndices { get; private set; }
 
         // Wall mesh:
         public Mesh WallMesh { get; private set; }
-        List<Vector3> wallVertices;
-        List<int> wallIndices;
+        public List<Vector3> WallVertices { get; private set; }
+        public List<int> WallIndices { get; private set; }
 
         // Helper:
         HashSet<int> checkedVertices = new HashSet<int>(); // indices that are checked in outline finding process.
@@ -27,20 +27,22 @@ namespace MicroUniverse {
         // Public Interface:
 
         /// <summary>
-        /// Main function to convert a map to the "wall" like mesh.
+        /// Main function to convert a map to the "wall" like mesh. Meshes are stored in public property "CoverMesh" and "WallMesh"
+        /// You can also get vertex positions and indices by getting from "xxxVertices" and "xxxIndices"
         /// One have to call this function first before call mesh getter.
         /// </summary>
         /// <param name="map">true: occupied, false: empty</param>
         /// <param name="squareSize">Square resolution.</param>
         /// <param name="wallHeight">The height (+Y) of the wall mesh.</param>
-        public void GenerateMesh(bool[,] map, float squareSize, float wallHeight, float smoothCount) {
+        /// <param name="wallFaceOutside">Whether wall's facing is towards empty area.</param>
+        public void GenerateMesh(bool[,] map, float squareSize, float wallHeight, float smoothCount, bool wallFaceOutside = true) {
 
             // Main grid
             SquareGrid squareGrid = new SquareGrid(map, squareSize);
 
             // Cover generation
-            coverVertices = new List<Vector3>();
-            coverIndices = new List<int>();
+            CoverVertices = new List<Vector3>();
+            CoverIndices = new List<int>();
             for (int x = 0; x < squareGrid.squares.GetLength(0); x++) {
                 for (int y = 0; y < squareGrid.squares.GetLength(1); y++) {
                     TriangulateSquare(squareGrid.squares[x, y]);
@@ -55,37 +57,37 @@ namespace MicroUniverse {
 
 
             // Wall Generation
-            wallVertices = new List<Vector3>();
-            wallIndices = new List<int>();
+            WallVertices = new List<Vector3>();
+            WallIndices = new List<int>();
             foreach (List<int> outline in outlineIndices) {
                 for (int i = 0; i < outline.Count - 1; i++) {
-                    int startIndex = wallVertices.Count;
-                    wallVertices.Add(coverVertices[outline[i]]); // left
-                    wallVertices.Add(coverVertices[outline[i + 1]]); // right
-                    wallVertices.Add(coverVertices[outline[i]] - Vector3.up * wallHeight); // bottom left
-                    wallVertices.Add(coverVertices[outline[i + 1]] - Vector3.up * wallHeight); // bottom right
+                    int startIndex = WallVertices.Count;
+                    WallVertices.Add(CoverVertices[outline[i]]); // left
+                    WallVertices.Add(CoverVertices[outline[i + 1]]); // right
+                    WallVertices.Add(CoverVertices[outline[i]] - Vector3.up * wallHeight); // bottom left
+                    WallVertices.Add(CoverVertices[outline[i + 1]] - Vector3.up * wallHeight); // bottom right
 
-                    wallIndices.Add(startIndex + 0);
-                    wallIndices.Add(startIndex + 2);
-                    wallIndices.Add(startIndex + 3);
+                    WallIndices.Add(startIndex + 0);
+                    WallIndices.Add(startIndex + 2);
+                    WallIndices.Add(startIndex + 3);
 
-                    wallIndices.Add(startIndex + 3);
-                    wallIndices.Add(startIndex + 1);
-                    wallIndices.Add(startIndex + 0);
+                    WallIndices.Add(startIndex + 3);
+                    WallIndices.Add(startIndex + 1);
+                    WallIndices.Add(startIndex + 0);
                 }
             }
 
             // Generate actual Mesh
             CoverMesh = new Mesh();
             CoverMesh.hideFlags = HideFlags.HideAndDontSave;
-            CoverMesh.vertices = coverVertices.ToArray();
-            CoverMesh.triangles = coverIndices.ToArray();
+            CoverMesh.vertices = CoverVertices.ToArray();
+            CoverMesh.triangles = CoverIndices.ToArray();
             CoverMesh.RecalculateNormals();
 
             WallMesh = new Mesh();
             WallMesh.hideFlags = HideFlags.HideAndDontSave;
-            WallMesh.vertices = wallVertices.ToArray();
-            WallMesh.triangles = wallIndices.ToArray();
+            WallMesh.vertices = WallVertices.ToArray();
+            WallMesh.triangles = WallIndices.ToArray();
         }
 
 
@@ -220,12 +222,12 @@ namespace MicroUniverse {
         void SmoothOutline() {
             foreach (List<int> outlineList in outlineIndices) {
                 for (int i = 1; i < outlineList.Count - 1; ++i) {
-                    Vector3 lhs = coverVertices[outlineList[i - 1]];
-                    Vector3 rhs = coverVertices[outlineList[i + 1]];
+                    Vector3 lhs = CoverVertices[outlineList[i - 1]];
+                    Vector3 rhs = CoverVertices[outlineList[i + 1]];
                     Vector3 midpoint = (lhs + rhs) / 2;
-                    Vector3 curr = coverVertices[outlineList[i]];
+                    Vector3 curr = CoverVertices[outlineList[i]];
                     curr = (curr + midpoint) / 2;
-                    coverVertices[outlineList[i]] = curr;
+                    CoverVertices[outlineList[i]] = curr;
                 }
             }
         }
@@ -308,7 +310,7 @@ namespace MicroUniverse {
         void CalculateMeshOutlines() {
 
             // check all coverVertices
-            for (int vertexIndex = 0; vertexIndex < coverVertices.Count; vertexIndex++) {
+            for (int vertexIndex = 0; vertexIndex < CoverVertices.Count; vertexIndex++) {
 
                 // skip checked vertices
                 if (checkedVertices.Contains(vertexIndex)) {
@@ -403,8 +405,8 @@ namespace MicroUniverse {
             // assign and register vertex index if new vertex occured.
             for (int i = 0; i < nodes.Length; i++) {
                 if (nodes[i].vertexIndex == -1) {
-                    nodes[i].vertexIndex = coverVertices.Count;
-                    coverVertices.Add(nodes[i].position);
+                    nodes[i].vertexIndex = CoverVertices.Count;
+                    CoverVertices.Add(nodes[i].position);
                 }
             }
 
@@ -422,9 +424,9 @@ namespace MicroUniverse {
 
 
         void CreateTriangle(Node a, Node b, Node c) {
-            coverIndices.Add(a.vertexIndex);
-            coverIndices.Add(b.vertexIndex);
-            coverIndices.Add(c.vertexIndex);
+            CoverIndices.Add(a.vertexIndex);
+            CoverIndices.Add(b.vertexIndex);
+            CoverIndices.Add(c.vertexIndex);
 
             // register triangle
             Triangle triangle = new Triangle(a.vertexIndex, b.vertexIndex, c.vertexIndex);
