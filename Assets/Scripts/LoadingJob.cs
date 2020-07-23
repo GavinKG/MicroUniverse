@@ -40,6 +40,7 @@ namespace MicroUniverse {
         public GameObject buildingPrefab;
         public GameObject pillarPrefab;
         public Transform propRoot;
+        public GameObject emptyGOPrefab;
 
         [Header("Debug")]
         public RawImage debugImage;
@@ -186,8 +187,10 @@ namespace MicroUniverse {
             // ----------
             // Step.7
             print("Step.7: Plant props (fountain + pillar + building)." + Timestamp);
-            foreach (RegionInfo regionInfo in regionInfos) {
-                regionInfo.PlantProps(fountainPrefab, buildingPrefab, pillarPrefab, propRoot);
+            for (int i = 0; i < regionInfos.Count; ++i) {
+                GameObject subRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, propRoot);
+                subRootGO.name = "Region #" + i.ToString();
+                regionInfos[i].PlantProps(fountainPrefab, buildingPrefab, pillarPrefab, subRootGO.transform);
             }
 
             print("[LoadingJob] Loading finished." + Timestamp);

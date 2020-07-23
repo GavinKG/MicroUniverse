@@ -140,8 +140,8 @@ namespace MicroUniverse {
 
             // Step.2: place actual props (in FlattenedMap coord, 1 pixel = 1 unity unit):
             List<CityProp> spawnedList = new List<CityProp>();
-            for (int r = 1; r < rowSize - 1; ++r) {
-                for (int c = 1; c < colSize - 1; ++c) {
+            for (int r = 0; r < rowSize; ++r) {
+                for (int c = 0; c < colSize; ++c) {
                     GameObject spawned = null;
                     switch (FlattenedMapWFC[r, c]) {
                         case fountainRoad:
@@ -166,31 +166,30 @@ namespace MicroUniverse {
             // Step.3: transform back:
             foreach (CityProp prop in spawnedList) {
 
-                /*
                 List<Vector3[]> tempRingPosVerts = new List<Vector3[]>(prop.meshesToTransform.Count);
                 for (int i = 0; i < prop.meshesToTransform.Count; ++i) {
-                    Vector3[] modelVerts = prop.meshesToTransform[i].mesh.vertices;
+                    Vector3[] modelVerts = prop.meshesToTransform[i].sharedMesh.vertices;
                     for (int j = 0; j < modelVerts.Length; ++j) {
                         modelVerts[j] = prop.meshesToTransform[i].transform.TransformPoint(modelVerts[j]); // pre-process: local position -> flattenmap coord (also current world coord)
                         modelVerts[j] = TransformBack(modelVerts[j]); // flattenmap coord -> ring coord (aka world position)
                     }
                     tempRingPosVerts.Add(modelVerts);
                 }
-                */
 
+                
                 Vector3 newWorldPos = TransformBack(prop.transform.position);
                 prop.transform.position = newWorldPos; // for shader center point, uhhhhhhhh
+                
 
-                /*
+
                 for (int i = 0; i < prop.meshesToTransform.Count; ++i) {
                     Vector3[] verts = tempRingPosVerts[i];
                     for (int j = 0; j < verts.Length; ++j) {
                         verts[j] = prop.meshesToTransform[i].transform.InverseTransformPoint(verts[j]); // post-process: world (ring) position -> local position (with newly placed root)
                     }
                     prop.meshesToTransform[i].mesh.SetVertices(verts);
-                    prop.meshesToTransform[i].mesh.RecalculateNormals();
+                    // prop.meshesToTransform[i].mesh.RecalculateNormals();
                 }
-                */
             }
 
         }
@@ -341,6 +340,7 @@ namespace MicroUniverse {
         private Vector3 TransformBack(Vector3 original) {
 
             // Step.1: flatten 3D -> 2D
+            float y = original.y;
             Vector2 pos = new Vector2(original.x, original.z);
 
             // Step.2: 2D -> radial coord r/theta
@@ -357,7 +357,7 @@ namespace MicroUniverse {
             pos -= filledCenterToMapCenter;
 
             // step.5: reconstruct
-            Vector3 ret = new Vector3(pos.x, 0, pos.y);
+            Vector3 ret = new Vector3(pos.x, y, pos.y);
             return ret;
         }
     }

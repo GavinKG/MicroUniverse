@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -991,9 +991,11 @@ MonoBehaviour:
     type: 3}
   buildingPrefab: {fileID: 1109629062611184061, guid: 272b3d5d989f7034c81b2a20ceca7d2c,
     type: 3}
-  pillarPrefab: {fileID: 3639788452223917974, guid: 8d05ae25271776449bbe52e0e765901a,
+  pillarPrefab: {fileID: 5371732874266503294, guid: eb521fbf3ba8d6346be684fb5786199c,
     type: 3}
   propRoot: {fileID: 1002798681}
+  emptyGOPrefab: {fileID: 2853529798919359504, guid: 081fadee72a59354e903af38b45a08e2,
+    type: 3}
   debugImage: {fileID: 1176948277}
 --- !u!4 &1422580537
 Transform:
