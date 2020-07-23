@@ -32,7 +32,7 @@ namespace MicroUniverse {
             
             bool[,] map = Util.Tex2BoolMap(downsampled, brighterEquals: true);
 
-            CityWallGenerator cityWallGenerator = new CityWallGenerator();
+            MarchingSquare cityWallGenerator = new MarchingSquare();
             cityWallGenerator.GenerateMesh(map, wallLength / (cityTex.width / downsampleRatio), wallHeight, smoothCount);
 
             coverGO.transform.position = Vector3.zero;

@@ -105,7 +105,7 @@ namespace MicroUniverse {
             // ----------
             // Step.2
             print("Step.2: Marching Square for city wall" + Timestamp);
-            CityWallGenerator cityWallGenerator = new CityWallGenerator();
+            MarchingSquare cityWallGenerator = new MarchingSquare();
             cityWallGenerator.GenerateMesh(wallMap, wallLength / wallMap.GetLength(0), wallHeight, smoothCount);
 
             coverGO.GetComponent<MeshFilter>().mesh = cityWallGenerator.CoverMesh;
