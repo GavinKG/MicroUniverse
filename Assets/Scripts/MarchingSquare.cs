@@ -7,20 +7,49 @@ namespace MicroUniverse {
     public class MarchingSquare {
 
         // Cover mesh:
-        public Mesh CoverMesh { get; private set; }
+        public Mesh CoverMesh {
+            get {
+                if (coverMesh == null) {
+                    coverMesh = new Mesh();
+                    coverMesh.hideFlags = HideFlags.HideAndDontSave;
+                    coverMesh.vertices = CoverVertices.ToArray();
+                    coverMesh.triangles = CoverIndices.ToArray();
+                    coverMesh.RecalculateNormals();
+                }
+                return coverMesh;
+            }
+            private set {
+                coverMesh = value;
+            }
+        }
         public List<Vector3> CoverVertices { get; private set; }
         public List<int> CoverIndices { get; private set; }
+        private Mesh coverMesh;
 
         // Wall mesh:
-        public Mesh WallMesh { get; private set; }
+        public Mesh WallMesh {
+            get {
+                if (wallMesh == null) {
+                    WallMesh = new Mesh();
+                    WallMesh.hideFlags = HideFlags.HideAndDontSave;
+                    WallMesh.vertices = WallVertices.ToArray();
+                    WallMesh.triangles = WallIndices.ToArray();
+                }
+                return wallMesh;
+            }
+            private set {
+                wallMesh = value;
+            }
+        }
         public List<Vector3> WallVertices { get; private set; }
         public List<int> WallIndices { get; private set; }
+        private Mesh wallMesh;
 
         // Helper:
         HashSet<int> checkedVertices; // indices that are checked in outline finding process.
         List<List<int>> outlineIndices; // outline indices (there might be multiple outlines)
         Dictionary<int, List<Triangle>> triHashMap; // index -> triangles containing this index
-        
+
 
         /// <summary>
         /// Main function to convert a map to the "wall" like mesh. Meshes are stored in public property "CoverMesh" and "WallMesh"
@@ -88,18 +117,6 @@ namespace MicroUniverse {
 
                 }
             }
-
-            // Generate actual Mesh
-            CoverMesh = new Mesh();
-            CoverMesh.hideFlags = HideFlags.HideAndDontSave;
-            CoverMesh.vertices = CoverVertices.ToArray();
-            CoverMesh.triangles = CoverIndices.ToArray();
-            CoverMesh.RecalculateNormals();
-
-            WallMesh = new Mesh();
-            WallMesh.hideFlags = HideFlags.HideAndDontSave;
-            WallMesh.vertices = WallVertices.ToArray();
-            WallMesh.triangles = WallIndices.ToArray();
         }
 
         /// <summary>
