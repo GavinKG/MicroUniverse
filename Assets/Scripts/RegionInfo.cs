@@ -229,7 +229,9 @@ namespace MicroUniverse {
         }
 
         public void MarchingSquareRoadnetwork() {
-
+            bool[,] roadmap = Util.ByteMapToBoolMap(FlattenedMapWFC, 1); // mask road to bool map
+            MarchingSquare mc = new MarchingSquare();
+            mc.GenerateMesh(roadmap, 1, 1, 4, false);
         }
     }
 

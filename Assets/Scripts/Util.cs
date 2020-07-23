@@ -91,15 +91,12 @@ namespace MicroUniverse {
             return ret;
         }
 
-        /// <summary>
-        /// Logic: 0 -> false, other -> true
-        /// </summary>
-        public static bool[,] ByteMapToBoolMap(byte[,] byteMap) {
+        public static bool[,] ByteMapToBoolMap(byte[,] byteMap, int trueValue) {
             int rowCount = byteMap.GetLength(0), colCount = byteMap.GetLength(1);
             bool[,] ret = new bool[rowCount, colCount];
             for (int r = 0; r < rowCount; ++r) {
                 for (int c = 0; c < colCount; ++c) {
-                    ret[r, c] = byteMap[r, c] == 0 ? false : true;
+                    ret[r, c] = byteMap[r, c] == trueValue ? true : false;
                 }
             }
             return ret;
