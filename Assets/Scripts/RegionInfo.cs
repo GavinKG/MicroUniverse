@@ -359,7 +359,7 @@ namespace MicroUniverse {
         private Vector2 TransformBack(Vector2 pos) {
 
             // Step.2: 2D -> radial coord r/theta
-            float r = pos.y + FlattenedColCount / 2f + BorderSectorNearRadius;
+            float r = pos.y + BorderSectorNearRadius;
             float theta = pos.x;
 
             // step.3: radial coord -> to-the-right euler coord.
