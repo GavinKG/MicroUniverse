@@ -20,7 +20,27 @@ namespace MicroUniverse {
     /// </summary>
     public static class Util {
 
-        // Bool map: row major!
+        /*
+            Unity TexCoord:
+
+            height
+            ^
+            |  ^ ^
+            |   - 
+            O--------> width        visit: (width, height)
+
+            Boolmap (2D Array) Coord:
+
+            O--------> col 
+            |  ^ ^
+            |   - 
+            |
+            row                     visit: (row, col)
+
+            When Converting:
+            (1) Swap X, Y
+            (2) h = rowSize - row - 1
+         */
 
         public static Texture2D RT2Tex(RenderTexture rt, TextureFormat format = TextureFormat.RGBA32, FilterMode filterMode = FilterMode.Bilinear) {
             RenderTexture currentActiveRT = RenderTexture.active;
