@@ -136,6 +136,10 @@ namespace MicroUniverse {
             coverGO.GetComponent<MeshFilter>().mesh = cityWallGenerator.CoverMesh;
             wallGO.GetComponent<MeshFilter>().mesh = cityWallGenerator.WallMesh;
 
+            Vector3 coverWallPos = new Vector3(0f, wallHeight, 0f);
+            coverGO.transform.position = coverWallPos;
+            wallGO.transform.position = coverWallPos;
+
 
             // ----------
             // Step.3
@@ -207,7 +211,6 @@ namespace MicroUniverse {
                 GameObject subRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, propRoot);
                 subRootGO.name = "Region #" + i.ToString();
                 regionInfos[i].PlantProps(emptyPrefab, fountainPrefab, buildingPrefab, pillarPrefab, subRootGO.transform);
-                break;
             }
 
             DebugTex(regionInfos[0].DebugTransformBackToTex(), 3);

@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -398,7 +398,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150760874}
   m_LocalRotation: {x: 0.29005945, y: -0, z: -0, w: 0.95700866}
-  m_LocalPosition: {x: 44.44, y: 61.01, z: -136.91}
+  m_LocalPosition: {x: 0.22, y: 31.3, z: -80.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1299,7 +1299,7 @@ MonoBehaviour:
   coverGO: {fileID: 98930429}
   wallGO: {fileID: 1056325219}
   wallLength: 128
-  wallHeight: 0.5
+  wallHeight: 2
   cityWallSmoothCount: 4
   cityWallSmoothRatio: 0.6
   capturer: {fileID: 67739326}

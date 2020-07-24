@@ -32,9 +32,9 @@ namespace MicroUniverse {
 
         // debug:
         public Texture2D debugTex1;
-        public Texture2D debugTex2;
-        public Texture2D debugTex3;
-        public Texture2D debugTex4;
+        // public Texture2D debugTex2;
+        // public Texture2D debugTex3;
+        // public Texture2D debugTex4;
         // ---
 
         private int flattenedMapHeight, flattenedMapWidth; // float -> int
@@ -275,17 +275,16 @@ namespace MicroUniverse {
             mapCenter = new Vector2(fillResult.MapCenterPoint.x, fillResult.MapCenterPoint.y);
 
             // use float based Vector2 for highter accuracy.
-            filledCenterToMapCenter = new Vector2(
-                mapCenter.x - fillResult.FilledAreaCenterPoint.x,
-                mapCenter.y - fillResult.FilledAreaCenterPoint.y
-            );
+            filledCenterToMapCenter = mapCenter - fillResult.FilledAreaCenterPoint;
             Vector2 mapCenterToFilledCenter = -filledCenterToMapCenter;
-            Vector2 mapCenterToFilledCenterDirection = filledCenterToMapCenter.normalized;
+            Vector2 mapCenterToFilledCenterDirection = mapCenterToFilledCenter.normalized;
             moveRightLength = filledCenterToMapCenter.magnitude;
 
 
             // should be kept.
             angleFromFilledCenterToRight = Vector2.SignedAngle(mapCenterToFilledCenterDirection, Vector2.right); // in degree, [-180, 180]
+            Debug.Log(mapCenterToFilledCenterDirection);
+            Debug.Log(angleFromFilledCenterToRight);
 
             List<Vector2> transformed = new List<Vector2>(fillResult.FilledPoints.Count);
             for (int i = 0; i < fillResult.FilledPoints.Count; ++i) {
@@ -296,7 +295,7 @@ namespace MicroUniverse {
             // Pass 1: Iterate all points in 2D world space inside a ring, transform them to radial coord and find out flattened texture's width and height.
             for (int i = 0; i < fillResult.FilledPoints.Count; ++i) {
 
-                // step.0: let map center point be zero!
+                // step.0: let map center point be in origin!
                 transformed[i] -= mapCenter;
 
                 // step.1: update sector near/far radius.
