@@ -47,6 +47,7 @@ namespace MicroUniverse {
         readonly static Vector2 right = new Vector2(0, 1); // not Vector2.right!
         float moveRightLength;
         Vector2 mapCenter;
+        float occupiedAngle;
 
         // ID rules:
         const int empty = 0;
@@ -176,15 +177,14 @@ namespace MicroUniverse {
                     for (int j = 0; j < modelVerts.Length; ++j) {
                         modelVerts[j] = prop.meshesToTransform[i].transform.TransformPoint(modelVerts[j]); // pre-process: local position -> flattenmap coord (also current world coord)
                         modelVerts[j] = TransformBack(modelVerts[j]); // flattenmap coord r,c -> ring coord r,c
-                        modelVerts[j] = new Vector3(modelVerts[j].x - 64f, modelVerts[j].y, -modelVerts[j].z + 64f); // filled map r/c -> actual world pos
+                        modelVerts[j] = new Vector3(-modelVerts[j].z + 64f, modelVerts[j].y, modelVerts[j].x - 64f); // filled map r/c -> actual world pos
                     }
-                    // 
                     tempRingPosVerts.Add(modelVerts); // r, y, c
                 }
 
                 
                 Vector3 newFilledBoolmapPos = TransformBack(prop.transform.position);
-                Vector3 newWorldPos = new Vector3(newFilledBoolmapPos.x - 64f, newFilledBoolmapPos.y, -newFilledBoolmapPos.z + 64f);
+                Vector3 newWorldPos = new Vector3(-newFilledBoolmapPos.z + 64f, newFilledBoolmapPos.y, newFilledBoolmapPos.x - 64f);
                 prop.transform.position = newWorldPos; // for shader center point, uhhhhhhhh
                 
 
@@ -305,15 +305,15 @@ namespace MicroUniverse {
                 transformed[i] += right * moveRightLength;
 
                 // step.3: Calc left/right angle boundary.
-                float angle = Vector2.SignedAngle(right, transformed[i]); // in degrees
-                if (angle > BorderSectorRightAngle) {
-                    BorderSectorRightAngle = angle;
-                } else if (angle < BorderSectorLeftAngle) {
-                    BorderSectorLeftAngle = angle;
+                float theta = Vector2.SignedAngle(right, transformed[i]); // in degrees
+                if (theta > BorderSectorRightAngle) {
+                    BorderSectorRightAngle = theta;
+                } else if (theta < BorderSectorLeftAngle) {
+                    BorderSectorLeftAngle = theta;
                 }
 
                 // write (radius, angleInDegree) to transformed
-                transformed[i] = new Vector2(radius, angle);
+                transformed[i] = new Vector2(radius, theta);
 
             }
 
@@ -333,15 +333,16 @@ namespace MicroUniverse {
             // calc flattened texture width / height
             FlattenedColCount = BorderSectorFarRadius - BorderSectorNearRadius;
             float middleRadius = (BorderSectorFarRadius + BorderSectorNearRadius) / 2f;
-            float occupiedAngle = BorderSectorRightAngle - BorderSectorLeftAngle;
+            occupiedAngle = BorderSectorRightAngle - BorderSectorLeftAngle;
             FlattenedRowCount = 2f * Mathf.PI * middleRadius * occupiedAngle / 360f;
 
             // ------------------------
             // Pass 2: Transform all points in radial coord (done in pass 1) to flattened's coord.
             // currently elements in `transformed` are in radial coord (r, theta).
             for (int i = 0; i < transformed.Count; ++i) {
-                float flattenedCol = transformed[i].x - BorderSectorNearRadius;
-                float flattenedRow = (transformed[i].y - BorderSectorLeftAngle) / occupiedAngle * FlattenedRowCount;
+                float r = transformed[i].x, theta = transformed[i].y;
+                float flattenedCol = r - BorderSectorNearRadius;
+                float flattenedRow = (theta - BorderSectorLeftAngle) / occupiedAngle * FlattenedRowCount;
                 transformed[i] = new Vector2(flattenedRow, flattenedCol);
             }
 
@@ -360,11 +361,11 @@ namespace MicroUniverse {
 
             // Step.2: 2D -> radial coord r/theta
             float r = pos.y + BorderSectorNearRadius;
-            float theta = pos.x;
+            float theta = pos.x / FlattenedRowCount * occupiedAngle + BorderSectorLeftAngle;
 
             // step.3: radial coord -> to-the-right euler coord.
-            pos.x = r * Mathf.Cos(theta * Mathf.Deg2Rad);
-            pos.y = r * Mathf.Sin(theta * Mathf.Deg2Rad);
+            pos.x = r * Mathf.Sin(theta * Mathf.Deg2Rad);
+            pos.y = r * Mathf.Cos(theta * Mathf.Deg2Rad);
 
             // step.4: rotate back (move left, rotate back, move back)
             pos -= right * moveRightLength;
