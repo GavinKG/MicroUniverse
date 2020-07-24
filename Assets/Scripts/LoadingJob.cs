@@ -44,6 +44,7 @@ namespace MicroUniverse {
 
         [Header("Debug")]
         public RawImage debugImage;
+        public bool loadOnStart = false;
 
         // --------------------
 
@@ -63,7 +64,15 @@ namespace MicroUniverse {
         // Step.6:
         private WFC wfc;
 
+        private bool loaded = false;
+
         // --------------------
+
+        private void Start() {
+            if (loadOnStart) {
+                Load();
+            }
+        }
 
         void DebugTex(Texture tex, bool shouldTerminate = false) {
             debugImage.texture = tex ?? throw new Exception("Texture not generated!");
@@ -92,6 +101,9 @@ namespace MicroUniverse {
 
         public void Load() {
 
+            if (loaded) {
+                throw new Exception("City already loaded.");
+            }
 
             print("[LoadingJob] Loading Level...");
 
@@ -194,6 +206,7 @@ namespace MicroUniverse {
             }
 
             print("[LoadingJob] Loading finished." + Timestamp);
+            loaded = true;
         }
 
     }

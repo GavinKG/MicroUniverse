@@ -189,6 +189,12 @@ namespace MicroUniverse {
                     prop.meshesToTransform[i].mesh.SetVertices(verts);
                     // prop.meshesToTransform[i].mesh.RecalculateNormals();
                 }
+
+                // debugging:
+                Vector3 localScale = prop.transform.localScale;
+                localScale.y = Random.Range(0.2f, 1f);
+                prop.transform.localScale = localScale;
+
             }
 
         }

@@ -997,6 +997,7 @@ MonoBehaviour:
   emptyGOPrefab: {fileID: 2853529798919359504, guid: 081fadee72a59354e903af38b45a08e2,
     type: 3}
   debugImage: {fileID: 1176948277}
+  loadOnStart: 1
 --- !u!4 &1422580537
 Transform:
   m_ObjectHideFlags: 0
