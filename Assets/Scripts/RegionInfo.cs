@@ -143,7 +143,7 @@ namespace MicroUniverse {
             for (int r = 0; r < rowSize; ++r) {
                 for (int c = 0; c < colSize; ++c) {
                     GameObject spawned = null;
-                    Vector3 flattenSpacePos = new Vector3(c, 0, r);
+                    Vector3 flattenSpacePos = new Vector3(c, 0, r); // c, r -> x, y
                     switch (FlattenedMapWFC[r, c]) {
                         case fountainRoad:
                             spawned = GameObject.Instantiate(fountainPrefab, flattenSpacePos, Quaternion.identity, propRoot);
@@ -345,13 +345,14 @@ namespace MicroUniverse {
 
         /// <summary>
         /// Inverse transform of Ring2FlattenTransform
-        /// Original position should strictly follows FlattenMap coord.
+        /// input / output points are all in X/Y/Z coord (not r/c).
+        /// input a 
         /// </summary>
         private Vector3 TransformBack(Vector3 original) {
 
             // Step.1: flatten 3D -> 2D
             float y = original.y;
-            Vector2 pos = new Vector2(original.x, original.z);
+            Vector2 pos = new Vector2(original.z, original.x); // prev transform are in r/c
 
             // Step.2: 2D -> radial coord r/theta
             float r = pos.x + FlattenedWidth / 2f + BorderSectorNearRadius;
@@ -367,7 +368,7 @@ namespace MicroUniverse {
             pos -= filledCenterToMapCenter;
 
             // step.5: reconstruct
-            Vector3 ret = new Vector3(pos.x, y, pos.y);
+            Vector3 ret = new Vector3(pos.y, y, pos.x);
             return ret;
         }
     }
