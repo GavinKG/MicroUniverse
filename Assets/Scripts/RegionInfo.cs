@@ -125,7 +125,7 @@ namespace MicroUniverse {
             debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
         }
 
-        public void PlantProps(GameObject fountainPrefab, GameObject buildingPrefab, GameObject pillarPrefab, Transform propRoot) {
+        public void PlantProps(GameObject emptyPrefab, GameObject fountainPrefab, GameObject buildingPrefab, GameObject pillarPrefab, Transform propRoot) {
 
             // Step.1: analyze where to place building (alongside road):
             int rowSize = FlattenedMapWFC.GetLength(0), colSize = FlattenedMapWFC.GetLength(1);
@@ -152,6 +152,9 @@ namespace MicroUniverse {
                             break;
                         case pillarRoad:
                             spawned = GameObject.Instantiate(pillarPrefab, new Vector3(c, 0, r), Quaternion.identity, propRoot);
+                            break;
+                        case empty:
+                            spawned = GameObject.Instantiate(emptyPrefab, new Vector3(c, 0, r), Quaternion.identity, propRoot);
                             break;
                         default:
                             break;

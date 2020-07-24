@@ -36,6 +36,7 @@ namespace MicroUniverse {
         [Range(1, 7)] public int symmetryVariantCount = 7;
 
         [Header("Step.7: Planting")]
+        public GameObject emptyPrefab;
         public GameObject fountainPrefab;
         public GameObject buildingPrefab;
         public GameObject pillarPrefab;
@@ -202,7 +203,7 @@ namespace MicroUniverse {
             for (int i = 0; i < regionInfos.Count; ++i) {
                 GameObject subRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, propRoot);
                 subRootGO.name = "Region #" + i.ToString();
-                regionInfos[i].PlantProps(fountainPrefab, buildingPrefab, pillarPrefab, subRootGO.transform);
+                regionInfos[i].PlantProps(emptyPrefab, fountainPrefab, buildingPrefab, pillarPrefab, subRootGO.transform);
             }
 
             print("[LoadingJob] Loading finished." + Timestamp);
