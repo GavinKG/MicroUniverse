@@ -44,7 +44,7 @@ namespace MicroUniverse {
         public GameObject emptyGOPrefab;
 
         [Header("Debug")]
-        public RawImage debugImage;
+        public List<RawImage> debugImages;
         public bool loadOnStart = false;
 
         // --------------------
@@ -75,17 +75,17 @@ namespace MicroUniverse {
             }
         }
 
-        void DebugTex(Texture tex, bool shouldTerminate = false) {
-            debugImage.texture = tex ?? throw new Exception("Texture not generated!");
-            debugImage.SetNativeSize();
+        void DebugTex(Texture tex, int index, bool shouldTerminate = false) {
+            debugImages[index].texture = tex ?? throw new Exception("Texture not generated!");
+            debugImages[index].SetNativeSize();
             print("DebugTex gets a texture: " + tex.width.ToString() + "x" + tex.height.ToString());
             if (shouldTerminate) {
                 throw new Exception("Debugging finished!");
             }
         }
 
-        void DebugTex(bool[,] map) {
-            DebugTex(Util.BoolMap2Tex(map, true));
+        void DebugTex(bool[,] map, int index, bool shouldTerminate = false) {
+            DebugTex(Util.BoolMap2Tex(map, true), index, shouldTerminate);
         }
 
         float firstStamp = -1;
