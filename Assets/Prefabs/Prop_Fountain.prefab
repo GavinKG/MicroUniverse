@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7844097524159148801
 Transform:
@@ -45,9 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshesToTransform: []
-  collisionMeshToTransform: []
-  positionsToTransform:
-  - {fileID: 4558484062693408863}
 --- !u!1001 &4091595471068571572
 PrefabInstance:
   m_ObjectHideFlags: 0

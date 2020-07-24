@@ -157,7 +157,6 @@ namespace MicroUniverse {
                             break;
                     }
                     if (spawned != null) {
-                        spawned.hideFlags = HideFlags.DontSaveInEditor;
                         spawnedList.Add(spawned.GetComponent<CityProp>());
                     }
                 }
