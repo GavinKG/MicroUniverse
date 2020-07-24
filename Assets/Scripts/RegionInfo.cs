@@ -143,18 +143,19 @@ namespace MicroUniverse {
             for (int r = 0; r < rowSize; ++r) {
                 for (int c = 0; c < colSize; ++c) {
                     GameObject spawned = null;
+                    Vector3 flattenSpacePos = new Vector3(c, 0, r);
                     switch (FlattenedMapWFC[r, c]) {
                         case fountainRoad:
-                            spawned = GameObject.Instantiate(fountainPrefab, new Vector3(c, 0, r), Quaternion.identity, propRoot);
+                            spawned = GameObject.Instantiate(fountainPrefab, flattenSpacePos, Quaternion.identity, propRoot);
                             break;
                         case building:
-                            spawned = GameObject.Instantiate(buildingPrefab, new Vector3(c, 0, r), Quaternion.identity, propRoot);
+                            spawned = GameObject.Instantiate(buildingPrefab, flattenSpacePos, Quaternion.identity, propRoot);
                             break;
                         case pillarRoad:
-                            spawned = GameObject.Instantiate(pillarPrefab, new Vector3(c, 0, r), Quaternion.identity, propRoot);
+                            spawned = GameObject.Instantiate(pillarPrefab, flattenSpacePos, Quaternion.identity, propRoot);
                             break;
                         case empty:
-                            spawned = GameObject.Instantiate(emptyPrefab, new Vector3(c, 0, r), Quaternion.identity, propRoot);
+                            spawned = GameObject.Instantiate(emptyPrefab, flattenSpacePos, Quaternion.identity, propRoot);
                             break;
                         default:
                             break;
@@ -362,7 +363,7 @@ namespace MicroUniverse {
 
             // step.4: rotate back (move left, rotate back, move back)
             pos -= right * moveRightLength;
-            pos.Rotate(-angleFromFilledCenterToRight);
+            pos = pos.Rotate(-angleFromFilledCenterToRight);
             pos -= filledCenterToMapCenter;
 
             // step.5: reconstruct
