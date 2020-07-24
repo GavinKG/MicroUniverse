@@ -17,8 +17,8 @@ namespace MicroUniverse {
         public float BorderSectorNearRadius { get; private set; } = float.MaxValue;
         public float BorderSectorFarRadius { get; private set; } = float.MinValue;
 
-        public float FlattenedRowCount { get; private set; }
-        public float FlattenedColCount { get; private set; }
+        public float FlattenedHeight { get; private set; }
+        public float FlattenedWidth { get; private set; }
 
         public bool[,] Map { get; private set; }
         public bool[,] SubMap { get; private set; } // clipped region area.
@@ -37,14 +37,13 @@ namespace MicroUniverse {
         public Texture2D debugTex4;
         // ---
 
-        private int flattenedMapRowCount, flattenedMapColCount; // float -> int
+        private int flattenedMapHeight, flattenedMapWidth; // float -> int
 
         FloodFill.FillResult fillResult;
 
         // transform record:
         float angleFromFilledCenterToRight; // in degrees
         Vector2 filledCenterToMapCenter;
-        readonly static Vector2 right = new Vector2(0, 1); // not Vector2.right!
         float moveRightLength;
         Vector2 mapCenter;
         float occupiedAngle;
@@ -78,41 +77,41 @@ namespace MicroUniverse {
         public void DoWFC(WFC wfc, int seed) {
 
 
-            FlattenedMapWFC = wfc.Run(flattenedMapRowCount, flattenedMapColCount, seed); // here we follow (row, col) convension
+            FlattenedMapWFC = wfc.Run(flattenedMapWidth, flattenedMapHeight, seed);
 
             // expand road alongside border (for safety reason)
-            int rowSize = FlattenedMap.GetLength(0), colSize = FlattenedMap.GetLength(1);
-            byte[,] mask = new byte[rowSize, colSize];
-            for (int r = 0; r < FlattenedMap.GetLength(0); ++r) {
-                for (int c = 0; c < FlattenedMap.GetLength(1); ++c) {
-                    if (FlattenedMap[r, c]) { // ground
-                        if (r == 0 || r == rowSize - 1 || c == 0 || c == colSize - 1) { // on the edge
-                            mask[r, c] = road;
+            int width = FlattenedMap.GetLength(0), height = FlattenedMap.GetLength(1);
+            byte[,] mask = new byte[width, height];
+            for (int x = 0; x < width; ++x) {
+                for (int y = 0; y < height; ++y) {
+                    if (FlattenedMap[x, y]) { // ground
+                        if (x == 0 || x == width - 1 || y == 0 || y == height - 1) { // on the edge
+                            mask[x, y] = road;
                         } else {
-                            if (FlattenedMap[r - 1, c] &&
-                                FlattenedMap[r + 1, c] &&
-                                FlattenedMap[r, c - 1] &&
-                                FlattenedMap[r, c + 1] &&
-                                FlattenedMap[r - 1, c + 1] &&
-                                FlattenedMap[r - 1, c - 1] &&
-                                FlattenedMap[r + 1, c + 1] &&
-                                FlattenedMap[r - 1, c + 1]) {
-                                mask[r, c] = empty;
+                            if (FlattenedMap[x - 1, y] &&
+                                FlattenedMap[x + 1, y] &&
+                                FlattenedMap[x, y - 1] &&
+                                FlattenedMap[x, y + 1] &&
+                                FlattenedMap[x - 1, y + 1] &&
+                                FlattenedMap[x - 1, y - 1] &&
+                                FlattenedMap[x + 1, y + 1] &&
+                                FlattenedMap[x - 1, y + 1]) {
+                                mask[x, y] = empty;
                             } else {
-                                mask[r, c] = road;
+                                mask[x, y] = road;
                             }
                         }
                     } else { // wall
-                        mask[r, c] = wall;
+                        mask[x, y] = wall;
                     }
                 }
             }
 
             // apply mask
-            for (int r = 0; r < flattenedMapRowCount; ++r) {
-                for (int c = 0; c < flattenedMapColCount; ++c) {
-                    if (mask[r, c] != 0) { // mask not empty(0) -> use mask value
-                        FlattenedMapWFC[r, c] = mask[r, c];
+            for (int y = 0; y < flattenedMapHeight; ++y) {
+                for (int x = 0; x < flattenedMapWidth; ++x) {
+                    if (mask[x, y] != 0) { // mask not empty(0) -> use mask value
+                        FlattenedMapWFC[x, y] = mask[x, y];
                     }
                 }
             }
@@ -130,23 +129,23 @@ namespace MicroUniverse {
         public void PlantProps(GameObject emptyPrefab, GameObject fountainPrefab, GameObject buildingPrefab, GameObject pillarPrefab, Transform propRoot) {
 
             // Step.1: analyze where to place building (alongside road):
-            int rowSize = FlattenedMapWFC.GetLength(0), colSize = FlattenedMapWFC.GetLength(1);
-            for (int r = 1; r < rowSize - 1; ++r) {
-                for (int c = 1; c < colSize - 1; ++c) {
-                    if (FlattenedMapWFC[r, c] == empty && (
-                        IsRoad(FlattenedMapWFC[r - 1, c]) || IsRoad(FlattenedMapWFC[r, c - 1]) || IsRoad(FlattenedMapWFC[r + 1, c]) || IsRoad(FlattenedMapWFC[r, c + 1]))) {
-                        FlattenedMapWFC[r, c] = building;
+            int width = FlattenedMapWFC.GetLength(0), height = FlattenedMapWFC.GetLength(1);
+            for (int x = 1; x < width - 1; ++x) {
+                for (int y = 1; y < height - 1; ++y) {
+                    if (FlattenedMapWFC[x, y] == empty && (
+                        IsRoad(FlattenedMapWFC[x - 1, y]) || IsRoad(FlattenedMapWFC[x, y - 1]) || IsRoad(FlattenedMapWFC[x + 1, y]) || IsRoad(FlattenedMapWFC[x, y + 1]))) {
+                        FlattenedMapWFC[x, y] = building;
                     }
                 }
             }
 
             // Step.2: place actual props (in FlattenedMap coord, 1 pixel = 1 unity unit):
             List<CityProp> spawnedList = new List<CityProp>();
-            for (int r = 0; r < rowSize; ++r) {
-                for (int c = 0; c < colSize; ++c) {
+            for (int x = 0; x < width; ++x) {
+                for (int y = 0; y < height; ++y) {
                     GameObject spawned = null;
-                    Vector3 flattenSpacePos = new Vector3(r, 0, c); // HACK: LETTING MESH'S VERTEX BE DIRECTLY IN R,C USING BUILTIN WORLD SPACE TRANSFORM
-                    switch (FlattenedMapWFC[r, c]) {
+                    Vector3 flattenSpacePos = new Vector3(x, 0, y);
+                    switch (FlattenedMapWFC[x, y]) {
                         case fountainRoad:
                             spawned = GameObject.Instantiate(fountainPrefab, flattenSpacePos, Quaternion.identity, propRoot);
                             break;
@@ -176,15 +175,15 @@ namespace MicroUniverse {
                     Vector3[] modelVerts = prop.meshesToTransform[i].sharedMesh.vertices;
                     for (int j = 0; j < modelVerts.Length; ++j) {
                         modelVerts[j] = prop.meshesToTransform[i].transform.TransformPoint(modelVerts[j]); // pre-process: local position -> flattenmap coord (also current world coord)
-                        modelVerts[j] = TransformBack(modelVerts[j]); // flattenmap coord r,c -> ring coord r,c
-                        modelVerts[j] = new Vector3(-modelVerts[j].z + 64f, modelVerts[j].y, modelVerts[j].x - 64f); // filled map r/c -> actual world pos
+                        modelVerts[j] = TransformBack(modelVerts[j]); // flattenmap coord -> ring coord
+                        modelVerts[j] = new Vector3(modelVerts[j].x - 64f, modelVerts[j].y, modelVerts[j].z - 64f); // filled map -> actual world pos
                     }
                     tempRingPosVerts.Add(modelVerts); // r, y, c
                 }
 
                 
                 Vector3 newFilledBoolmapPos = TransformBack(prop.transform.position);
-                Vector3 newWorldPos = new Vector3(-newFilledBoolmapPos.z + 64f, newFilledBoolmapPos.y, newFilledBoolmapPos.x - 64f);
+                Vector3 newWorldPos = new Vector3(newFilledBoolmapPos.x - 64f , newFilledBoolmapPos.y, newFilledBoolmapPos.z - 64f);
                 prop.transform.position = newWorldPos; // for shader center point, uhhhhhhhh
                 
 
@@ -227,25 +226,25 @@ namespace MicroUniverse {
         }
 
         void GenerateSubMap(bool fillValue = true) {
-            int subWidth = fillResult.BorderColMax - fillResult.BorderColMin + 1;
-            int subHeight = fillResult.BorderRowMax - fillResult.BorderRowMin + 1;
-            SubMap = new bool[subHeight, subWidth];
+            int subHeight = fillResult.BorderYMax - fillResult.BorderYMin + 1;
+            int subWidth = fillResult.BorderXMax - fillResult.BorderXMin + 1;
+            SubMap = new bool[subWidth, subHeight];
 
-            for (int r = 0; r < subHeight; ++r) {
-                for (int c = 0; c < subWidth; ++c) {
-                    SubMap[r, c] = !fillValue;
+            for (int y = 0; y < subHeight; ++y) {
+                for (int x = 0; x < subWidth; ++x) {
+                    SubMap[x, y] = !fillValue;
                 }
             }
 
             foreach (Vector2Int p in fillResult.FilledPoints) {
-                int subRow = p.x - fillResult.BorderRowMin;
-                int subCol = p.y - fillResult.BorderColMin;
-                SubMap[subRow, subCol] = fillValue;
+                int subX = p.x - fillResult.BorderXMin;
+                int subY = p.y - fillResult.BorderYMin;
+                SubMap[subX, subY] = fillValue;
             }
         }
 
         void GenerateMap(bool fillValue = true) {
-            Map = new bool[fillResult.RowSize, fillResult.ColSize];
+            Map = new bool[fillResult.Width, fillResult.Height];
             foreach (Vector2Int p in fillResult.FilledPoints) {
                 Map[p.x, p.y] = fillValue;
             }
@@ -254,7 +253,7 @@ namespace MicroUniverse {
 
         /// <summary>
         /// First find out how to construct a flattened map, (Pass 1)
-        /// Then transform point from filled points (bool[,] r/c inside the main 128x128 map) to flattened map (bool[,] r/c) (Pass 2)
+        /// Then transform point from filled points to flattened map (Pass 2)
         /// </summary>
         void Ring2FlattenTransform() {
 
@@ -274,7 +273,7 @@ namespace MicroUniverse {
 
 
             // should be kept.
-            angleFromFilledCenterToRight = Vector2.SignedAngle(mapCenterToFilledCenterDirection, right); // in degree, [-180, 180]
+            angleFromFilledCenterToRight = Vector2.SignedAngle(mapCenterToFilledCenterDirection, Vector2.right); // in degree, [-180, 180]
 
             List<Vector2> transformed = new List<Vector2>(fillResult.FilledPoints.Count);
             for (int i = 0; i < fillResult.FilledPoints.Count; ++i) {
@@ -302,10 +301,10 @@ namespace MicroUniverse {
                 // 2D rotation to move the pattern to the right:
                 transformed[i] = transformed[i].Rotate(angleFromFilledCenterToRight);
                 // move to the right:
-                transformed[i] += right * moveRightLength;
+                transformed[i] += Vector2.right * moveRightLength;
 
                 // step.3: Calc left/right angle boundary.
-                float theta = Vector2.SignedAngle(right, transformed[i]); // in degrees
+                float theta = Vector2.SignedAngle(Vector2.right, transformed[i]); // in degrees
                 if (theta > BorderSectorRightAngle) {
                     BorderSectorRightAngle = theta;
                 } else if (theta < BorderSectorLeftAngle) {
@@ -331,25 +330,25 @@ namespace MicroUniverse {
             }
 
             // calc flattened texture width / height
-            FlattenedColCount = BorderSectorFarRadius - BorderSectorNearRadius;
+            FlattenedWidth = BorderSectorFarRadius - BorderSectorNearRadius;
             float middleRadius = (BorderSectorFarRadius + BorderSectorNearRadius) / 2f;
             occupiedAngle = BorderSectorRightAngle - BorderSectorLeftAngle;
-            FlattenedRowCount = 2f * Mathf.PI * middleRadius * occupiedAngle / 360f;
+            FlattenedHeight = 2f * Mathf.PI * middleRadius * occupiedAngle / 360f;
 
             // ------------------------
             // Pass 2: Transform all points in radial coord (done in pass 1) to flattened's coord.
             // currently elements in `transformed` are in radial coord (r, theta).
             for (int i = 0; i < transformed.Count; ++i) {
                 float r = transformed[i].x, theta = transformed[i].y;
-                float flattenedCol = r - BorderSectorNearRadius;
-                float flattenedRow = (theta - BorderSectorLeftAngle) / occupiedAngle * FlattenedRowCount;
-                transformed[i] = new Vector2(flattenedRow, flattenedCol);
+                float flattenedX = r - BorderSectorNearRadius;
+                float flattenedY = (theta - BorderSectorLeftAngle) / occupiedAngle * FlattenedHeight;
+                transformed[i] = new Vector2(flattenedX, flattenedY);
             }
 
             // Convert point list to bool map (can be optimized. seperate for-loop for easy understanding)
-            flattenedMapRowCount = Mathf.CeilToInt(FlattenedRowCount);
-            flattenedMapColCount = Mathf.CeilToInt(FlattenedColCount);
-            FlattenedMap = Util.PlotPointsToBoolMap(transformed, flattenedMapRowCount, flattenedMapColCount, true);
+            flattenedMapWidth = Mathf.CeilToInt(FlattenedWidth);
+            flattenedMapHeight = Mathf.CeilToInt(FlattenedHeight);
+            FlattenedMap = Util.PlotPointsToBoolMap(transformed, flattenedMapWidth, flattenedMapHeight, true);
 
         }
 
@@ -361,14 +360,14 @@ namespace MicroUniverse {
 
             // Step.2: 2D -> radial coord r/theta
             float r = pos.y + BorderSectorNearRadius;
-            float theta = pos.x / FlattenedRowCount * occupiedAngle + BorderSectorLeftAngle;
+            float theta = pos.x / FlattenedHeight * occupiedAngle + BorderSectorLeftAngle;
 
             // step.3: radial coord -> to-the-right euler coord.
-            pos.x = r * Mathf.Sin(theta * Mathf.Deg2Rad);
-            pos.y = r * Mathf.Cos(theta * Mathf.Deg2Rad);
+            pos.x = r * Mathf.Cos(theta * Mathf.Deg2Rad);
+            pos.y = r * Mathf.Sin(theta * Mathf.Deg2Rad);
 
             // step.4: rotate back (move left, rotate back, move back)
-            pos -= right * moveRightLength;
+            pos -= Vector2.right * moveRightLength;
             pos = pos.Rotate(-angleFromFilledCenterToRight);
             pos -= filledCenterToMapCenter;
             pos += mapCenter;

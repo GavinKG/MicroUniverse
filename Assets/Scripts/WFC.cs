@@ -45,14 +45,14 @@ namespace MicroUniverse {
             this.N = N;
             makeOutputRepeatable = outputRepeatable;
 
-            int sampleXSize = sample.GetLength(0), sampleYSize = sample.GetLength(1);
+            int sampleWidth = sample.GetLength(0), sampleHeight = sample.GetLength(1);
 
             colors = new List<byte>();
             colors.Add((byte)0); // 0: blank, empty, void, sad sad pixel...
 
             // get all colors (or block types, stored in byte) occured in sample pattern.
-            for (int y = 0; y < sampleYSize; y++) {
-                for (int x = 0; x < sampleXSize; x++) {
+            for (int y = 0; y < sampleHeight; y++) {
+                for (int x = 0; x < sampleWidth; x++) {
                     byte color = sample[x, y];
 
                     int i = 0;
@@ -78,7 +78,7 @@ namespace MicroUniverse {
             }
 
             byte[] patternFromSample(int x, int y) {
-                return Flatten((dx, dy) => { return sample[(x + dx) % sampleXSize, (y + dy) % sampleYSize]; });
+                return Flatten((dx, dy) => { return sample[(x + dx) % sampleWidth, (y + dy) % sampleHeight]; });
             }
 
 
@@ -94,8 +94,8 @@ namespace MicroUniverse {
             List<long> hashKeyOrdering = new List<long>();
 
             // pattern r/f, then record
-            for (int y = 0; y < (inputRepeatable ? sampleYSize : sampleYSize - N + 1); y++) {
-                for (int x = 0; x < (inputRepeatable ? sampleXSize : sampleXSize - N + 1); x++) {
+            for (int y = 0; y < (inputRepeatable ? sampleHeight : sampleHeight - N + 1); y++) {
+                for (int x = 0; x < (inputRepeatable ? sampleWidth : sampleWidth - N + 1); x++) {
 
                     byte[][] ps = new byte[8][];
 

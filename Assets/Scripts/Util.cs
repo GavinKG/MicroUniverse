@@ -21,33 +21,13 @@ namespace MicroUniverse {
     public static class Util {
 
         /*
-            Unity TexCoord:
+            Boolmap coord follows Unity TexCoord, which is:
 
-            height
+            height (Y/Z)
             ^
             |  ^ ^
             |   - 
-            O--------> width        visit: (width, height)
-
-            Unity Top-down Coord:
-
-            Z
-            ^
-            |  ^ ^
-            |   - 
-            O--------> X            visit: (X, Z)
-
-            Boolmap (2D Array) Coord:
-
-            O--------> col 
-            |  ^ ^
-            |   - 
-            |
-            row                     visit: (row, col)
-
-            When Converting:
-            (1) Swap X, Y
-            (2) h = rowSize - row - 1
+            O--------> width (X)       visit: (X, Y/Z)
          */
 
         public static Texture2D RT2Tex(RenderTexture rt, TextureFormat format = TextureFormat.RGBA32, FilterMode filterMode = FilterMode.Bilinear) {
@@ -63,13 +43,13 @@ namespace MicroUniverse {
         }
 
         /// <summary>
-        /// Convert a Texture2D to a row-major bool map.
+        /// Convert a Texture2D to a bool map.
         /// </summary>
         public static bool[,] Tex2BoolMap(Texture2D texture, bool brighterEquals, float brightThreshold = 0.5f) {
-            bool[,] ret = new bool[texture.height, texture.width];
+            bool[,] ret = new bool[texture.width, texture.height];
             Color[] pix = texture.GetPixels(); // left to right, bottom to top (i.e. row after row)
             for (int i = 0; i < pix.Length; ++i) {
-                ret[texture.height - 1 - i / texture.width, i % texture.width] = (pix[i].r > brightThreshold ? brighterEquals : !brighterEquals);
+                ret[i % texture.width, i / texture.width] = (pix[i].r > brightThreshold ? brighterEquals : !brighterEquals);
             }
             return ret;
         }
@@ -82,14 +62,13 @@ namespace MicroUniverse {
         /// <summary>
         /// Convert a bool map to a B&W texture.
         /// </summary>
-        /// <param name="map">row contains column, from top left.</param>
         public static Texture2D BoolMap2Tex(in bool[,] map, bool brighterEquals) {
-            Texture2D tex = new Texture2D(map.GetLength(1), map.GetLength(0));
+            int width = map.GetLength(0), height = map.GetLength(1);
+            Texture2D tex = new Texture2D(width, height);
             tex.wrapMode = TextureWrapMode.Clamp;
-            int rowCount = map.GetLength(0), colCount = map.GetLength(1);
-            for (int r = 0; r < rowCount; ++r) {
-                for (int c = 0; c < colCount; ++c) {
-                    tex.SetPixel(c, rowCount - r - 1, map[r, c] == brighterEquals ? Color.white : Color.black); // IMPORTANT: c, r -> x, y
+            for (int x = 0; x < width; ++x) {
+                for (int y = 0; y < height; ++y) {
+                    tex.SetPixel(x, y, map[x, y] == brighterEquals ? Color.white : Color.black);
                 }
             }
             tex.Apply();
@@ -97,24 +76,24 @@ namespace MicroUniverse {
             return tex;
         }
 
-        public static bool[,] PlotPointsToBoolMap(List<Vector2> points, int rowSize, int colSize, bool pointEquals = true) {
-            bool[,] ret = new bool[rowSize, colSize];
+        public static bool[,] PlotPointsToBoolMap(List<Vector2> points, int width, int height, bool pointEquals = true) {
+            bool[,] ret = new bool[width, height];
             foreach (Vector2 point in points) {
-                float r = Mathf.Clamp(point.x, 0f, rowSize - 1f);
-                float c = Mathf.Clamp(point.y, 0f, colSize - 1f);
-                int r1 = Mathf.FloorToInt(r), r2 = Mathf.CeilToInt(r), c1 = Mathf.FloorToInt(c), c2 = Mathf.CeilToInt(c); // "Conservative rasterization"
-                if (r2 == rowSize) --r2;
-                if (c2 == colSize) --c2;
-                ret[r1, c1] = pointEquals;
-                ret[r1, c2] = pointEquals;
-                ret[r2, c1] = pointEquals;
-                ret[r2, c2] = pointEquals;
+                float x = Mathf.Clamp(point.x, 0f, width - 1f);
+                float y = Mathf.Clamp(point.y, 0f, height - 1f);
+                int x1 = Mathf.FloorToInt(x), x2 = Mathf.CeilToInt(x), y1 = Mathf.FloorToInt(y), y2 = Mathf.CeilToInt(y); // "Conservative rasterization"
+                if (x2 == width) --x2;
+                if (y2 == height) --y2;
+                ret[x1, y1] = pointEquals;
+                ret[x1, y2] = pointEquals;
+                ret[x2, y1] = pointEquals;
+                ret[x2, y2] = pointEquals;
             }
             return ret;
         }
 
-        public static bool[,] PlotPointsToBoolMap(List<Vector2Int> points, int rowSize, int colSize, bool pointEquals = true) {
-            bool[,] ret = new bool[rowSize, colSize];
+        public static bool[,] PlotPointsToBoolMap(List<Vector2Int> points, int width, int height, bool pointEquals = true) {
+            bool[,] ret = new bool[width, height];
             foreach (Vector2Int point in points) {
                 ret[point.x, point.y] = pointEquals;
             }
@@ -122,22 +101,22 @@ namespace MicroUniverse {
         }
 
         public static bool[,] ByteMapToBoolMap(byte[,] byteMap, HashSet<int> trueMask) {
-            int rowCount = byteMap.GetLength(0), colCount = byteMap.GetLength(1);
-            bool[,] ret = new bool[rowCount, colCount];
-            for (int r = 0; r < rowCount; ++r) {
-                for (int c = 0; c < colCount; ++c) {
-                    ret[r, c] = trueMask.Contains(byteMap[r, c]) ? true : false;
+            int width = byteMap.GetLength(0), height = byteMap.GetLength(1);
+            bool[,] ret = new bool[width, height];
+            for (int x = 0; x < width; ++x) {
+                for (int y = 0; y < height; ++y) {
+                    ret[x, y] = trueMask.Contains(byteMap[x, y]) ? true : false;
                 }
             }
             return ret;
         }
 
         public static string ByteMapWithSingleDigitToString(byte[,] byteMap) {
-            int rowCount = byteMap.GetLength(0), colCount = byteMap.GetLength(1);
+            int width = byteMap.GetLength(0), height = byteMap.GetLength(1);
             StringBuilder sb = new StringBuilder();
-            for (int r = 0; r < rowCount; ++r) {
-                for (int c = 0; c < colCount; ++c) {
-                    sb.Append(byteMap[r, c]);
+            for (int x = 0; x < width; ++x) {
+                for (int y = 0; y < height; ++y) {
+                    sb.Append(byteMap[x, y]);
                 }
                 sb.AppendLine();
             }
@@ -150,12 +129,12 @@ namespace MicroUniverse {
             foreach (var line in s.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)) {
                 lines.Add(line);
             }
-            int rowCount = lines.Count;
-            int colCount = lines[0].Length;
-            byte[,] ret = new byte[rowCount, colCount];
-            for (int r = 0; r < rowCount; ++r) {
-                for (int c = 0; c < colCount; ++c) {
-                    ret[r, c] = byte.Parse(lines[r][c].ToString());
+            int width = lines.Count;
+            int height = lines[0].Length;
+            byte[,] ret = new byte[width, height];
+            for (int x = 0; x < width; ++x) {
+                for (int y = 0; y < height; ++y) {
+                    ret[x, y] = byte.Parse(lines[x][y].ToString());
                 }
             }
             return ret;

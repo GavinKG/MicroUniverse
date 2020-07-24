@@ -102,6 +102,8 @@ namespace MicroUniverse {
 
         public void Load() {
 
+            firstStamp = -1;
+
             if (loaded) {
                 throw new Exception("City already loaded.");
             }
@@ -145,15 +147,15 @@ namespace MicroUniverse {
             // Step.4
             print("Step.4: flood fill." + Timestamp);
             bool[,] fillMap = Util.Tex2BoolMap(texAfterRecapture, brighterEquals: true);
-            int fillMapRowCount = fillMap.GetLength(0), fillMapColCount = fillMap.GetLength(1);
+            int fillMapWidth = fillMap.GetLength(0), fillMapHeight = fillMap.GetLength(1);
             FloodFill floodFiller = new FloodFill();
 
             // first fill four corners / center region to white since they are useless in further process.
             floodFiller.Fill(ref fillMap, 0, 0, fillValue: false);
-            floodFiller.Fill(ref fillMap, 0, fillMapColCount - 1, fillValue: false);
-            floodFiller.Fill(ref fillMap, fillMapRowCount - 1, 0, fillValue: false);
-            floodFiller.Fill(ref fillMap, fillMapRowCount - 1, fillMapColCount - 1, fillValue: false);
-            floodFiller.Fill(ref fillMap, fillMapRowCount / 2, fillMapColCount / 2, fillValue: false);
+            floodFiller.Fill(ref fillMap, 0, fillMapHeight - 1, fillValue: false);
+            floodFiller.Fill(ref fillMap, fillMapWidth - 1, 0, fillValue: false);
+            floodFiller.Fill(ref fillMap, fillMapWidth - 1, fillMapHeight - 1, fillValue: false);
+            floodFiller.Fill(ref fillMap, fillMapWidth / 2, fillMapHeight / 2, fillValue: false);
             
             List<FloodFill.FillResult> fillResults = floodFiller.FindAndFill(ref fillMap, false);
             regionInfos = new List<RegionInfo>();
