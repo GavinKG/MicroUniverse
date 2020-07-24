@@ -61,7 +61,7 @@ namespace MicroUniverse {
             int rowCount = map.GetLength(0), colCount = map.GetLength(1);
             for (int r = 0; r < rowCount; ++r) {
                 for (int c = 0; c < colCount; ++c) {
-                    tex.SetPixel(c, r, map[r, c] == brighterEquals ? Color.white : Color.black); // IMPORTANT: c, r -> x, y
+                    tex.SetPixel(c, rowCount - r - 1, map[r, c] == brighterEquals ? Color.white : Color.black); // IMPORTANT: c, r -> x, y
                 }
             }
             tex.Apply();
