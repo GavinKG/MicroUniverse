@@ -249,6 +249,11 @@ namespace MicroUniverse {
             }
         }
 
+
+        /// <summary>
+        /// First find out how to construct a flattened map, (Pass 1)
+        /// Then transform point from filled points (bool[,] r/c inside the main 128x128 map) to flattened map (bool[,] r/c) (Pass 2)
+        /// </summary>
         void Ring2FlattenTransform() {
 
             // see sketch for details.
