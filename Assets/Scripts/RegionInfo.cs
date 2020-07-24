@@ -187,7 +187,8 @@ namespace MicroUniverse {
                         verts[j] = prop.meshesToTransform[i].transform.InverseTransformPoint(verts[j]); // post-process: world (ring) position -> local position (with newly placed root)
                     }
                     prop.meshesToTransform[i].mesh.SetVertices(verts);
-                    // prop.meshesToTransform[i].mesh.RecalculateNormals();
+                    prop.meshesToTransform[i].mesh.RecalculateNormals();
+                    prop.meshesToTransform[i].mesh.RecalculateBounds();
                 }
 
                 // debugging:
