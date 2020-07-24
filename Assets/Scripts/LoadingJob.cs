@@ -165,7 +165,8 @@ namespace MicroUniverse {
                 }
             }
             print("RegionInfo list contains " + regionInfos.Count.ToString() + " regions");
-
+            DebugTex(regionInfos[0].MapTex, 0);
+            DebugTex(regionInfos[0].FlattenedMapTex, 1);
 
             
 
@@ -196,7 +197,7 @@ namespace MicroUniverse {
             foreach (RegionInfo regionInfo in regionInfos) {
                 regionInfo.DoWFC(wfc, seed);
             }
-            // DebugTex(regionInfos[0].debugTex1);
+            DebugTex(regionInfos[0].debugTex1, 2);
 
 
             // ----------

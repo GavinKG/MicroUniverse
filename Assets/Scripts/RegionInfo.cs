@@ -359,8 +359,8 @@ namespace MicroUniverse {
         private Vector2 TransformBack(Vector2 pos) {
 
             // Step.2: 2D -> radial coord r/theta
-            float r = pos.y + BorderSectorNearRadius;
-            float theta = pos.x / FlattenedHeight * occupiedAngle + BorderSectorLeftAngle;
+            float r = pos.x + BorderSectorNearRadius;
+            float theta = pos.y / FlattenedHeight * occupiedAngle + BorderSectorLeftAngle;
 
             // step.3: radial coord -> to-the-right euler coord.
             pos.x = r * Mathf.Cos(theta * Mathf.Deg2Rad);
