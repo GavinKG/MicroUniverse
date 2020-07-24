@@ -29,6 +29,14 @@ namespace MicroUniverse {
             |   - 
             O--------> width        visit: (width, height)
 
+            Unity Top-down Coord:
+
+            Z
+            ^
+            |  ^ ^
+            |   - 
+            O--------> X            visit: (X, Z)
+
             Boolmap (2D Array) Coord:
 
             O--------> col 
