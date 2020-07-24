@@ -178,7 +178,7 @@ namespace MicroUniverse {
                         modelVerts[j] = TransformBack(modelVerts[j]); // flattenmap coord -> ring coord
                         modelVerts[j] = new Vector3(modelVerts[j].x - 64f, modelVerts[j].y, modelVerts[j].z - 64f); // filled map -> actual world pos
                     }
-                    tempRingPosVerts.Add(modelVerts); // r, y, c
+                    tempRingPosVerts.Add(modelVerts);
                 }
 
                 
@@ -207,13 +207,25 @@ namespace MicroUniverse {
 
         }
 
-        bool IsRoad(byte id) {
-            return id == road || id == fountainRoad || id == pillarRoad;
+        public Texture2D DebugTransformBackToTex() {
+            List<Vector2> vec2s = new List<Vector2>();
+            for (int x = 0; x < FlattenedMapWFC.GetLength(0); ++x) {
+                for (int y = 0; y < FlattenedMapWFC.GetLength(1); ++y) {
+                    if (IsRoad(FlattenedMapWFC[x, y])) {
+                        Vector2 v = TransformBack(new Vector2(x, y));
+                        vec2s.Add(v);
+                    }
+                }
+            }
+            bool[,] debugBoolMap = Util.PlotPointsToBoolMap(vec2s, MapTex.width, MapTex.height);
+            return Util.BoolMap2Tex(debugBoolMap, true);
         }
 
         // ---------- public interface ---------- [END]
 
-
+        bool IsRoad(byte id) {
+            return id == road || id == fountainRoad || id == pillarRoad;
+        }
 
 
         void DoCalc() {

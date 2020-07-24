@@ -207,7 +207,11 @@ namespace MicroUniverse {
                 GameObject subRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, propRoot);
                 subRootGO.name = "Region #" + i.ToString();
                 regionInfos[i].PlantProps(emptyPrefab, fountainPrefab, buildingPrefab, pillarPrefab, subRootGO.transform);
+                break;
             }
+
+            DebugTex(regionInfos[0].DebugTransformBackToTex(), 3);
+
 
             print("[LoadingJob] Loading finished." + Timestamp);
             loaded = true;
