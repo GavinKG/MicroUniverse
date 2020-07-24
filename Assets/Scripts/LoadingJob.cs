@@ -46,6 +46,7 @@ namespace MicroUniverse {
         [Header("Debug")]
         public List<RawImage> debugImages;
         public bool loadOnStart = false;
+        public Text cityGenTimeText;
 
         // --------------------
 
@@ -217,6 +218,7 @@ namespace MicroUniverse {
 
 
             print("[LoadingJob] Loading finished." + Timestamp);
+            cityGenTimeText.text = "CityGen Time: " + Timestamp.ToString();
             loaded = true;
         }
 

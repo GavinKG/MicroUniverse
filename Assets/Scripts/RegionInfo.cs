@@ -283,8 +283,6 @@ namespace MicroUniverse {
 
             // should be kept.
             angleFromFilledCenterToRight = Vector2.SignedAngle(mapCenterToFilledCenterDirection, Vector2.right); // in degree, [-180, 180]
-            Debug.Log(mapCenterToFilledCenterDirection);
-            Debug.Log(angleFromFilledCenterToRight);
 
             List<Vector2> transformed = new List<Vector2>(fillResult.FilledPoints.Count);
             for (int i = 0; i < fillResult.FilledPoints.Count; ++i) {
