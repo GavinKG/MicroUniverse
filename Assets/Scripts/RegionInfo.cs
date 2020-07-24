@@ -46,6 +46,7 @@ namespace MicroUniverse {
         Vector2 filledCenterToMapCenter;
         readonly static Vector2 right = new Vector2(0, 1); // not Vector2.right!
         float moveRightLength;
+        Vector2 mapCenter;
 
         // ID rules:
         const int empty = 0;
@@ -143,7 +144,7 @@ namespace MicroUniverse {
             for (int r = 0; r < rowSize; ++r) {
                 for (int c = 0; c < colSize; ++c) {
                     GameObject spawned = null;
-                    Vector3 flattenSpacePos = new Vector3(c, 0, r); // c, r -> x, y
+                    Vector3 flattenSpacePos = new Vector3(r, 0, c); // HACK: LETTING MESH'S VERTEX BE DIRECTLY IN R,C USING BUILTIN WORLD SPACE TRANSFORM
                     switch (FlattenedMapWFC[r, c]) {
                         case fountainRoad:
                             spawned = GameObject.Instantiate(fountainPrefab, flattenSpacePos, Quaternion.identity, propRoot);
@@ -174,9 +175,10 @@ namespace MicroUniverse {
                     Vector3[] modelVerts = prop.meshesToTransform[i].sharedMesh.vertices;
                     for (int j = 0; j < modelVerts.Length; ++j) {
                         modelVerts[j] = prop.meshesToTransform[i].transform.TransformPoint(modelVerts[j]); // pre-process: local position -> flattenmap coord (also current world coord)
-                        modelVerts[j] = TransformBack(modelVerts[j]); // flattenmap coord -> ring coord (aka world position)
+                        modelVerts[j] = TransformBack(modelVerts[j]); // flattenmap coord r,c -> ring coord r,c
                     }
-                    tempRingPosVerts.Add(modelVerts);
+                    // 
+                    tempRingPosVerts.Add(modelVerts); // r, y, c
                 }
 
                 
@@ -252,7 +254,7 @@ namespace MicroUniverse {
             // see sketch for details.
             // all those fancy transforms are to prevent one thing: sudden change of angle like -180 -> 180
 
-            Vector2 mapCenter = new Vector2(fillResult.MapCenterPoint.x, fillResult.MapCenterPoint.y);
+            mapCenter = new Vector2(fillResult.MapCenterPoint.x, fillResult.MapCenterPoint.y);
 
             // use float based Vector2 for highter accuracy.
             filledCenterToMapCenter = new Vector2(
@@ -345,14 +347,9 @@ namespace MicroUniverse {
 
         /// <summary>
         /// Inverse transform of Ring2FlattenTransform
-        /// input / output points are all in X/Y/Z coord (not r/c).
-        /// input a 
+        /// transform flatten space (r/c) to fill space (r/c)
         /// </summary>
-        private Vector3 TransformBack(Vector3 original) {
-
-            // Step.1: flatten 3D -> 2D
-            float y = original.y;
-            Vector2 pos = new Vector2(original.z, original.x); // prev transform are in r/c
+        private Vector2 TransformBack(Vector2 pos) {
 
             // Step.2: 2D -> radial coord r/theta
             float r = pos.x + FlattenedWidth / 2f + BorderSectorNearRadius;
@@ -366,9 +363,16 @@ namespace MicroUniverse {
             pos -= right * moveRightLength;
             pos = pos.Rotate(-angleFromFilledCenterToRight);
             pos -= filledCenterToMapCenter;
+            pos += mapCenter;
 
-            // step.5: reconstruct
-            Vector3 ret = new Vector3(pos.y, y, pos.x);
+            return pos;
+        }
+
+        private Vector3 TransformBack(Vector3 pos) {
+
+            Vector2 pos2d = new Vector2(pos.x, pos.z);
+            Vector2 transformed = TransformBack(pos2d);
+            Vector3 ret = new Vector3(transformed.x, pos.y, transformed.y);
             return ret;
         }
     }
