@@ -17,8 +17,8 @@ namespace MicroUniverse {
         public float BorderSectorNearRadius { get; private set; } = float.MaxValue;
         public float BorderSectorFarRadius { get; private set; } = float.MinValue;
 
-        public float FlattenedWidth { get; private set; }
-        public float FlattenedHeight { get; private set; }
+        public float FlattenedRowCount { get; private set; }
+        public float FlattenedColCount { get; private set; }
 
         public bool[,] Map { get; private set; }
         public bool[,] SubMap { get; private set; } // clipped region area.
@@ -37,7 +37,7 @@ namespace MicroUniverse {
         public Texture2D debugTex4;
         // ---
 
-        private int flattenedTexWidth, flattenedTexHeight; // float -> int
+        private int flattenedMapRowCount, flattenedMapColCount; // float -> int
 
         FloodFill.FillResult fillResult;
 
@@ -77,7 +77,7 @@ namespace MicroUniverse {
         public void DoWFC(WFC wfc, int seed) {
 
 
-            FlattenedMapWFC = wfc.Run(flattenedTexHeight, flattenedTexWidth, seed); // here we follow (row, col) convension
+            FlattenedMapWFC = wfc.Run(flattenedMapRowCount, flattenedMapColCount, seed); // here we follow (row, col) convension
 
             // expand road alongside border (for safety reason)
             int rowSize = FlattenedMap.GetLength(0), colSize = FlattenedMap.GetLength(1);
@@ -108,8 +108,8 @@ namespace MicroUniverse {
             }
 
             // apply mask
-            for (int r = 0; r < flattenedTexHeight; ++r) {
-                for (int c = 0; c < flattenedTexWidth; ++c) {
+            for (int r = 0; r < flattenedMapRowCount; ++r) {
+                for (int c = 0; c < flattenedMapColCount; ++c) {
                     if (mask[r, c] != 0) { // mask not empty(0) -> use mask value
                         FlattenedMapWFC[r, c] = mask[r, c];
                     }
@@ -176,13 +176,15 @@ namespace MicroUniverse {
                     for (int j = 0; j < modelVerts.Length; ++j) {
                         modelVerts[j] = prop.meshesToTransform[i].transform.TransformPoint(modelVerts[j]); // pre-process: local position -> flattenmap coord (also current world coord)
                         modelVerts[j] = TransformBack(modelVerts[j]); // flattenmap coord r,c -> ring coord r,c
+                        modelVerts[j] = new Vector3(modelVerts[j].x - 64f, modelVerts[j].y, -modelVerts[j].z + 64f); // filled map r/c -> actual world pos
                     }
                     // 
                     tempRingPosVerts.Add(modelVerts); // r, y, c
                 }
 
                 
-                Vector3 newWorldPos = TransformBack(prop.transform.position);
+                Vector3 newFilledBoolmapPos = TransformBack(prop.transform.position);
+                Vector3 newWorldPos = new Vector3(newFilledBoolmapPos.x - 64f, newFilledBoolmapPos.y, -newFilledBoolmapPos.z + 64f);
                 prop.transform.position = newWorldPos; // for shader center point, uhhhhhhhh
                 
 
@@ -329,24 +331,24 @@ namespace MicroUniverse {
             }
 
             // calc flattened texture width / height
-            FlattenedHeight = BorderSectorFarRadius - BorderSectorNearRadius;
+            FlattenedColCount = BorderSectorFarRadius - BorderSectorNearRadius;
             float middleRadius = (BorderSectorFarRadius + BorderSectorNearRadius) / 2f;
             float occupiedAngle = BorderSectorRightAngle - BorderSectorLeftAngle;
-            FlattenedWidth = 2f * Mathf.PI * middleRadius * occupiedAngle / 360f;
+            FlattenedRowCount = 2f * Mathf.PI * middleRadius * occupiedAngle / 360f;
 
             // ------------------------
-            // Pass 2: Transform all points in radial coord (done in pass 1) to flattened tex's coord.
+            // Pass 2: Transform all points in radial coord (done in pass 1) to flattened's coord.
             // currently elements in `transformed` are in radial coord (r, theta).
             for (int i = 0; i < transformed.Count; ++i) {
-                float flattenedX = transformed[i].x - BorderSectorNearRadius;
-                float flattenedY = (transformed[i].y - BorderSectorLeftAngle) / occupiedAngle * FlattenedWidth; // directly use degree value as tex height
-                transformed[i] = new Vector2(flattenedX, flattenedY);
+                float flattenedCol = transformed[i].x - BorderSectorNearRadius;
+                float flattenedRow = (transformed[i].y - BorderSectorLeftAngle) / occupiedAngle * FlattenedRowCount;
+                transformed[i] = new Vector2(flattenedRow, flattenedCol);
             }
 
             // Convert point list to bool map (can be optimized. seperate for-loop for easy understanding)
-            flattenedTexWidth = Mathf.CeilToInt(FlattenedWidth);
-            flattenedTexHeight = Mathf.CeilToInt(FlattenedHeight);
-            FlattenedMap = Util.PlotPointsToBoolMap(transformed, flattenedTexHeight, flattenedTexWidth, true);
+            flattenedMapRowCount = Mathf.CeilToInt(FlattenedRowCount);
+            flattenedMapColCount = Mathf.CeilToInt(FlattenedColCount);
+            FlattenedMap = Util.PlotPointsToBoolMap(transformed, flattenedMapRowCount, flattenedMapColCount, true);
 
         }
 
@@ -357,8 +359,8 @@ namespace MicroUniverse {
         private Vector2 TransformBack(Vector2 pos) {
 
             // Step.2: 2D -> radial coord r/theta
-            float r = pos.x + FlattenedWidth / 2f + BorderSectorNearRadius;
-            float theta = pos.y;
+            float r = pos.y + FlattenedColCount / 2f + BorderSectorNearRadius;
+            float theta = pos.x;
 
             // step.3: radial coord -> to-the-right euler coord.
             pos.x = r * Mathf.Cos(theta * Mathf.Deg2Rad);
