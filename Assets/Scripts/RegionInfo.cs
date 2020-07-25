@@ -191,6 +191,7 @@ namespace MicroUniverse {
             // Step.4: transform back:
             foreach (CityProp prop in spawnedList) {
 
+                // 1: Prepare per-vertex transform to world position
                 List<Vector3[]> tempRingPosVerts = new List<Vector3[]>(prop.meshesToTransform.Count);
                 for (int i = 0; i < prop.meshesToTransform.Count; ++i) {
                     Vector3[] modelVerts = prop.meshesToTransform[i].sharedMesh.vertices;
@@ -203,14 +204,21 @@ namespace MicroUniverse {
                     tempRingPosVerts.Add(modelVerts);
                 }
 
-                
-                Vector3 newFilledBoolmapPos = TransformBack(prop.transform.position);
-                Vector3 newWorldPos = new Vector3(newFilledBoolmapPos.x - fillResult.MapWidth / 2 , newFilledBoolmapPos.y, newFilledBoolmapPos.z - fillResult.MapHeight / 2);
-                newWorldPos *= scaleFactor;
-                prop.transform.position = newWorldPos; // for shader center point, uhhhhhhhh
+                // 2. Transform prop root pos/rot
+                Vector3 propOriginalPos = prop.transform.position;
+                Vector3 propOriginalPosForwardOne = prop.transform.position + Vector3.forward; // move towards +Z for one unit.
+                Vector3 propFilledBoolmapPos = TransformBack(propOriginalPos);
+                Vector3 propFilledBoolmapPosForwardOne = TransformBack(propOriginalPosForwardOne);
+                Vector3 propWorldPos = new Vector3(propFilledBoolmapPos.x - fillResult.MapWidth / 2 , propFilledBoolmapPos.y, propFilledBoolmapPos.z - fillResult.MapHeight / 2);
+                Vector3 propWorldPosForwardOne = new Vector3(propFilledBoolmapPosForwardOne.x - fillResult.MapWidth / 2 , propFilledBoolmapPosForwardOne.y, propFilledBoolmapPosForwardOne.z - fillResult.MapHeight / 2);
+                propWorldPos *= scaleFactor;
+                propWorldPosForwardOne *= scaleFactor;
+                prop.transform.position = propWorldPos; // for shader center point, uhhhhhhhh
+                prop.transform.LookAt(propWorldPosForwardOne);
+                float newForwardOneDistance = Vector3.Distance(propWorldPos, propWorldPosForwardOne);
                 // prop.transform.localScale *= scaleFactor;
 
-
+                // 3. Transform vertex position from world to already transformed local
                 for (int i = 0; i < prop.meshesToTransform.Count; ++i) {
                     Vector3[] verts = tempRingPosVerts[i];
                     for (int j = 0; j < verts.Length; ++j) {

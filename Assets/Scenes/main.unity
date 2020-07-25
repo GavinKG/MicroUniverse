@@ -1387,6 +1387,9 @@ MonoBehaviour:
     - {fileID: 3639788452223917974, guid: 8d05ae25271776449bbe52e0e765901a, type: 3}
     buildingLowMediumSeperator: 0.33
     buildingMediumHighSeperator: 0.66
+    buildingLowHeightVariation: -0.1
+    buildingMediumHeightVariation: -0.3
+    buildingHighHeightVariation: 0
   propRoot: {fileID: 1002798681}
   debugImages:
   - {fileID: 1176948277}
