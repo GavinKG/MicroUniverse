@@ -16,19 +16,24 @@ namespace MicroUniverse {
         [Header("Random Core")]
         [Range(0, 100)] public int seed;
 
+        [Header("General Settings")]
+        public int cityWH = 128;
+
         [Header("Step.2: Marching Square")]
         public GameObject coverGO;
         public GameObject wallGO;
-        public float wallLength = 20f;
+        [Range(1, 16)] public int msDownsampleRate = 8;
         public float wallHeight = 2f;
         [Range(0, 4)] public int cityWallSmoothCount = 4;
         [Range(0, 1)] public float cityWallSmoothRatio = 0.5f; // 1: shrink, -1: expand
 
         [Header("Step.3: Recapture")]
         public CaptureOverviewMask capturer;
+        public int recaptureResolution = 64;
 
         [Header("Step.4: Flood Fill")]
-        public int smallRegionThreshold = 20;
+        
+        public int smallRegionThreshold = 20; // pixel
 
         [Header("Step.6: WFC")]
         public string sampleFilePath = "WFCSample.txt";
@@ -111,28 +116,27 @@ namespace MicroUniverse {
 
             print("[LoadingJob] Loading Level...");
 
-
             // ----------
             // Step.0
             print("Step.0: Sanity Check.");
-            if (source.width != 1024 || source.height != 1024) {
-                throw new System.Exception("Source texture should be in 1024x1024!");
+            if (source.width != source.height) {
+                throw new System.Exception("Source texture should be a fucking square.");
             }
-
+            int currResolution = source.width;
 
             // ----------
             // Step.1
             print("Step.1: binarize, downsample." + Timestamp);
             Texture afterBinarize = Util.Binarize(source, 0.5f);
-            texAfterPrepare = Util.Downsample(afterBinarize, 8); // should be from 1024x1024 to 128x128, stroke should be in white, background black.
+            texAfterPrepare = Util.Downsample(afterBinarize, msDownsampleRate); // should be from 1024x1024 to 128x128, stroke should be in white, background black.
             wallMap = Util.Tex2BoolMap(texAfterPrepare, true);
-
+            currResolution /= msDownsampleRate;
 
             // ----------
             // Step.2
             print("Step.2: Marching Square for city wall" + Timestamp);
             MarchingSquare cityWallGenerator = new MarchingSquare();
-            cityWallGenerator.GenerateMesh(wallMap, wallLength / wallMap.GetLength(0), wallHeight, cityWallSmoothCount, cityWallSmoothRatio);
+            cityWallGenerator.GenerateMesh(wallMap, (float)cityWH / currResolution, wallHeight, cityWallSmoothCount, cityWallSmoothRatio);
 
             coverGO.GetComponent<MeshFilter>().mesh = cityWallGenerator.CoverMesh;
             wallGO.GetComponent<MeshFilter>().mesh = cityWallGenerator.WallMesh;
@@ -145,8 +149,8 @@ namespace MicroUniverse {
             // ----------
             // Step.3
             print("Recapture" + Timestamp);
-            texAfterRecapture = capturer.Capture(FilterMode.Point);
-
+            texAfterRecapture = capturer.Capture(FilterMode.Point, cityWH, recaptureResolution);
+            currResolution = recaptureResolution;
 
             // ----------
             // Step.4
@@ -170,6 +174,9 @@ namespace MicroUniverse {
                 }
             }
             print("RegionInfo list contains " + regionInfos.Count.ToString() + " regions");
+            if (regionInfos.Count == 0) {
+                throw new Exception("No region to proceed, quitting...");
+            }
             DebugTex(regionInfos[0].MapTex, 0);
             DebugTex(regionInfos[0].FlattenedMapTex, 1);
 
@@ -208,10 +215,11 @@ namespace MicroUniverse {
             // ----------
             // Step.7
             print("Step.7: Plant props (fountain + pillar + building)." + Timestamp);
+            float scaleFactor = (float)cityWH / (float)currResolution;
             for (int i = 0; i < regionInfos.Count; ++i) {
                 GameObject subRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, propRoot);
                 subRootGO.name = "Region #" + i.ToString();
-                regionInfos[i].PlantProps(emptyPrefab, fountainPrefab, buildingPrefab, pillarPrefab, subRootGO.transform);
+                regionInfos[i].PlantProps(scaleFactor, emptyPrefab, fountainPrefab, buildingPrefab, pillarPrefab, subRootGO.transform);
             }
 
             DebugTex(regionInfos[0].DebugTransformBackToTex(), 3);

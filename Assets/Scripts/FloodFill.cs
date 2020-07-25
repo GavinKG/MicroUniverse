@@ -21,18 +21,18 @@ namespace MicroUniverse {
 
 
             public Vector2Int FilledAreaCenterPoint { get; private set; }
-            public Vector2Int MapCenterPoint { get { return new Vector2Int(Width / 2, Height / 2); } }
+            public Vector2Int MapCenterPoint { get { return new Vector2Int(MapWidth / 2, MapHeight / 2); } }
 
             public bool Finished { get; private set; } = false;
 
 
             Vector2Int accumulatePoint = Vector2Int.zero;
-            public int Height { get; private set; }
-            public int Width { get; private set; }
+            public int MapHeight { get; private set; }
+            public int MapWidth { get; private set; }
 
             public FillResult(in bool[,] map) {
-                Width = map.GetLength(0);
-                Height = map.GetLength(1);
+                MapWidth = map.GetLength(0);
+                MapHeight = map.GetLength(1);
             }
 
             public void FinishFill() {

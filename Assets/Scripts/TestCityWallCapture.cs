@@ -12,7 +12,7 @@ namespace MicroUniverse {
 
         public void Capture() {
             CaptureOverviewMask capturer = GetComponent<CaptureOverviewMask>();
-            Texture2D captured = capturer.Capture(FilterMode.Point);
+            Texture2D captured = capturer.Capture(FilterMode.Point, 128, 128);
             previewImage.texture = captured;
         }
 

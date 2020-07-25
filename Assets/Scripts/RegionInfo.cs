@@ -126,7 +126,7 @@ namespace MicroUniverse {
             debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
         }
 
-        public void PlantProps(GameObject emptyPrefab, GameObject fountainPrefab, GameObject buildingPrefab, GameObject pillarPrefab, Transform propRoot) {
+        public void PlantProps(float scaleFactor, GameObject emptyPrefab, GameObject fountainPrefab, GameObject buildingPrefab, GameObject pillarPrefab, Transform propRoot) {
 
             // Step.1: analyze where to place building (alongside road):
             int width = FlattenedMapWFC.GetLength(0), height = FlattenedMapWFC.GetLength(1);
@@ -176,16 +176,18 @@ namespace MicroUniverse {
                     for (int j = 0; j < modelVerts.Length; ++j) {
                         modelVerts[j] = prop.meshesToTransform[i].transform.TransformPoint(modelVerts[j]); // pre-process: local position -> flattenmap coord (also current world coord)
                         modelVerts[j] = TransformBack(modelVerts[j]); // flattenmap coord -> ring coord
-                        modelVerts[j] = new Vector3(modelVerts[j].x - 64f, modelVerts[j].y, modelVerts[j].z - 64f); // filled map -> actual world pos
+                        modelVerts[j] = new Vector3(modelVerts[j].x - fillResult.MapWidth / 2, modelVerts[j].y, modelVerts[j].z - fillResult.MapHeight / 2); // filled map -> actual world pos
+                        modelVerts[j] *= scaleFactor;
                     }
                     tempRingPosVerts.Add(modelVerts);
                 }
 
                 
                 Vector3 newFilledBoolmapPos = TransformBack(prop.transform.position);
-                Vector3 newWorldPos = new Vector3(newFilledBoolmapPos.x - 64f , newFilledBoolmapPos.y, newFilledBoolmapPos.z - 64f);
+                Vector3 newWorldPos = new Vector3(newFilledBoolmapPos.x - fillResult.MapWidth / 2 , newFilledBoolmapPos.y, newFilledBoolmapPos.z - fillResult.MapHeight / 2);
+                newWorldPos *= scaleFactor;
                 prop.transform.position = newWorldPos; // for shader center point, uhhhhhhhh
-                
+                // prop.transform.localScale *= scaleFactor;
 
 
                 for (int i = 0; i < prop.meshesToTransform.Count; ++i) {
@@ -256,7 +258,7 @@ namespace MicroUniverse {
         }
 
         void GenerateMap(bool fillValue = true) {
-            Map = new bool[fillResult.Width, fillResult.Height];
+            Map = new bool[fillResult.MapWidth, fillResult.MapHeight];
             foreach (Vector2Int p in fillResult.FilledPoints) {
                 Map[p.x, p.y] = fillValue;
             }
