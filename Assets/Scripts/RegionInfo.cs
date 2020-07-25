@@ -203,7 +203,7 @@ namespace MicroUniverse {
 
                 // 2. Transform prop root pos/rot
                 Vector3 propOriginalPos = prop.transform.position;
-                Vector3 propOriginalPosForwardOne = prop.transform.position + Vector3.forward; // move towards +Z for one unit.
+                Vector3 propOriginalPosForwardOne = prop.transform.TransformPoint(Vector3.forward); // move towards +Z for one unit.
 
                 Vector3 propFilledBoolmapPos = TransformBack(propOriginalPos);
                 Vector3 propFilledBoolmapPosForwardOne = TransformBack(propOriginalPosForwardOne);
@@ -269,6 +269,9 @@ namespace MicroUniverse {
             } else {
                 spawned = GameObject.Instantiate(collection.RandomBuildingHighHeight(), flattenSpacePos, Quaternion.identity);
             }
+            // debug:
+            int turns = Random.Range(0, 3);
+            spawned.transform.Rotate(Vector3.up, turns * 90f);
             return spawned;
         }
 
