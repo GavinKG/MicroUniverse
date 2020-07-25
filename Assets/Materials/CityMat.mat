@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: CityMat
   m_Shader: {fileID: 4800000, guid: 9196e996c691c71408c187724b2d3ec3, type: 3}
-  m_ShaderKeywords: _EMISSION_ON
+  m_ShaderKeywords: _EMISSION_ON _FLOORAO_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -50,6 +50,7 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _AlphaCutoff: 0.5
+    - _AttenFalloff: 0.2
     - _Blend: 0
     - _BumpScale: 1
     - _ColorWrap1: 0
@@ -62,14 +63,15 @@ Material:
     - _FlattenHalfLambert: 0.1
     - _FlipNormal: 0
     - _Float4: 0.31
-    - _FloorAO: 0
-    - _FloorAOIntensity: 0.5705882
-    - _FloorAORadius: 0.1
+    - _FloorAO: 1
+    - _FloorAOIntensity: 0.439
+    - _FloorAORadius: 0.298
     - _Gloss: 0.3
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossinessSource: 0
     - _GlossyReflections: 0
+    - _HalfLambert: 0
     - _JSIntensity: 3.16
     - _JSMaxDistance: 10
     - _JellySubsurface: 0

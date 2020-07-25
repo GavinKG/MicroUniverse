@@ -63,6 +63,7 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _AlphaCutoff: 0.5
+    - _AttenFalloff: 0
     - _Blend: 0
     - _BumpScale: 1
     - _Cull: 2
@@ -78,6 +79,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _HalfLambert: 0.124
     - _JSIntensity: 1
     - _JSMaxDistance: 1
     - _JellySubsurface: 0
