@@ -1374,9 +1374,10 @@ MonoBehaviour:
     type: 3}
   propCollection:
     buildingPrefabsLowHeight:
-    - {fileID: 1747994513862885019, guid: 8618f09b49b6edb4c8f298acc238d22a, type: 3}
-    - {fileID: 6203157127542999483, guid: 07bb9672827b0e045a57504f4c9e3e7b, type: 3}
-    - {fileID: 2811609125248429588, guid: 13b68c2e61001184b804469db7171d5f, type: 3}
+    - {fileID: 4097319919313514675, guid: e65a11afe5b7e1f428ae49744f997c30, type: 3}
+    - {fileID: 6678036662593880881, guid: a6267c48e1ec7e14d942c1a16c6f505e, type: 3}
+    - {fileID: 2884137785685510926, guid: bdf970459c324cc46904b625989e3b44, type: 3}
+    - {fileID: 1228122042977177225, guid: 825017785349de84dacc1ca2e52f003a, type: 3}
     buildingPrefabsMediumHeight:
     - {fileID: 1109629062611184061, guid: 272b3d5d989f7034c81b2a20ceca7d2c, type: 3}
     buildingPrefabsHighHeight:
