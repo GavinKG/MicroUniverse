@@ -1365,22 +1365,29 @@ MonoBehaviour:
   cityWallSmoothCount: 4
   cityWallSmoothRatio: 0.6
   capturer: {fileID: 67739326}
-  recaptureResolution: 64
+  recaptureResolution: 128
   smallRegionThreshold: 50
   sampleFilePath: WFCSample
   N: 3
   symmetryVariantCount: 7
-  emptyPrefab: {fileID: 5405142518907150955, guid: ad03108bbe2304b43b7c6454b0efa875,
-    type: 3}
-  fountainPrefab: {fileID: 3639788452223917974, guid: 8d05ae25271776449bbe52e0e765901a,
-    type: 3}
-  buildingPrefab: {fileID: 1109629062611184061, guid: 272b3d5d989f7034c81b2a20ceca7d2c,
-    type: 3}
-  pillarPrefab: {fileID: 5371732874266503294, guid: eb521fbf3ba8d6346be684fb5786199c,
-    type: 3}
-  propRoot: {fileID: 1002798681}
   emptyGOPrefab: {fileID: 2853529798919359504, guid: 081fadee72a59354e903af38b45a08e2,
     type: 3}
+  propCollection:
+    buildingPrefabsLowHeight:
+    - {fileID: 1109629062611184061, guid: 45854216cd7d76d46b7252032f2d44df, type: 3}
+    buildingPrefabsMediumHeight:
+    - {fileID: 1109629062611184061, guid: 272b3d5d989f7034c81b2a20ceca7d2c, type: 3}
+    buildingPrefabsHighHeight:
+    - {fileID: 1109629062611184061, guid: 0847c97ce5ab61c4bbeda1b468b46fd4, type: 3}
+    pillarPrefabs:
+    - {fileID: 5371732874266503294, guid: eb521fbf3ba8d6346be684fb5786199c, type: 3}
+    emptyPrefabs:
+    - {fileID: 5405142518907150955, guid: ad03108bbe2304b43b7c6454b0efa875, type: 3}
+    fountainPrefabs:
+    - {fileID: 3639788452223917974, guid: 8d05ae25271776449bbe52e0e765901a, type: 3}
+    buildingLowMediumSeperator: 0.33
+    buildingMediumHighSeperator: 0.66
+  propRoot: {fileID: 1002798681}
   debugImages:
   - {fileID: 1176948277}
   - {fileID: 1373616944}

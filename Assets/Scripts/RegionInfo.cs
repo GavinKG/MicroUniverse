@@ -126,9 +126,20 @@ namespace MicroUniverse {
             debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
         }
 
-        public void PlantProps(float scaleFactor, GameObject emptyPrefab, GameObject fountainPrefab, GameObject buildingPrefab, GameObject pillarPrefab, Transform propRoot) {
+        public void PlantProps(float scaleFactor, PropCollection collection, Transform propRoot) {
 
-            // Step.1: analyze where to place building (alongside road):
+            // Step.1: Generate city heat map using Perlin Noise: 0(black) -> less urbanized, 1(white) -> urbanized
+            float xOffset = Random.Range(0, 100);
+            float yOffset = Random.Range(0, 100);
+            float scale = 0.1f; // TODO: REMOVE HARD-CODED PARAMS
+            float[,] heatmap = new float[flattenedMapWidth, flattenedMapHeight];
+            for (int x = 0; x < flattenedMapWidth; ++x) {
+                for (int y = 0; y < flattenedMapHeight; ++y) {
+                    heatmap[x, y] = Mathf.PerlinNoise(x * scale + xOffset, y * scale + yOffset);
+                }
+            }
+
+            // Step.2: analyze where to place building (alongside road):
             int width = FlattenedMapWFC.GetLength(0), height = FlattenedMapWFC.GetLength(1);
             for (int x = 1; x < width - 1; ++x) {
                 for (int y = 1; y < height - 1; ++y) {
@@ -139,7 +150,7 @@ namespace MicroUniverse {
                 }
             }
 
-            // Step.2: place actual props (in FlattenedMap coord, 1 pixel = 1 unity unit):
+            // Step.3: place actual props (in FlattenedMap coord, 1 pixel = 1 unity unit):
             List<CityProp> spawnedList = new List<CityProp>();
             for (int x = 0; x < width; ++x) {
                 for (int y = 0; y < height; ++y) {
@@ -147,16 +158,24 @@ namespace MicroUniverse {
                     Vector3 flattenSpacePos = new Vector3(x, 0, y);
                     switch (FlattenedMapWFC[x, y]) {
                         case fountainRoad:
-                            spawned = GameObject.Instantiate(fountainPrefab, flattenSpacePos, Quaternion.identity, propRoot);
+                            spawned = GameObject.Instantiate(collection.RandomFountain(), flattenSpacePos, Quaternion.identity, propRoot);
                             break;
                         case building:
-                            spawned = GameObject.Instantiate(buildingPrefab, flattenSpacePos, Quaternion.identity, propRoot);
+                            float buildingHeightLevel = heatmap[x, y];
+                            if (buildingHeightLevel < collection.buildingLowMediumSeperator) {
+                                spawned = GameObject.Instantiate(collection.RandomBuildingLowHeight(), flattenSpacePos, Quaternion.identity, propRoot);
+                            } else if (buildingHeightLevel < collection.buildingMediumHighSeperator) {
+                                spawned = GameObject.Instantiate(collection.RandomBuildingMediumHeight(), flattenSpacePos, Quaternion.identity, propRoot);
+                            } else {
+                                spawned = GameObject.Instantiate(collection.RandomBuildingHighHeight(), flattenSpacePos, Quaternion.identity, propRoot);
+                            }
+
                             break;
                         case pillarRoad:
-                            spawned = GameObject.Instantiate(pillarPrefab, flattenSpacePos, Quaternion.identity, propRoot);
+                            spawned = GameObject.Instantiate(collection.RandomPillar(), flattenSpacePos, Quaternion.identity, propRoot);
                             break;
                         case empty:
-                            spawned = GameObject.Instantiate(emptyPrefab, flattenSpacePos, Quaternion.identity, propRoot);
+                            spawned = GameObject.Instantiate(collection.RandomEmpty(), flattenSpacePos, Quaternion.identity, propRoot);
                             break;
                         default:
                             break;
@@ -167,7 +186,7 @@ namespace MicroUniverse {
                 }
             }
 
-            // Step.3: transform back:
+            // Step.4: transform back:
             foreach (CityProp prop in spawnedList) {
 
                 List<Vector3[]> tempRingPosVerts = new List<Vector3[]>(prop.meshesToTransform.Count);
@@ -200,10 +219,6 @@ namespace MicroUniverse {
                     prop.meshesToTransform[i].mesh.RecalculateBounds();
                 }
 
-                // debugging:
-                Vector3 localScale = prop.transform.localScale;
-                localScale.y = Random.Range(0.2f, 1f);
-                prop.transform.localScale = localScale;
 
             }
 

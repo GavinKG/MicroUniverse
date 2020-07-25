@@ -7,11 +7,9 @@ using System.Linq;
 namespace MicroUniverse {
     public class CityProp : MonoBehaviour {
 
-        public List<MeshFilter> meshesToTransform;
+        [Range(1, 100)] public int propWeight = 1;
 
-        private void OnDrawGizmosSelected() {
-            Gizmos.matrix = transform.localToWorldMatrix;
-            Gizmos.DrawWireCube(Vector3.up * 0.5f, Vector3.one);
-        }
+        // Listed MeshFilters' meshes will be transformed from flatten space to world space in per-vertex basis.
+        public List<MeshFilter> meshesToTransform;
     }
 }
