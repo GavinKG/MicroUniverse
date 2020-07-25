@@ -9,6 +9,8 @@ namespace MicroUniverse {
 
         [Range(1, 100)] public int propWeight = 1;
 
+        public bool compensateScale = true;
+
         // Listed MeshFilters' meshes will be transformed from flatten space to world space in per-vertex basis.
         public List<MeshFilter> meshesToTransform;
     }

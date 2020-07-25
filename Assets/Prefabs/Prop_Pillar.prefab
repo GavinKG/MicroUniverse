@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propWeight: 1
+  compensateScale: 0
   meshesToTransform: []
 --- !u!1 &8918353316660073873
 GameObject:
