@@ -16,6 +16,9 @@ namespace MicroUniverse {
 
         [Range(0f, 1f)] public float buildingLowMediumSeperator = 0.2f;
         [Range(0f, 1f)] public float buildingMediumHighSeperator = 0.8f;
+        [Range(-10f, 0f)] public float buildingLowHeightVariation = -0.1f;
+        [Range(-10f, 0f)] public float buildingMediumHeightVariation = -0.3f;
+        [Range(-10f, 0f)] public float buildingHighHeightVariation = 0f;
 
 
         int BuildingLowHeightTotalWeight {

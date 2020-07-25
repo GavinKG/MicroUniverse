@@ -131,7 +131,7 @@ namespace MicroUniverse {
             // Step.1: Generate city heat map using Perlin Noise: 0(black) -> less urbanized, 1(white) -> urbanized
             float xOffset = Random.Range(0, 100);
             float yOffset = Random.Range(0, 100);
-            float scale = 0.1f; // TODO: REMOVE HARD-CODED PARAMS
+            float scale = 0.05f; // TODO: REMOVE HARD-CODED PARAMS
             float[,] heatmap = new float[flattenedMapWidth, flattenedMapHeight];
             for (int x = 0; x < flattenedMapWidth; ++x) {
                 for (int y = 0; y < flattenedMapHeight; ++y) {
@@ -163,13 +163,15 @@ namespace MicroUniverse {
                         case building:
                             float buildingHeightLevel = heatmap[x, y];
                             if (buildingHeightLevel < collection.buildingLowMediumSeperator) {
+                                flattenSpacePos.y = Random.Range(collection.buildingLowHeightVariation, 0f);
                                 spawned = GameObject.Instantiate(collection.RandomBuildingLowHeight(), flattenSpacePos, Quaternion.identity, propRoot);
                             } else if (buildingHeightLevel < collection.buildingMediumHighSeperator) {
+                                flattenSpacePos.y = Random.Range(collection.buildingMediumHeightVariation, 0f);
                                 spawned = GameObject.Instantiate(collection.RandomBuildingMediumHeight(), flattenSpacePos, Quaternion.identity, propRoot);
                             } else {
+                                flattenSpacePos.y = Random.Range(collection.buildingHighHeightVariation, 0f);
                                 spawned = GameObject.Instantiate(collection.RandomBuildingHighHeight(), flattenSpacePos, Quaternion.identity, propRoot);
                             }
-
                             break;
                         case pillarRoad:
                             spawned = GameObject.Instantiate(collection.RandomPillar(), flattenSpacePos, Quaternion.identity, propRoot);
