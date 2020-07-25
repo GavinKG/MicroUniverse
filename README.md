@@ -12,7 +12,7 @@ malosgao · Gavin KG · gavin_kg@outlook.com
 
 ## 当前进度
 
-![屏幕截图(README.assets/屏幕截图(1352).png)](C:/Users/gkg12/Pictures/Screenshots/屏幕截图(1352).png)
+![屏幕截图(README.assets/屏幕截图(1373).png)](C:/Users/gkg12/Pictures/Screenshots/屏幕截图(1373).png)
 
 
 
