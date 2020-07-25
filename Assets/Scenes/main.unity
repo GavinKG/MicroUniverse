@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1374,9 +1374,14 @@ MonoBehaviour:
     type: 3}
   propCollection:
     buildingPrefabsLowHeight:
+    - {fileID: 1819630032948909113, guid: a6f9950b8a5cd414387a1b55866dfe0d, type: 3}
+    - {fileID: 5224182245916022515, guid: ea3592738d61ffd43ab67576aa159001, type: 3}
     - {fileID: 4097319919313514675, guid: e65a11afe5b7e1f428ae49744f997c30, type: 3}
+    - {fileID: 1109629062611184061, guid: 45854216cd7d76d46b7252032f2d44df, type: 3}
+    - {fileID: 8100932334996081724, guid: f7582f9e5734f9d41bd1c7a189dc1cca, type: 3}
     - {fileID: 6678036662593880881, guid: a6267c48e1ec7e14d942c1a16c6f505e, type: 3}
     - {fileID: 2884137785685510926, guid: bdf970459c324cc46904b625989e3b44, type: 3}
+    - {fileID: 6347040031634149575, guid: 3ce38d5cf643fb84cb9d01826f0cc3e6, type: 3}
     - {fileID: 1228122042977177225, guid: 825017785349de84dacc1ca2e52f003a, type: 3}
     buildingPrefabsMediumHeight:
     - {fileID: 1109629062611184061, guid: 272b3d5d989f7034c81b2a20ceca7d2c, type: 3}

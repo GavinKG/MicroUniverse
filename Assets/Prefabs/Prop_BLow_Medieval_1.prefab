@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2be3a206c75610b41a8dc391c3058d49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propWeight: 1
+  propWeight: 10
   compensateScale: 1
   meshesToTransform:
   - {fileID: 2884137785977972664}
