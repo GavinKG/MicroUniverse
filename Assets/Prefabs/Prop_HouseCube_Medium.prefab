@@ -46,8 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propWeight: 1
   meshesToTransform: []
---- !u!64 &5762616788216765361
-MeshCollider:
+--- !u!65 &46052845756451099
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -55,11 +55,10 @@ MeshCollider:
   m_GameObject: {fileID: 6664568897856111680}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4068373912626513877, guid: 08da762974f18e54fa022fd6f56c9cce, type: 3}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &5817568574941280529
 PrefabInstance:
   m_ObjectHideFlags: 0
