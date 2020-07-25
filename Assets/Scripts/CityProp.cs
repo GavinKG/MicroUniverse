@@ -13,5 +13,10 @@ namespace MicroUniverse {
 
         // Listed MeshFilters' meshes will be transformed from flatten space to world space in per-vertex basis.
         public List<MeshFilter> meshesToTransform;
+
+        public void OnDrawGizmosSelected() {
+            Gizmos.matrix = transform.localToWorldMatrix;
+            Gizmos.DrawWireCube(new Vector3(0, 0.5f, 0), Vector3.one);
+        }
     }
 }

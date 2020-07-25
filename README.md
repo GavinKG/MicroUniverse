@@ -254,6 +254,12 @@ LS/L 控制驱动力方向；RS/R 控制冲刺方向；RB/R1 控制连接，按�
 
 ![Datasheets, Electronic Parts, Components, Search - Octopart](README.assets/leddriver_wide.png)
 
+![Electronic Components / Devices | Products | MARUWA CO., LTD.](README.assets/pc-electronic_parts-img-h1.jpg)
+
+![rain1.jpg](README.assets/rain1.jpg)
+
+每个原件是这种卡通/写实混合的模型
+
 ### UI 界面配色
 
 
