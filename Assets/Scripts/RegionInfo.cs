@@ -57,6 +57,10 @@ namespace MicroUniverse {
         const int building = 5;
 
 
+        // spawn params (for cross-function generate):
+        float[,] heatmap;
+        PropCollection collection;
+
 
         public RegionInfo(FloodFill.FillResult _fillResult) {
             if (!_fillResult.Finished) {
@@ -128,11 +132,13 @@ namespace MicroUniverse {
 
         public void PlantProps(float scaleFactor, PropCollection collection, Transform propRoot) {
 
+            this.collection = collection;
+
             // Step.1: Generate city heat map using Perlin Noise: 0(black) -> less urbanized, 1(white) -> urbanized
             float xOffset = Random.Range(0, 100);
             float yOffset = Random.Range(0, 100);
             float scale = 0.05f; // TODO: REMOVE HARD-CODED PARAMS
-            float[,] heatmap = new float[flattenedMapWidth, flattenedMapHeight];
+            heatmap = new float[flattenedMapWidth, flattenedMapHeight];
             for (int x = 0; x < flattenedMapWidth; ++x) {
                 for (int y = 0; y < flattenedMapHeight; ++y) {
                     heatmap[x, y] = Mathf.PerlinNoise(x * scale + xOffset, y * scale + yOffset);
@@ -161,17 +167,8 @@ namespace MicroUniverse {
                             spawned = GameObject.Instantiate(collection.RandomFountain(), flattenSpacePos, Quaternion.identity, propRoot);
                             break;
                         case building:
-                            float buildingHeightLevel = heatmap[x, y];
-                            if (buildingHeightLevel < collection.buildingLowMediumSeperator) {
-                                flattenSpacePos.y = Random.Range(collection.buildingLowHeightVariation, 0f);
-                                spawned = GameObject.Instantiate(collection.RandomBuildingLowHeight(), flattenSpacePos, Quaternion.identity, propRoot);
-                            } else if (buildingHeightLevel < collection.buildingMediumHighSeperator) {
-                                flattenSpacePos.y = Random.Range(collection.buildingMediumHeightVariation, 0f);
-                                spawned = GameObject.Instantiate(collection.RandomBuildingMediumHeight(), flattenSpacePos, Quaternion.identity, propRoot);
-                            } else {
-                                flattenSpacePos.y = Random.Range(collection.buildingHighHeightVariation, 0f);
-                                spawned = GameObject.Instantiate(collection.RandomBuildingHighHeight(), flattenSpacePos, Quaternion.identity, propRoot);
-                            }
+                            spawned = SpawnBuilding(x, y);
+                            spawned.transform.SetParent(propRoot);
                             break;
                         case pillarRoad:
                             spawned = GameObject.Instantiate(collection.RandomPillar(), flattenSpacePos, Quaternion.identity, propRoot);
@@ -220,8 +217,8 @@ namespace MicroUniverse {
                 }
 
 
-                Vector3 propWorldPos = new Vector3(propFilledBoolmapPos.x - fillResult.MapWidth / 2 , propFilledBoolmapPos.y, propFilledBoolmapPos.z - fillResult.MapHeight / 2);
-                Vector3 propWorldPosForwardOne = new Vector3(propFilledBoolmapPosForwardOne.x - fillResult.MapWidth / 2 , propFilledBoolmapPosForwardOne.y, propFilledBoolmapPosForwardOne.z - fillResult.MapHeight / 2);
+                Vector3 propWorldPos = new Vector3(propFilledBoolmapPos.x - fillResult.MapWidth / 2, propFilledBoolmapPos.y, propFilledBoolmapPos.z - fillResult.MapHeight / 2);
+                Vector3 propWorldPosForwardOne = new Vector3(propFilledBoolmapPosForwardOne.x - fillResult.MapWidth / 2, propFilledBoolmapPosForwardOne.y, propFilledBoolmapPosForwardOne.z - fillResult.MapHeight / 2);
                 //Vector3 propWorldPosRightOne = new Vector3(propOriginalPosRightOne.x - fillResult.MapWidth / 2 , propOriginalPosRightOne.y, propOriginalPosRightOne.z - fillResult.MapHeight / 2);
 
                 propWorldPos *= scaleFactor;
@@ -260,6 +257,20 @@ namespace MicroUniverse {
         }
 
         // ---------- public interface ---------- [END]
+
+        GameObject SpawnBuilding(int x, int y) {
+            GameObject spawned;
+            Vector3 flattenSpacePos = new Vector3(x, 0, y);
+            float buildingHeightLevel = heatmap[x, y];
+            if (buildingHeightLevel < collection.buildingLowMediumSeperator) {
+                spawned = GameObject.Instantiate(collection.RandomBuildingLowHeight(), flattenSpacePos, Quaternion.identity);
+            } else if (buildingHeightLevel < collection.buildingMediumHighSeperator) {
+                spawned = GameObject.Instantiate(collection.RandomBuildingMediumHeight(), flattenSpacePos, Quaternion.identity);
+            } else {
+                spawned = GameObject.Instantiate(collection.RandomBuildingHighHeight(), flattenSpacePos, Quaternion.identity);
+            }
+            return spawned;
+        }
 
         bool IsRoad(byte id) {
             return id == road || id == fountainRoad || id == pillarRoad;
