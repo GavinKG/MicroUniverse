@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -481,7 +481,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &412592525
 RectTransform:
   m_ObjectHideFlags: 0
@@ -552,7 +552,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &587798395
 RectTransform:
   m_ObjectHideFlags: 0
@@ -850,7 +850,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &797673638
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1130,7 +1130,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1176948276
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1201,7 +1201,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1247142833
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1272,7 +1272,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1373616943
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1383,8 +1383,18 @@ MonoBehaviour:
     - {fileID: 2884137785685510926, guid: bdf970459c324cc46904b625989e3b44, type: 3}
     - {fileID: 6347040031634149575, guid: 3ce38d5cf643fb84cb9d01826f0cc3e6, type: 3}
     - {fileID: 1228122042977177225, guid: 825017785349de84dacc1ca2e52f003a, type: 3}
+    - {fileID: 156962298080518505, guid: 18cddc34310e46d48a81d648f20d49f0, type: 3}
+    - {fileID: 156962298080518505, guid: ebf623a0b46cf4d4b80d155040b44810, type: 3}
+    - {fileID: 156962298080518505, guid: 41a756e9022da1a4fbebbf48accca79d, type: 3}
+    - {fileID: 156962298080518505, guid: a7291dc0582f2c746823ba2c32bf7b20, type: 3}
+    - {fileID: 156962298080518505, guid: 041849222f769e7469a47b8ca4e2e5db, type: 3}
+    - {fileID: 156962298080518505, guid: 097404254e2ce19419afa06c53ac2fc3, type: 3}
     buildingPrefabsMediumHeight:
     - {fileID: 1109629062611184061, guid: 272b3d5d989f7034c81b2a20ceca7d2c, type: 3}
+    - {fileID: 6344237080597968018, guid: 610284fd3fee4ad4ba2c77d90ce25882, type: 3}
+    - {fileID: 2573940015706152319, guid: 2a9dd6c9bcc254641958b3cf01b2bc63, type: 3}
+    - {fileID: 5310691715074445244, guid: a8009928dcf271d46ba1144c978bb793, type: 3}
+    - {fileID: 5152031280029439849, guid: a6b5c88a29790ac4e9bbf43a0edfe879, type: 3}
     buildingPrefabsHighHeight:
     - {fileID: 1109629062611184061, guid: 0847c97ce5ab61c4bbeda1b468b46fd4, type: 3}
     pillarPrefabs:
@@ -1393,8 +1403,8 @@ MonoBehaviour:
     - {fileID: 5405142518907150955, guid: ad03108bbe2304b43b7c6454b0efa875, type: 3}
     fountainPrefabs:
     - {fileID: 3639788452223917974, guid: 8d05ae25271776449bbe52e0e765901a, type: 3}
-    buildingLowMediumSeperator: 0.33
-    buildingMediumHighSeperator: 0.66
+    buildingLowMediumSeperator: 0.4
+    buildingMediumHighSeperator: 0.75
     buildingLowHeightVariation: 0
     buildingMediumHeightVariation: 0
     buildingHighHeightVariation: 0
@@ -1539,7 +1549,7 @@ Light:
     m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.8
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -1752,7 +1762,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2124619465
 RectTransform:
   m_ObjectHideFlags: 0
