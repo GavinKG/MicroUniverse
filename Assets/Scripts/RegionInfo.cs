@@ -207,16 +207,24 @@ namespace MicroUniverse {
                 // 2. Transform prop root pos/rot
                 Vector3 propOriginalPos = prop.transform.position;
                 Vector3 propOriginalPosForwardOne = prop.transform.position + Vector3.forward; // move towards +Z for one unit.
+                Vector3 propOriginalPosRightOne = prop.transform.position + Vector3.right; // move towards +X for one unit.
+
                 Vector3 propFilledBoolmapPos = TransformBack(propOriginalPos);
                 Vector3 propFilledBoolmapPosForwardOne = TransformBack(propOriginalPosForwardOne);
+                Vector3 propFilledBoolmapPosRightOne = TransformBack(propOriginalPosRightOne);
+
+                float forwardOneDistance = Vector3.Distance(propFilledBoolmapPos, propFilledBoolmapPosForwardOne);
+                float rightOneDistance = Vector3.Distance(propFilledBoolmapPos, propFilledBoolmapPosRightOne);
+                prop.transform.localScale = new Vector3(rightOneDistance, 1f, forwardOneDistance); // scale compensation
+
                 Vector3 propWorldPos = new Vector3(propFilledBoolmapPos.x - fillResult.MapWidth / 2 , propFilledBoolmapPos.y, propFilledBoolmapPos.z - fillResult.MapHeight / 2);
                 Vector3 propWorldPosForwardOne = new Vector3(propFilledBoolmapPosForwardOne.x - fillResult.MapWidth / 2 , propFilledBoolmapPosForwardOne.y, propFilledBoolmapPosForwardOne.z - fillResult.MapHeight / 2);
+                //Vector3 propWorldPosRightOne = new Vector3(propOriginalPosRightOne.x - fillResult.MapWidth / 2 , propOriginalPosRightOne.y, propOriginalPosRightOne.z - fillResult.MapHeight / 2);
+
                 propWorldPos *= scaleFactor;
                 propWorldPosForwardOne *= scaleFactor;
-                prop.transform.position = propWorldPos; // for shader center point, uhhhhhhhh
+                prop.transform.position = propWorldPos;
                 prop.transform.LookAt(propWorldPosForwardOne);
-                float newForwardOneDistance = Vector3.Distance(propWorldPos, propWorldPosForwardOne);
-                // prop.transform.localScale *= scaleFactor;
 
                 // 3. Transform vertex position from world to already transformed local
                 for (int i = 0; i < prop.meshesToTransform.Count; ++i) {
