@@ -130,18 +130,17 @@ namespace MicroUniverse {
             debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
         }
 
-        public void PlantProps(float scaleFactor, PropCollection collection, Transform propRoot) {
+        public void PlantProps(float scaleFactor, PropCollection collection, Transform propRoot, float perlinFreq) {
 
             this.collection = collection;
 
             // Step.1: Generate city heat map using Perlin Noise: 0(black) -> less urbanized, 1(white) -> urbanized
             float xOffset = Random.Range(0, 100);
             float yOffset = Random.Range(0, 100);
-            float scale = 0.05f; // TODO: REMOVE HARD-CODED PARAMS
             heatmap = new float[flattenedMapWidth, flattenedMapHeight];
             for (int x = 0; x < flattenedMapWidth; ++x) {
                 for (int y = 0; y < flattenedMapHeight; ++y) {
-                    heatmap[x, y] = Mathf.PerlinNoise(x * scale + xOffset, y * scale + yOffset);
+                    heatmap[x, y] = Mathf.PerlinNoise(x * perlinFreq + xOffset, y * perlinFreq + yOffset);
                 }
             }
 
@@ -164,16 +163,16 @@ namespace MicroUniverse {
                     Vector3 flattenSpacePos = new Vector3(x, 0, y);
                     switch (FlattenedMapWFC[x, y]) {
                         case fountainRoad:
-                            spawned = GameObject.Instantiate(collection.GetFountainPrefab(), Vector3.zero, Quaternion.identity, propRoot);
+                            spawned = GameObject.Instantiate(collection.GetFountainPrefab(), Vector3.zero, Quaternion.identity);
                             break;
                         case building:
                             spawned = SpawnBuilding(FlattenedMapWFC, x, y);
                             break;
                         case pillarRoad:
-                            spawned = GameObject.Instantiate(collection.GetPillarPrefab(), Vector3.zero, Quaternion.identity, propRoot);
+                            spawned = GameObject.Instantiate(collection.GetPillarPrefab(), Vector3.zero, Quaternion.identity);
                             break;
                         case empty:
-                            spawned = GameObject.Instantiate(collection.GetEmptyPrefab(), Vector3.zero, Quaternion.identity, propRoot);
+                            spawned = GameObject.Instantiate(collection.GetEmptyPrefab(), Vector3.zero, Quaternion.identity);
                             break;
                         default:
                             break;
@@ -184,6 +183,7 @@ namespace MicroUniverse {
                     }
 
                     spawned.transform.position = flattenSpacePos; // double check...
+                    spawned.transform.SetParent(propRoot);
                     spawnedList.Add(spawned.GetComponent<CityProp>());
 
                 }

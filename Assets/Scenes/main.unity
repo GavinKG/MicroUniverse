@@ -1370,25 +1370,53 @@ MonoBehaviour:
   sampleFilePath: WFCSample
   N: 3
   symmetryVariantCount: 7
+  perlinFreq: 0.1
   emptyGOPrefab: {fileID: 2853529798919359504, guid: 081fadee72a59354e903af38b45a08e2,
     type: 3}
   propCollection:
     buildings:
-    - {fileID: 1260503086228986182, guid: e33ccf2cefc639c4787f9455007748e0, type: 3}
-    - {fileID: 4185886530134064551, guid: 9e0fb92543f279a4d9ac4ec888192dd9, type: 3}
-    - {fileID: 2421369216086075852, guid: 97cfaac7fd49965449d871568fd39899, type: 3}
-    - {fileID: 3772282570203671812, guid: 5d5d3f9200367c940a347fcfbb16ef0b, type: 3}
-    - {fileID: 3546458924525823723, guid: 4887392e2ba1a65459c5d0793ccdf505, type: 3}
-    - {fileID: 30476432027367804, guid: 272b3d5d989f7034c81b2a20ceca7d2c, type: 3}
     - {fileID: 5572746441350520199, guid: 0847c97ce5ab61c4bbeda1b468b46fd4, type: 3}
+    - {fileID: 7280470103781490582, guid: a6f9950b8a5cd414387a1b55866dfe0d, type: 3}
+    - {fileID: 7166024351456585020, guid: 9348420cdbf6c1f45b179d2a701b53e4, type: 3}
+    - {fileID: 5415428090766446262, guid: ea021902ea3eaf14abb49a4ebf777a73, type: 3}
+    - {fileID: 5772806654836676521, guid: ea3592738d61ffd43ab67576aa159001, type: 3}
+    - {fileID: 690777423703362238, guid: f89df5aae8e98804fa0bff066af9069a, type: 3}
+    - {fileID: 2072593340004874202, guid: 00a1109d660cb104d981c24212a803cf, type: 3}
+    - {fileID: 6362526568066621459, guid: e65a11afe5b7e1f428ae49744f997c30, type: 3}
+    - {fileID: 9190032925441375917, guid: 55625849e4979e44ea96ab43ba1f5d59, type: 3}
+    - {fileID: 4791885064615893879, guid: 45854216cd7d76d46b7252032f2d44df, type: 3}
+    - {fileID: 1153069427045805938, guid: f7582f9e5734f9d41bd1c7a189dc1cca, type: 3}
+    - {fileID: 3216168842240061134, guid: 3a37b8e3d32accd4e8f7a557eccc1f11, type: 3}
+    - {fileID: -3663107442478294075, guid: a6267c48e1ec7e14d942c1a16c6f505e, type: 3}
+    - {fileID: 8662688070798044840, guid: bdf970459c324cc46904b625989e3b44, type: 3}
+    - {fileID: 1620194189181055731, guid: 56a1663942074384280f965af03092d6, type: 3}
+    - {fileID: 4902176457641273618, guid: b210a5ae0aa87ea45b4faa46c52d222d, type: 3}
+    - {fileID: 4881279349758107448, guid: eb9ad40e89da8ac4193ca9ad1b3d9b26, type: 3}
+    - {fileID: 631500602304335308, guid: 3dab78d3020babc4b827c08ba6942c95, type: 3}
+    - {fileID: 1680690059806340110, guid: 3ce38d5cf643fb84cb9d01826f0cc3e6, type: 3}
+    - {fileID: 1287458909671230687, guid: 10dec5163ecaad741a5742c6ba10b794, type: 3}
+    - {fileID: 8882563883993908653, guid: 097404254e2ce19419afa06c53ac2fc3, type: 3}
+    - {fileID: 8725340319747214116, guid: 18cddc34310e46d48a81d648f20d49f0, type: 3}
+    - {fileID: 4480276774747839657, guid: ebf623a0b46cf4d4b80d155040b44810, type: 3}
+    - {fileID: 4542535626891485353, guid: 41a756e9022da1a4fbebbf48accca79d, type: 3}
+    - {fileID: 3522926828140668040, guid: a7291dc0582f2c746823ba2c32bf7b20, type: 3}
+    - {fileID: 5118305235503637546, guid: 041849222f769e7469a47b8ca4e2e5db, type: 3}
+    - {fileID: 6822021131286749752, guid: 825017785349de84dacc1ca2e52f003a, type: 3}
+    - {fileID: 30476432027367804, guid: 272b3d5d989f7034c81b2a20ceca7d2c, type: 3}
+    - {fileID: 6343859147691549358, guid: a9b7c17dc4b5b8e418008582db2ad208, type: 3}
+    - {fileID: 4945797704746803743, guid: 610284fd3fee4ad4ba2c77d90ce25882, type: 3}
+    - {fileID: 485054501067708844, guid: 802140debaeb5184bb047a929dd586f5, type: 3}
+    - {fileID: 4130729516574392383, guid: 2a9dd6c9bcc254641958b3cf01b2bc63, type: 3}
+    - {fileID: 2646730624199433083, guid: a8009928dcf271d46ba1144c978bb793, type: 3}
+    - {fileID: 974262603581453362, guid: a6b5c88a29790ac4e9bbf43a0edfe879, type: 3}
     fountains:
     - {fileID: 4948575356226954429, guid: 8d05ae25271776449bbe52e0e765901a, type: 3}
     emptys:
     - {fileID: 5405142518907150954, guid: ad03108bbe2304b43b7c6454b0efa875, type: 3}
     pillars:
     - {fileID: 3566403346147398715, guid: eb521fbf3ba8d6346be684fb5786199c, type: 3}
-    buildingLMSep: 0.9
-    buildingMHSep: 0.95
+    buildingLMSep: 0.4
+    buildingMHSep: 0.8
   propRoot: {fileID: 1002798681}
   debugImages:
   - {fileID: 1176948277}

@@ -32,15 +32,9 @@ namespace MicroUniverse {
                 heightType = BuildingProp.HeightType.High;
             }
 
-            var filtered = buildings.Where(bp => bp.buildingType == buildingType && bp.heightType == heightType);
+            var filtered = buildings.Where(bp => (bp.buildingType == buildingType || bp.buildingType == BuildingProp.BuildingType.DontCare) && bp.heightType == heightType);
             GameObject prefab = RandomPropPrefab(filtered);
-            if (prefab != null) {
-                return prefab;
-            }
-
-            // cannot find proper building, fallback to DontCare:
-            var filteredDontcare = buildings.Where(bp => bp.buildingType == BuildingProp.BuildingType.DontCare && bp.heightType == heightType).ToArray();
-            return RandomPropPrefab(filteredDontcare);
+            return prefab;
 
         }
 

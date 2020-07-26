@@ -41,6 +41,7 @@ namespace MicroUniverse {
         [Range(1, 7)] public int symmetryVariantCount = 7;
 
         [Header("Step.7: Planting")]
+        [Range(0.05f, 0.5f)] public float perlinFreq = 0.1f;
         public GameObject emptyGOPrefab;
         public PropCollection propCollection;
         public Transform propRoot;
@@ -216,7 +217,7 @@ namespace MicroUniverse {
             for (int i = 0; i < regionInfos.Count; ++i) {
                 GameObject subRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, propRoot);
                 subRootGO.name = "Region #" + i.ToString();
-                regionInfos[i].PlantProps(scaleFactor, propCollection, subRootGO.transform);
+                regionInfos[i].PlantProps(scaleFactor, propCollection, subRootGO.transform, perlinFreq);
             }
 
             DebugTex(regionInfos[0].DebugTransformBackToTex(), 3);
