@@ -284,7 +284,7 @@ namespace MicroUniverse {
                 (IsRoad(map, x - 1, y) ? 1 : 0) +
                 (IsRoad(map, x + 1, y) ? 1 : 0) +
                 (IsRoad(map, x, y + 1) ? 1 : 0) +
-                (IsRoad(map, x, y + 1) ? 1 : 0);
+                (IsRoad(map, x, y - 1) ? 1 : 0);
             if (surrRoadCount == 4) {
                 buildingType = BuildingProp.BuildingType.Alone;
                 turn = Random.Range(0, 3); // whatever the rotation is...
@@ -323,9 +323,9 @@ namespace MicroUniverse {
             } else { // surrounding road count = 1, must be BuildingType.AlongsideRoad
                 buildingType = BuildingProp.BuildingType.AlongsideRoad;
                 turn =
-                    (!IsRoad(map, x, y + 1)) ? 0 :
-                    (!IsRoad(map, x + 1, y)) ? 1 :
-                    (!IsRoad(map, x, y - 1)) ? 2 :
+                    (IsRoad(map, x, y + 1)) ? 0 :
+                    (IsRoad(map, x + 1, y)) ? 1 :
+                    (IsRoad(map, x, y - 1)) ? 2 :
                     3;
             }
 

@@ -33,30 +33,21 @@ namespace MicroUniverse {
             }
 
             var filtered = buildings.Where(bp => bp.buildingType == buildingType && bp.heightType == heightType);
-            int totalWeight = 0;
-            foreach (BuildingProp prop in filtered) {
-                totalWeight += prop.propWeight;
-            }
-            int dice = Random.Range(0, totalWeight);
-            int currWeight = 0;
-            foreach (BuildingProp prop in filtered) {
-                currWeight += prop.propWeight;
-                if (currWeight >= dice) {
-                    return prop.gameObject;
-                }
+            GameObject prefab = RandomPropPrefab(filtered);
+            if (prefab != null) {
+                return prefab;
             }
 
             // cannot find proper building, fallback to DontCare:
             var filteredDontcare = buildings.Where(bp => bp.buildingType == BuildingProp.BuildingType.DontCare && bp.heightType == heightType).ToArray();
-            if (filteredDontcare.Length == 0) {
-                throw new System.Exception("Cannot find proper building with building type DontCare or " + buildingType.ToString() + " and height type " + heightType.ToString());
-            }
-            int dontcareIndex = Random.Range(0, filteredDontcare.Length);
-            return filteredDontcare[dontcareIndex].gameObject;
+            return RandomPropPrefab(filteredDontcare);
 
         }
 
-        GameObject GetNormalPropPrefab(List<CityProp> props) {
+        /// <summary>
+        /// Roll the dice!
+        /// </summary>
+        GameObject RandomPropPrefab(IEnumerable<CityProp> props) {
 
             // TODO: Cache
             int totalWeight = 0;
@@ -71,13 +62,12 @@ namespace MicroUniverse {
                     return prop.gameObject;
                 }
             }
-            throw new System.Exception("Cannot find props...");
-
+            return null;
         }
 
-        public GameObject GetFountainPrefab() { return GetNormalPropPrefab(fountains); }
-        public GameObject GetEmptyPrefab() { return GetNormalPropPrefab(emptys); }
-        public GameObject GetPillarPrefab() { return GetNormalPropPrefab(pillars); }
+        public GameObject GetFountainPrefab() { return RandomPropPrefab(fountains); }
+        public GameObject GetEmptyPrefab() { return RandomPropPrefab(emptys); }
+        public GameObject GetPillarPrefab() { return RandomPropPrefab(pillars); }
     }
 
 }
