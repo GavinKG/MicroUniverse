@@ -387,7 +387,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.8396226, g: 0.9742113, b: 1, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -427,13 +427,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150760874}
-  m_LocalRotation: {x: 0.5735764, y: 0, z: 0, w: 0.8191521}
-  m_LocalPosition: {x: -13.53, y: 5, z: -39.17}
+  m_LocalRotation: {x: 0.38026348, y: 0, z: 0, w: 0.92487824}
+  m_LocalPosition: {x: -13.53, y: 10, z: -39.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 70, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 44.7, y: 0, z: 0}
 --- !u!114 &150760878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -477,9 +477,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d76188a72f9462640aeb6cf00c1c53f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  height: 10
-  rotationSpeed: 80
-  movementSpeed: 5
+  rotationSpeed: 90
+  movementSpeed: 7
+  speedup: 0
 --- !u!1 &412592524
 GameObject:
   m_ObjectHideFlags: 0
@@ -1392,6 +1392,9 @@ MonoBehaviour:
   propCollection:
     buildings:
     - {fileID: 5572746441350520199, guid: 0847c97ce5ab61c4bbeda1b468b46fd4, type: 3}
+    - {fileID: 1643428679811571630, guid: bd3dfeaa44502e34691b177d6e82a13a, type: 3}
+    - {fileID: 3108286020059512529, guid: ea836844207aedb42b1db01c359b68ee, type: 3}
+    - {fileID: 9212227053214225208, guid: 0983690ed6e1dbf4d94d9171c025e816, type: 3}
     - {fileID: 7280470103781490582, guid: a6f9950b8a5cd414387a1b55866dfe0d, type: 3}
     - {fileID: 7166024351456585020, guid: 9348420cdbf6c1f45b179d2a701b53e4, type: 3}
     - {fileID: 5415428090766446262, guid: ea021902ea3eaf14abb49a4ebf777a73, type: 3}
@@ -1598,7 +1601,18 @@ MonoBehaviour:
     m_ActionId: 52dc34fa-04e7-456b-b94b-c1429dc488c7
     m_ActionName: In-game/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 150760879}
+        m_MethodName: OnPlayerSpeedupInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 71b5f999-8ce7-43ba-b524-e8fa50ce2068
     m_ActionName: In-game/Action[/Mouse/leftButton,/Keyboard/space]
   - m_PersistentCalls:
@@ -1617,7 +1631,18 @@ MonoBehaviour:
     m_ActionId: 86f1a5c5-786a-41fc-88e3-05e5df4702da
     m_ActionName: In-game/Aim
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 150760879}
+        m_MethodName: OnPlayerUpDownInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 6637ebfb-b386-44e7-9fd3-a7700375b3bf
     m_ActionName: In-game/New action
   m_NeverAutoSwitchControlSchemes: 0
