@@ -234,6 +234,10 @@ LS/L 控制驱动力方向；RS/R 控制冲刺方向；RB/R1 控制连接，按�
 
 ![Review: Cities: Skylines — Worthy city-building simulation on Xbox ...](README.assets/image.jpg)
 
+![image-20200726174014262](README.assets/image-20200726174014262.png)
+
+GTA1，用来参考道路的纹理，打算程序化生成。
+
 ### 城市配色及风格
 
 ![镜之边缘：催化剂Mirrors Edge-Catalyst-自由落体- 游戏发现- 叽咪叽咪 ...](README.assets/09bb7a5350a27422c6a63d1cf5629383.jpg)
