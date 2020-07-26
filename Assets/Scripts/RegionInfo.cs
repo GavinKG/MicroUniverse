@@ -160,7 +160,6 @@ namespace MicroUniverse {
             for (int x = 0; x < width; ++x) {
                 for (int y = 0; y < height; ++y) {
                     GameObject spawned = null;
-                    Vector3 flattenSpacePos = new Vector3(x, 0, y);
                     switch (FlattenedMapWFC[x, y]) {
                         case fountainRoad:
                             spawned = GameObject.Instantiate(collection.GetFountainPrefab(), Vector3.zero, Quaternion.identity);
@@ -182,7 +181,7 @@ namespace MicroUniverse {
                         continue;
                     }
 
-                    spawned.transform.position = flattenSpacePos; // double check...
+                    spawned.transform.position = new Vector3(x, 0, y);
                     spawned.transform.SetParent(propRoot);
                     spawnedList.Add(spawned.GetComponent<CityProp>());
 
@@ -502,6 +501,7 @@ namespace MicroUniverse {
 
             // step.4: rotate back (move left, rotate back, move back)
             pos -= Vector2.right * moveRightLength;
+            pos *= 0.9f; // The precision is not good, so shrink it down a little bit...It just works.
             pos = pos.Rotate(-angleFromFilledCenterToRight);
             pos -= filledCenterToMapCenter;
             pos += mapCenter;
