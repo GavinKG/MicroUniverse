@@ -12,7 +12,7 @@ malosgao · Gavin KG · gavin_kg@outlook.com
 
 ## 当前进度
 
-![屏幕截图(README.assets/屏幕截图(1373).png)](C:/Users/gkg12/Pictures/Screenshots/屏幕截图(1373).png)
+![屏幕截图(README.assets/屏幕截图(1377).png)](C:/Users/gkg12/Pictures/Screenshots/屏幕截图(1377).png)
 
 
 
@@ -236,29 +236,21 @@ LS/L 控制驱动力方向；RS/R 控制冲刺方向；RB/R1 控制连接，按�
 
 ### 城市配色及风格
 
+![镜之边缘：催化剂Mirrors Edge-Catalyst-自由落体- 游戏发现- 叽咪叽咪 ...](README.assets/09bb7a5350a27422c6a63d1cf5629383.jpg)
+
+没有染色时是这种类似于镜之边缘的白模风格。
+
 ![image-20200714221657585](README.assets/image-20200714221657585.png)
 
 ![Townscaper - Gameplay Trailer ▻ NEW GAMES 2020 - YouTube](README.assets/maxresdefault.jpg)
 
 ![image-20200704012121965](README.assets/image-20200704012121965.png)
 
-![img](README.assets/Store_EpicZenGarden_01 (1)-1920x1080-82bc3c22e0437cd6a7acb7b9d7be92d7.png)
-
 ![image-20200716110518209](README.assets/image-20200716110518209.png)
 
 ![image-20200718101143625](README.assets/image-20200718101143625.png)
 
 （移轴摄影，同样有一种微缩模型的感觉，符合主题）
-
-## 微观电子城市设计思路
-
-![Datasheets, Electronic Parts, Components, Search - Octopart](README.assets/leddriver_wide.png)
-
-![Electronic Components / Devices | Products | MARUWA CO., LTD.](README.assets/pc-electronic_parts-img-h1.jpg)
-
-![rain1.jpg](README.assets/rain1.jpg)
-
-每个原件是这种卡通/写实混合的模型
 
 ### UI 界面配色
 
