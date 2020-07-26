@@ -123,18 +123,30 @@ namespace MicroUniverse {
             return sb.ToString();
         }
 
-        public static byte[,] StringToByteMapWithSingleDigit(string s) {
-
-            List<string> lines = new List<string>();
-            foreach (var line in s.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)) {
-                lines.Add(line);
+        public static byte[,] StringToByteMapWithSingleDigit(string s, char lineSeperator) {
+            List<List<byte>> lines = new List<List<byte>>();
+            List<byte> line = new List<byte>();
+            foreach (char c in s) {
+                if (char.IsDigit(c)) {
+                    line.Add(byte.Parse(c.ToString()));
+                } else if (c == lineSeperator) {
+                    lines.Add(line);
+                    line = new List<byte>();
+                }
             }
-            int width = lines.Count;
-            int height = lines[0].Length;
-            byte[,] ret = new byte[width, height];
-            for (int x = 0; x < width; ++x) {
-                for (int y = 0; y < height; ++y) {
-                    ret[x, y] = byte.Parse(lines[x][y].ToString());
+            if (lines.Count == 0) {
+                return null;
+            }
+            int lineLength = lines[0].Count;
+            for (int i = 1; i < lines.Count; ++i) {
+                if (lineLength != lines[1].Count) {
+                    throw new Exception("pattern is not a square.");
+                }
+            }
+            byte[,] ret = new byte[lineLength, lines.Count];
+            for (int x = 0; x < lineLength; ++x) {
+                for (int y = 0; y < lines.Count; ++y) {
+                    ret[x, y] = lines[y][x];
                 }
             }
             return ret;

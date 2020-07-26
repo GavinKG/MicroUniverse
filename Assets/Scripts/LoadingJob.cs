@@ -202,7 +202,7 @@ namespace MicroUniverse {
             // *Wall = 4
 
             string sampleString = Util.ReadStringFromResource(sampleFilePath);
-            byte[,] sample = Util.StringToByteMapWithSingleDigit(sampleString);
+            byte[,] sample = Util.StringToByteMapWithSingleDigit(sampleString, '#');
             wfc = new WFC(sample, N, false, false, symmetryVariantCount);
             foreach (RegionInfo regionInfo in regionInfos) {
                 regionInfo.DoWFC(wfc, seed);
