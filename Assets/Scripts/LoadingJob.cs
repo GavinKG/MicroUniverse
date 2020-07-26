@@ -74,6 +74,10 @@ namespace MicroUniverse {
         // --------------------
 
         private void Start() {
+
+            Application.targetFrameRate = 60;
+            // setting the framerate: (will be removed when gameplay framework is constructed)
+
             if (loadOnStart) {
                 Load();
             }
@@ -175,20 +179,21 @@ namespace MicroUniverse {
             if (regionInfos.Count == 0) {
                 throw new Exception("No region to proceed, quitting...");
             }
-            DebugTex(regionInfos[0].MapTex, 0);
-            DebugTex(regionInfos[0].FlattenedMapTex, 1);
+            // DebugTex(regionInfos[0].MapTex, 0);
+            // DebugTex(regionInfos[0].FlattenedMapTex, 1);
 
             
 
             // ----------
             // Step.5
+            /* Disabled for faster demo performance.
             print("Step.5: MST." + Timestamp);
             List<IGraphNode> graphNodes = new List<IGraphNode>(regionInfos.Count);
             foreach (RegionInfo regionInfo in regionInfos) {
                 graphNodes.Add(regionInfo as IGraphNode);
             }
             rootRegion = MST.Run(graphNodes, registerBidirectional: false) as RegionInfo;
-
+            */
 
             // ----------
             // Step.6
@@ -207,7 +212,7 @@ namespace MicroUniverse {
             foreach (RegionInfo regionInfo in regionInfos) {
                 regionInfo.DoWFC(wfc, seed);
             }
-            DebugTex(regionInfos[0].debugTex1, 2);
+            // DebugTex(regionInfos[0].debugTex1, 2);
 
 
             // ----------
@@ -220,7 +225,7 @@ namespace MicroUniverse {
                 regionInfos[i].PlantProps(scaleFactor, propCollection, subRootGO.transform, perlinFreq);
             }
 
-            DebugTex(regionInfos[0].DebugTransformBackToTex(), 3);
+            // DebugTex(regionInfos[0].DebugTransformBackToTex(), 3);
 
 
             print("[LoadingJob] Loading finished." + Timestamp);

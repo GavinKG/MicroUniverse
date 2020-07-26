@@ -31,7 +31,7 @@ namespace MicroUniverse {
         public List<RegionInfo> ConnectedRegion { get; private set; } = new List<RegionInfo>();
 
         // debug:
-        public Texture2D debugTex1;
+        // public Texture2D debugTex1;
         // public Texture2D debugTex2;
         // public Texture2D debugTex3;
         // public Texture2D debugTex4;
@@ -127,7 +127,7 @@ namespace MicroUniverse {
                 fountainRoad,
                 pillarRoad
             };
-            debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
+            // debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
         }
 
         public void PlantProps(float scaleFactor, PropCollection collection, Transform propRoot, float perlinFreq) {
