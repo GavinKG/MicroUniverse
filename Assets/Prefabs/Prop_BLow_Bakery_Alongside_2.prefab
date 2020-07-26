@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &8693354486277919282
 Transform:
@@ -94,7 +94,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4953072169666795865
 Transform:
@@ -150,7 +150,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &9047656075276952742
 Transform:
@@ -298,6 +298,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: fence-picket (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8730ccc026fe02346b0e36eb43ccb46c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8730ccc026fe02346b0e36eb43ccb46c, type: 3}
 --- !u!4 &5487076859035683781 stripped
@@ -377,6 +382,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: fence-picket (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8730ccc026fe02346b0e36eb43ccb46c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8730ccc026fe02346b0e36eb43ccb46c, type: 3}

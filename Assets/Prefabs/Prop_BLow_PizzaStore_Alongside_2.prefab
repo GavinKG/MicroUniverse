@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2586972626387620570
 Transform:
@@ -96,7 +96,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6774526773299125218
 Transform:
@@ -187,7 +187,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &9073139309320632159
 Transform:
@@ -307,6 +307,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: carnations (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3036d4265b979914a9c3fe43bc7d6372,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3036d4265b979914a9c3fe43bc7d6372, type: 3}
 --- !u!4 &507146553533770647 stripped
@@ -386,6 +391,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: fence-picket (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8730ccc026fe02346b0e36eb43ccb46c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8730ccc026fe02346b0e36eb43ccb46c, type: 3}
@@ -467,6 +477,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: carnations (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3036d4265b979914a9c3fe43bc7d6372,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3036d4265b979914a9c3fe43bc7d6372, type: 3}
 --- !u!4 &507146553191642986 stripped
@@ -546,6 +561,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: carnations (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3036d4265b979914a9c3fe43bc7d6372,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3036d4265b979914a9c3fe43bc7d6372, type: 3}
@@ -627,6 +647,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: carnations (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3036d4265b979914a9c3fe43bc7d6372,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3036d4265b979914a9c3fe43bc7d6372, type: 3}
 --- !u!4 &507146552583767613 stripped
@@ -706,6 +731,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: carnations (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3036d4265b979914a9c3fe43bc7d6372,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3036d4265b979914a9c3fe43bc7d6372, type: 3}
@@ -787,6 +817,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: log
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6f0ede418f981114a9a78fd08d7955c6,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f0ede418f981114a9a78fd08d7955c6, type: 3}
 --- !u!4 &507146552478630002 stripped
@@ -866,6 +901,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: carnations (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3036d4265b979914a9c3fe43bc7d6372,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3036d4265b979914a9c3fe43bc7d6372, type: 3}
@@ -947,6 +987,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: fence-picket
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8730ccc026fe02346b0e36eb43ccb46c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8730ccc026fe02346b0e36eb43ccb46c, type: 3}
 --- !u!4 &507146552026242428 stripped
@@ -1027,6 +1072,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: carnations (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3036d4265b979914a9c3fe43bc7d6372,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3036d4265b979914a9c3fe43bc7d6372, type: 3}
 --- !u!4 &507146551567841889 stripped
@@ -1106,6 +1156,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: carnations
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3036d4265b979914a9c3fe43bc7d6372,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3036d4265b979914a9c3fe43bc7d6372, type: 3}

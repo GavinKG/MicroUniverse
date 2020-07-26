@@ -37,6 +37,12 @@ public class FlyView : MonoBehaviour {
         Vector3 rot = transform.eulerAngles;
         rot.y += inputAimAxis.x * rotationSpeed * Time.deltaTime;
         rot.x += -inputAimAxis.y * rotationSpeed * Time.deltaTime;
+        if (rot.x > 89.9f) {
+            rot.x = 89.9f;
+        } else if (rot.x < -70f) {
+            rot.x = -70f;
+        }
+
         transform.eulerAngles = rot;
 
         Vector3 currAiming = transform.rotation * Vector3.forward;

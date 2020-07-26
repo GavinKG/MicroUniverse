@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6725277102434987318
 Transform:
@@ -94,7 +94,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &5241583762996131291
 Transform:
@@ -152,7 +152,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &715501369043874518
 Transform:
@@ -315,6 +315,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: tree-square (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 02b47e5412d2c584c8836f483ac8fb08,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02b47e5412d2c584c8836f483ac8fb08, type: 3}
 --- !u!4 &243800323096116609 stripped
@@ -409,6 +414,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: tree-square (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 02b47e5412d2c584c8836f483ac8fb08,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02b47e5412d2c584c8836f483ac8fb08, type: 3}
@@ -505,6 +515,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: tree-square
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 02b47e5412d2c584c8836f483ac8fb08,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02b47e5412d2c584c8836f483ac8fb08, type: 3}
 --- !u!4 &3784938306121691272 stripped
@@ -599,6 +614,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: tree-square (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 02b47e5412d2c584c8836f483ac8fb08,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02b47e5412d2c584c8836f483ac8fb08, type: 3}

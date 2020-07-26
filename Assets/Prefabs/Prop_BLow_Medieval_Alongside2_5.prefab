@@ -17,7 +17,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6412284321542587615
 Transform:
@@ -108,7 +108,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6412284322060232808
 Transform:
@@ -221,6 +221,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: rocks-small (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 58714df69028ac24f8b2155eb9f07da0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58714df69028ac24f8b2155eb9f07da0, type: 3}
 --- !u!4 &1166328590705240862 stripped
@@ -300,6 +305,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: stone-small
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8a9e391bd035b19429b3f1af14d3e208,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a9e391bd035b19429b3f1af14d3e208, type: 3}
@@ -381,6 +391,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: house-medieval-small
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 949bfbea16baec14e9ca5f512530c9ee,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 949bfbea16baec14e9ca5f512530c9ee, type: 3}
 --- !u!4 &6879173529444735969 stripped
@@ -461,6 +476,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: rocks-small
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 58714df69028ac24f8b2155eb9f07da0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58714df69028ac24f8b2155eb9f07da0, type: 3}
 --- !u!4 &7979790817021975214 stripped
@@ -540,6 +560,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: rocks-small (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 58714df69028ac24f8b2155eb9f07da0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58714df69028ac24f8b2155eb9f07da0, type: 3}

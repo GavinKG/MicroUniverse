@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &8042925047648004866
 Transform:
@@ -96,7 +96,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4262435940187272418
 Transform:
@@ -187,7 +187,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &8824547259921527791
 Transform:
@@ -313,6 +313,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: tree-square (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 02b47e5412d2c584c8836f483ac8fb08,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02b47e5412d2c584c8836f483ac8fb08, type: 3}
 --- !u!4 &832496803766340634 stripped
@@ -392,6 +397,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: tree-lime
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 928f6809ff7fa8341a3cddca48cef9bb,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 928f6809ff7fa8341a3cddca48cef9bb, type: 3}
