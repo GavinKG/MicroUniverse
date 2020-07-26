@@ -164,24 +164,28 @@ namespace MicroUniverse {
                     Vector3 flattenSpacePos = new Vector3(x, 0, y);
                     switch (FlattenedMapWFC[x, y]) {
                         case fountainRoad:
-                            spawned = GameObject.Instantiate(collection.RandomFountain(), flattenSpacePos, Quaternion.identity, propRoot);
+                            spawned = GameObject.Instantiate(collection.GetFountainPrefab(), Vector3.zero, Quaternion.identity, propRoot);
                             break;
                         case building:
-                            spawned = SpawnBuilding(x, y);
-                            spawned.transform.SetParent(propRoot);
+                            spawned = SpawnBuilding(FlattenedMapWFC, x, y);
                             break;
                         case pillarRoad:
-                            spawned = GameObject.Instantiate(collection.RandomPillar(), flattenSpacePos, Quaternion.identity, propRoot);
+                            spawned = GameObject.Instantiate(collection.GetPillarPrefab(), Vector3.zero, Quaternion.identity, propRoot);
                             break;
                         case empty:
-                            spawned = GameObject.Instantiate(collection.RandomEmpty(), flattenSpacePos, Quaternion.identity, propRoot);
+                            spawned = GameObject.Instantiate(collection.GetEmptyPrefab(), Vector3.zero, Quaternion.identity, propRoot);
                             break;
                         default:
                             break;
                     }
-                    if (spawned != null) {
-                        spawnedList.Add(spawned.GetComponent<CityProp>());
+
+                    if (spawned == null) {
+                        continue;
                     }
+
+                    spawned.transform.position = flattenSpacePos; // double check...
+                    spawnedList.Add(spawned.GetComponent<CityProp>());
+
                 }
             }
 
@@ -258,26 +262,95 @@ namespace MicroUniverse {
 
         // ---------- public interface ---------- [END]
 
-        GameObject SpawnBuilding(int x, int y) {
+
+
+
+
+
+
+
+
+
+        GameObject SpawnBuilding(byte[,] map, int x, int y) {
             GameObject spawned;
             Vector3 flattenSpacePos = new Vector3(x, 0, y);
-            float buildingHeightLevel = heatmap[x, y];
-            if (buildingHeightLevel < collection.buildingLowMediumSeperator) {
-                spawned = GameObject.Instantiate(collection.RandomBuildingLowHeight(), flattenSpacePos, Quaternion.identity);
-            } else if (buildingHeightLevel < collection.buildingMediumHighSeperator) {
-                spawned = GameObject.Instantiate(collection.RandomBuildingMediumHeight(), flattenSpacePos, Quaternion.identity);
-            } else {
-                spawned = GameObject.Instantiate(collection.RandomBuildingHighHeight(), flattenSpacePos, Quaternion.identity);
+            float heat = heatmap[x, y];
+
+            // building type detection:
+            BuildingProp.BuildingType buildingType = BuildingProp.BuildingType.DontCare;
+            int turn = 0;
+
+            int surrRoadCount =
+                (IsRoad(map, x - 1, y) ? 1 : 0) +
+                (IsRoad(map, x + 1, y) ? 1 : 0) +
+                (IsRoad(map, x, y + 1) ? 1 : 0) +
+                (IsRoad(map, x, y + 1) ? 1 : 0);
+            if (surrRoadCount == 4) {
+                buildingType = BuildingProp.BuildingType.Alone;
+                turn = Random.Range(0, 3); // whatever the rotation is...
+            } else if (surrRoadCount == 3) {
+                buildingType = BuildingProp.BuildingType.Stub;
+                turn =
+                    (!IsRoad(map, x, y + 1)) ? 2 :
+                    (!IsRoad(map, x + 1, y)) ? 3 :
+                    (!IsRoad(map, x, y - 1)) ? 0 :
+                    1;
+            } else if (surrRoadCount == 2) { // corner or alongside both parallel road.
+                if (IsRoad(map, x, y + 1)) { // up (3 cases)
+                    if (IsRoad(map, x + 1, y)) { // right -> corner
+                        buildingType = BuildingProp.BuildingType.Corner;
+                        turn = 0;
+                    } else if (IsRoad(map, x, y - 1)) { // down -> alongside 2 parallel roads
+                        buildingType = BuildingProp.BuildingType.AlongsideTwoRoads;
+                        turn = Random.value > 0.5f ? 0 : 2; // facing up (default) or down
+                    } else { // left -> corner
+                        buildingType = BuildingProp.BuildingType.Corner;
+                        turn = 3;
+                    }
+                } else if (IsRoad(map, x + 1, y)) { // right (2 cases left)
+                    if (IsRoad(map, x, y - 1)) { // down -> corner
+                        buildingType = BuildingProp.BuildingType.Corner;
+                        turn = 1;
+                    } else { // left -> alongside 2 parallel roads
+                        buildingType = BuildingProp.BuildingType.AlongsideTwoRoads;
+                        turn = Random.value > 0.5f ? 1 : 3; // facing right or left
+
+                    }
+                } else { // left and down: corner
+                    buildingType = BuildingProp.BuildingType.Corner;
+                    turn = 2;
+                }
+            } else { // surrounding road count = 1, must be BuildingType.AlongsideRoad
+                buildingType = BuildingProp.BuildingType.AlongsideRoad;
+                turn =
+                    (!IsRoad(map, x, y + 1)) ? 0 :
+                    (!IsRoad(map, x + 1, y)) ? 1 :
+                    (!IsRoad(map, x, y - 1)) ? 2 :
+                    3;
             }
-            // debug:
-            int turns = Random.Range(0, 3);
-            spawned.transform.Rotate(Vector3.up, turns * 90f);
+
+
+            GameObject prefab = collection.GetBuildingPrefab(heat, buildingType);
+            spawned = GameObject.Instantiate(prefab, Vector3.zero, Quaternion.identity);
+            spawned.transform.Rotate(new Vector3(0f, turn * 90f, 0f));
+
             return spawned;
+
         }
 
         bool IsRoad(byte id) {
             return id == road || id == fountainRoad || id == pillarRoad;
         }
+
+        bool IsRoad(byte[,] map, int x, int y) {
+            if (IsOutside(map, x, y)) return false;
+            return IsRoad(map[x, y]);
+        }
+
+        bool IsOutside(byte[,] map, int x, int y) {
+            return x < 0 || x >= map.GetLength(0) || y < 0 || y >= map.GetLength(1);
+        }
+
 
 
         void DoCalc() {

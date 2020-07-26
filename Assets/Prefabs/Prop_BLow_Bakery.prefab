@@ -88,7 +88,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4811921616763978739}
-  - component: {fileID: 2530562896531880266}
+  - component: {fileID: 7280470103781490582}
   m_Layer: 0
   m_Name: Prop_BLow_Bakery
   m_TagString: Untagged
@@ -112,7 +112,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2530562896531880266
+--- !u!114 &7280470103781490582
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,13 +121,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1819630032948909113}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2be3a206c75610b41a8dc391c3058d49, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d7bb53cf11ca65439e5f071823ea353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   propWeight: 3
+  debug: 0
   compensateScale: 1
   meshesToTransform:
   - {fileID: 4196348119601702868}
+  heightType: 0
+  buildingType: 0
 --- !u!1 &8694179934384932970
 GameObject:
   m_ObjectHideFlags: 0

@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1373,41 +1373,22 @@ MonoBehaviour:
   emptyGOPrefab: {fileID: 2853529798919359504, guid: 081fadee72a59354e903af38b45a08e2,
     type: 3}
   propCollection:
-    buildingPrefabsLowHeight:
-    - {fileID: 1819630032948909113, guid: a6f9950b8a5cd414387a1b55866dfe0d, type: 3}
-    - {fileID: 5224182245916022515, guid: ea3592738d61ffd43ab67576aa159001, type: 3}
-    - {fileID: 4097319919313514675, guid: e65a11afe5b7e1f428ae49744f997c30, type: 3}
-    - {fileID: 1109629062611184061, guid: 45854216cd7d76d46b7252032f2d44df, type: 3}
-    - {fileID: 8100932334996081724, guid: f7582f9e5734f9d41bd1c7a189dc1cca, type: 3}
-    - {fileID: 6678036662593880881, guid: a6267c48e1ec7e14d942c1a16c6f505e, type: 3}
-    - {fileID: 2884137785685510926, guid: bdf970459c324cc46904b625989e3b44, type: 3}
-    - {fileID: 6347040031634149575, guid: 3ce38d5cf643fb84cb9d01826f0cc3e6, type: 3}
-    - {fileID: 1228122042977177225, guid: 825017785349de84dacc1ca2e52f003a, type: 3}
-    - {fileID: 156962298080518505, guid: 18cddc34310e46d48a81d648f20d49f0, type: 3}
-    - {fileID: 156962298080518505, guid: ebf623a0b46cf4d4b80d155040b44810, type: 3}
-    - {fileID: 156962298080518505, guid: 41a756e9022da1a4fbebbf48accca79d, type: 3}
-    - {fileID: 156962298080518505, guid: a7291dc0582f2c746823ba2c32bf7b20, type: 3}
-    - {fileID: 156962298080518505, guid: 041849222f769e7469a47b8ca4e2e5db, type: 3}
-    - {fileID: 156962298080518505, guid: 097404254e2ce19419afa06c53ac2fc3, type: 3}
-    buildingPrefabsMediumHeight:
-    - {fileID: 1109629062611184061, guid: 272b3d5d989f7034c81b2a20ceca7d2c, type: 3}
-    - {fileID: 6344237080597968018, guid: 610284fd3fee4ad4ba2c77d90ce25882, type: 3}
-    - {fileID: 2573940015706152319, guid: 2a9dd6c9bcc254641958b3cf01b2bc63, type: 3}
-    - {fileID: 5310691715074445244, guid: a8009928dcf271d46ba1144c978bb793, type: 3}
-    - {fileID: 5152031280029439849, guid: a6b5c88a29790ac4e9bbf43a0edfe879, type: 3}
-    buildingPrefabsHighHeight:
-    - {fileID: 1109629062611184061, guid: 0847c97ce5ab61c4bbeda1b468b46fd4, type: 3}
-    pillarPrefabs:
-    - {fileID: 5371732874266503294, guid: eb521fbf3ba8d6346be684fb5786199c, type: 3}
-    emptyPrefabs:
-    - {fileID: 5405142518907150955, guid: ad03108bbe2304b43b7c6454b0efa875, type: 3}
-    fountainPrefabs:
-    - {fileID: 3639788452223917974, guid: 8d05ae25271776449bbe52e0e765901a, type: 3}
-    buildingLowMediumSeperator: 0.4
-    buildingMediumHighSeperator: 0.75
-    buildingLowHeightVariation: 0
-    buildingMediumHeightVariation: 0
-    buildingHighHeightVariation: 0
+    buildings:
+    - {fileID: 1260503086228986182, guid: e33ccf2cefc639c4787f9455007748e0, type: 3}
+    - {fileID: 4185886530134064551, guid: 9e0fb92543f279a4d9ac4ec888192dd9, type: 3}
+    - {fileID: 2421369216086075852, guid: 97cfaac7fd49965449d871568fd39899, type: 3}
+    - {fileID: 3772282570203671812, guid: 5d5d3f9200367c940a347fcfbb16ef0b, type: 3}
+    - {fileID: 3546458924525823723, guid: 4887392e2ba1a65459c5d0793ccdf505, type: 3}
+    - {fileID: 30476432027367804, guid: 272b3d5d989f7034c81b2a20ceca7d2c, type: 3}
+    - {fileID: 5572746441350520199, guid: 0847c97ce5ab61c4bbeda1b468b46fd4, type: 3}
+    fountains:
+    - {fileID: 4948575356226954429, guid: 8d05ae25271776449bbe52e0e765901a, type: 3}
+    emptys:
+    - {fileID: 5405142518907150954, guid: ad03108bbe2304b43b7c6454b0efa875, type: 3}
+    pillars:
+    - {fileID: 3566403346147398715, guid: eb521fbf3ba8d6346be684fb5786199c, type: 3}
+    buildingLMSep: 0.9
+    buildingMHSep: 0.95
   propRoot: {fileID: 1002798681}
   debugImages:
   - {fileID: 1176948277}

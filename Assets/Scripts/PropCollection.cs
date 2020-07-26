@@ -1,191 +1,83 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace MicroUniverse {
 
     [System.Serializable]
     public class PropCollection {
 
-        public List<GameObject> buildingPrefabsLowHeight;
-        public List<GameObject> buildingPrefabsMediumHeight;
-        public List<GameObject> buildingPrefabsHighHeight;
-        public List<GameObject> pillarPrefabs;
-        public List<GameObject> emptyPrefabs;
-        public List<GameObject> fountainPrefabs;
+        public List<BuildingProp> buildings;
+        public List<CityProp> fountains;
+        public List<CityProp> emptys;
+        public List<CityProp> pillars;
 
-        [Range(0f, 1f)] public float buildingLowMediumSeperator = 0.2f;
-        [Range(0f, 1f)] public float buildingMediumHighSeperator = 0.8f;
-        [Range(-10f, 0f)] public float buildingLowHeightVariation = -0.1f;
-        [Range(-10f, 0f)] public float buildingMediumHeightVariation = -0.3f;
-        [Range(-10f, 0f)] public float buildingHighHeightVariation = 0f;
+        [Range(0f, 1f)] public float buildingLMSep = 0.4f;
+        [Range(0f, 1f)] public float buildingMHSep = 0.8f;
 
+        public GameObject GetBuildingPrefab(float heat, BuildingProp.BuildingType buildingType) {
+            // turn: lookat:
+            // 0 -> forward
+            // 1 -> left
+            // 2 -> back
+            // 3 -> right
 
-        int BuildingLowHeightTotalWeight {
-            get {
-                if (bLowHeightTotalWeight < 0) {
-                    bLowHeightTotalWeight = 0;
-                    foreach (GameObject go in buildingPrefabsLowHeight) {
-                        CityProp prop = go.GetComponent<CityProp>();
-                        bLowHeightTotalWeight += prop.propWeight;
-                    }
-                }
-                return bLowHeightTotalWeight;
+            BuildingProp.HeightType heightType;
+            if (heat < buildingLMSep) {
+                heightType = BuildingProp.HeightType.Low;
+            } else if (heat < buildingMHSep) {
+                heightType = BuildingProp.HeightType.Mid;
+            } else {
+                heightType = BuildingProp.HeightType.High;
             }
-        }
-        int bLowHeightTotalWeight = -1;
 
-
-        int BuildingMediumHeightTotalWeight {
-            get {
-                if (bMediumHeightTotalWeight < 0) {
-                    bMediumHeightTotalWeight = 0;
-                    foreach (GameObject go in buildingPrefabsMediumHeight) {
-                        CityProp prop = go.GetComponent<CityProp>();
-                        bMediumHeightTotalWeight += prop.propWeight;
-                    }
-                }
-                return bMediumHeightTotalWeight;
+            var filtered = buildings.Where(bp => bp.buildingType == buildingType && bp.heightType == heightType);
+            int totalWeight = 0;
+            foreach (BuildingProp prop in filtered) {
+                totalWeight += prop.propWeight;
             }
-        }
-        int bMediumHeightTotalWeight = -1;
-
-
-        int BuildingHighHeightTotalWeight {
-            get {
-                if (bHighHeightTotalWeight < 0) {
-                    bHighHeightTotalWeight = 0;
-                    foreach (GameObject go in buildingPrefabsHighHeight) {
-                        CityProp prop = go.GetComponent<CityProp>();
-                        bHighHeightTotalWeight += prop.propWeight;
-                    }
-                }
-                return bHighHeightTotalWeight;
-            }
-        }
-        int bHighHeightTotalWeight = -1;
-
-        int PillarTotalWeight {
-            get {
-                if (pillarTotalWeight < 0) {
-                    pillarTotalWeight = 0;
-                    foreach (GameObject go in pillarPrefabs) {
-                        CityProp prop = go.GetComponent<CityProp>();
-                        pillarTotalWeight += prop.propWeight;
-                    }
-                }
-                return pillarTotalWeight;
-            }
-        }
-        int pillarTotalWeight = -1;
-
-        int EmptyTotalWeight {
-            get {
-                if (emptyTotalWeight < 0) {
-                    emptyTotalWeight = 0;
-                    foreach (GameObject go in emptyPrefabs) {
-                        CityProp prop = go.GetComponent<CityProp>();
-                        emptyTotalWeight += prop.propWeight;
-                    }
-                }
-                return emptyTotalWeight;
-            }
-        }
-        int emptyTotalWeight = -1;
-
-        int FountainTotalWeight {
-            get {
-                if (fountainTotalWeight < 0) {
-                    fountainTotalWeight = 0;
-                    foreach (GameObject go in fountainPrefabs) {
-                        CityProp prop = go.GetComponent<CityProp>();
-                        fountainTotalWeight += prop.propWeight;
-                    }
-                }
-                return fountainTotalWeight;
-            }
-        }
-        int fountainTotalWeight = -1;
-
-
-        public GameObject RandomBuildingLowHeight() {
-            int dice = Random.Range(0, BuildingLowHeightTotalWeight);
-            int counter = 0;
-            foreach (GameObject go in buildingPrefabsLowHeight) {
-                CityProp prop = go.GetComponent<CityProp>();
-                counter += prop.propWeight;
-                if (counter > dice) {
-                    return go;
+            int dice = Random.Range(0, totalWeight);
+            int currWeight = 0;
+            foreach (BuildingProp prop in filtered) {
+                currWeight += prop.propWeight;
+                if (currWeight >= dice) {
+                    return prop.gameObject;
                 }
             }
-            return null;
+
+            // cannot find proper building, fallback to DontCare:
+            var filteredDontcare = buildings.Where(bp => bp.buildingType == BuildingProp.BuildingType.DontCare && bp.heightType == heightType).ToArray();
+            if (filteredDontcare.Length == 0) {
+                throw new System.Exception("Cannot find proper building with building type DontCare or " + buildingType.ToString() + " and height type " + heightType.ToString());
+            }
+            int dontcareIndex = Random.Range(0, filteredDontcare.Length);
+            return filteredDontcare[dontcareIndex].gameObject;
+
         }
 
-        public GameObject RandomBuildingMediumHeight() {
-            int dice = Random.Range(0, BuildingMediumHeightTotalWeight);
-            int counter = 0;
-            foreach (GameObject go in buildingPrefabsMediumHeight) {
-                CityProp prop = go.GetComponent<CityProp>();
-                counter += prop.propWeight;
-                if (counter > dice) {
-                    return go;
+        GameObject GetNormalPropPrefab(List<CityProp> props) {
+
+            // TODO: Cache
+            int totalWeight = 0;
+            foreach (CityProp prop in props) {
+                totalWeight += prop.propWeight;
+            }
+            int dice = Random.Range(0, totalWeight);
+            int currWeight = 0;
+            foreach (CityProp prop in props) {
+                currWeight += prop.propWeight;
+                if (currWeight >= dice) {
+                    return prop.gameObject;
                 }
             }
-            return null;
+            throw new System.Exception("Cannot find props...");
+
         }
 
-        public GameObject RandomBuildingHighHeight() {
-            int dice = Random.Range(0, BuildingHighHeightTotalWeight);
-            int counter = 0;
-            foreach (GameObject go in buildingPrefabsHighHeight) {
-                CityProp prop = go.GetComponent<CityProp>();
-                counter += prop.propWeight;
-                if (counter > dice) {
-                    return go;
-                }
-            }
-            return null;
-        }
-
-        public GameObject RandomPillar() {
-            int dice = Random.Range(0, PillarTotalWeight);
-            int counter = 0;
-            foreach (GameObject go in pillarPrefabs) {
-                CityProp prop = go.GetComponent<CityProp>();
-                counter += prop.propWeight;
-                if (counter > dice) {
-                    return go;
-                }
-            }
-            return null;
-        }
-
-        public GameObject RandomFountain() {
-            int dice = Random.Range(0, FountainTotalWeight);
-            int counter = 0;
-            foreach (GameObject go in fountainPrefabs) {
-                CityProp prop = go.GetComponent<CityProp>();
-                counter += prop.propWeight;
-                if (counter > dice) {
-                    return go;
-                }
-            }
-            return null;
-        }
-
-        public GameObject RandomEmpty() {
-            int dice = Random.Range(0, EmptyTotalWeight);
-            int counter = 0;
-            foreach (GameObject go in emptyPrefabs) {
-                CityProp prop = go.GetComponent<CityProp>();
-                counter += prop.propWeight;
-                if (counter > dice) {
-                    return go;
-                }
-            }
-            return null;
-        }
-
+        public GameObject GetFountainPrefab() { return GetNormalPropPrefab(fountains); }
+        public GameObject GetEmptyPrefab() { return GetNormalPropPrefab(emptys); }
+        public GameObject GetPillarPrefab() { return GetNormalPropPrefab(pillars); }
     }
 
 }

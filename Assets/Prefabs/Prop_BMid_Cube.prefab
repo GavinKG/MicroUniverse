@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7804825726137491983}
-  - component: {fileID: 5951426052973253592}
+  - component: {fileID: 30476432027367804}
   m_Layer: 0
-  m_Name: Prop_HouseCube_Medium
+  m_Name: Prop_BMid_Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5951426052973253592
+--- !u!114 &30476432027367804
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,11 +41,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1109629062611184061}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2be3a206c75610b41a8dc391c3058d49, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d7bb53cf11ca65439e5f071823ea353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   propWeight: 1
-  meshesToTransform: []
+  debug: 0
+  compensateScale: 1
+  meshesToTransform:
+  - {fileID: 6960670719821467999}
+  heightType: 1
+  buildingType: 5
 --- !u!65 &46052845756451099
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -147,6 +152,12 @@ GameObject:
 --- !u!4 &6284384837573074682 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 08da762974f18e54fa022fd6f56c9cce,
+    type: 3}
+  m_PrefabInstance: {fileID: 5817568574941280529}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &6960670719821467999 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: -5754084199372789682, guid: 08da762974f18e54fa022fd6f56c9cce,
     type: 3}
   m_PrefabInstance: {fileID: 5817568574941280529}
   m_PrefabAsset: {fileID: 0}

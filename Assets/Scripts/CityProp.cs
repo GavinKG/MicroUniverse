@@ -5,9 +5,25 @@ using System.Linq;
 
 
 namespace MicroUniverse {
+
     public class CityProp : MonoBehaviour {
 
+        /*
+        public enum PropType {
+            BLow,
+            BMid,
+            BHigh,
+            Fountain,
+            Pillar,
+            Empty
+        }
+
+        public PropType propType;
+        */
+
         [Range(1, 100)] public int propWeight = 1;
+
+        public bool debug = false;
 
         public bool compensateScale = true;
 
@@ -15,8 +31,12 @@ namespace MicroUniverse {
         public List<MeshFilter> meshesToTransform;
 
         public void OnDrawGizmosSelected() {
-            Gizmos.matrix = transform.localToWorldMatrix;
-            Gizmos.DrawWireCube(new Vector3(0, 0.5f, 0), Vector3.one);
+            if (debug) {
+                Gizmos.matrix = transform.localToWorldMatrix;
+                Gizmos.DrawWireCube(new Vector3(0, 0.5f, 0), Vector3.one);
+            }
         }
     }
+
+
 }
