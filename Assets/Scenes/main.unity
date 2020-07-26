@@ -478,7 +478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 90
-  movementSpeed: 7
+  movementSpeed: 5
   speedup: 0
 --- !u!1 &412592524
 GameObject:

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7804825726137491983}
   - component: {fileID: 5572746441350520199}
   m_Layer: 0
-  m_Name: Prop_BHigh_Cube
+  m_Name: Prop_BHigh_Cube_DontCare_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d7bb53cf11ca65439e5f071823ea353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propWeight: 1
+  propWeight: 5
   debug: 0
   compensateScale: 1
   meshesToTransform:
