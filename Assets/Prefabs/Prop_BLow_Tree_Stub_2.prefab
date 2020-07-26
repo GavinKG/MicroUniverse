@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4233532305701382062}
   - component: {fileID: 3522926828140668040}
   m_Layer: 0
-  m_Name: Prop_BLow_Tree_DontCare_4
+  m_Name: Prop_BLow_Tree_Stub_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,7 +52,7 @@ MonoBehaviour:
   meshesToTransform:
   - {fileID: 4877151509170261237}
   heightType: 0
-  buildingType: 5
+  buildingType: 3
 --- !u!1 &2321993345998780123
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,7 +93,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2321993345998780123}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 1293072055712728325, guid: 65e2d1bf964b6d84d90d0702dc861ab6, type: 3}
 --- !u!23 &7050251993376379054
 MeshRenderer:
   m_ObjectHideFlags: 0
