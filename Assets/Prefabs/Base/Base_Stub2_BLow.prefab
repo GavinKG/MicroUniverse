@@ -38,7 +38,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4742876898064183295}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: f213e5f1cf4a69245bc074c00c456762, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -56,7 +56,6 @@ GameObject:
   - component: {fileID: 1049998384643356001}
   - component: {fileID: 1151619332812592899}
   - component: {fileID: 3279682717510175576}
-  - component: {fileID: 9046573802925581878}
   m_Layer: 12
   m_Name: Base_Stub2_BLow
   m_TagString: Untagged
@@ -126,16 +125,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &9046573802925581878
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7812936657787497773}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 22.4, z: 1}
-  m_Center: {x: 0, y: 10.87, z: 0}

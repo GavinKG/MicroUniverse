@@ -123,4 +123,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9163c2d9090c914083ef52ba8ec6e86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveForce: 2
+  moveForce: 1

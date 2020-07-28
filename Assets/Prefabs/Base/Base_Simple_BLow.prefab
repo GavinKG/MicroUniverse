@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8413988829479587128}
   - component: {fileID: 1666354510788929694}
   m_Layer: 12
-  m_Name: Base
+  m_Name: Base_Simple_BLow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87,7 +87,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8783154846494512488}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: f213e5f1cf4a69245bc074c00c456762, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2

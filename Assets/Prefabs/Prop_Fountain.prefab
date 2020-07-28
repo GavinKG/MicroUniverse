@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7844097524159148801}
   - component: {fileID: 4948575356226954429}
+  - component: {fileID: 3417185074633266328}
   m_Layer: 0
   m_Name: Prop_Fountain
   m_TagString: Untagged
@@ -48,6 +49,20 @@ MonoBehaviour:
   debug: 0
   compensateScale: 0
   meshesToTransform: []
+--- !u!136 &3417185074633266328
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3639788452223917974}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.19
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.19, z: 0}
 --- !u!1001 &4091595471068571572
 PrefabInstance:
   m_ObjectHideFlags: 0

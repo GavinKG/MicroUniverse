@@ -38,7 +38,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5366304196704169034}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: f213e5f1cf4a69245bc074c00c456762, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -56,7 +56,6 @@ GameObject:
   - component: {fileID: 8217857410657729884}
   - component: {fileID: 7456713925322727532}
   - component: {fileID: 3601835301531703419}
-  - component: {fileID: 8380047007031510885}
   m_Layer: 12
   m_Name: Base_Bevel1_BMid
   m_TagString: Untagged
@@ -126,16 +125,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &8380047007031510885
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7338462427632297840}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 22.4, z: 1}
-  m_Center: {x: 0, y: 10.87, z: 0}

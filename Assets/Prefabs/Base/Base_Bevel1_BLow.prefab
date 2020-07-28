@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3291212636038037812}
   - component: {fileID: 5553328607725104911}
   - component: {fileID: 7603781120075334648}
-  - component: {fileID: 2398597739558381855}
   m_Layer: 12
   m_Name: Base_Bevel1_BLow
   m_TagString: Untagged
@@ -81,20 +80,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &2398597739558381855
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5350177910606154810}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -7431365942142407803, guid: aab18f52e08ac944398863f19bd643aa, type: 3}
 --- !u!1 &5460599139817165431
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,7 +118,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5460599139817165431}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: f213e5f1cf4a69245bc074c00c456762, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
