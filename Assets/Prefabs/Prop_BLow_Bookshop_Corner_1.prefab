@@ -28,8 +28,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 9189987515231455607}
   - {fileID: 540570434105142270}
+  - {fileID: 9189987515231455607}
   - {fileID: 4068861504809368636}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -65,7 +65,7 @@ GameObject:
   - component: {fileID: 7439281879301309893}
   - component: {fileID: 4875937291724450098}
   - component: {fileID: 467474751554473896}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ Transform:
   m_LocalScale: {x: 1, y: 0.01, z: 1}
   m_Children: []
   m_Father: {fileID: 2368125488632048178}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7439281879301309893
 MeshFilter:
@@ -102,7 +102,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6922991336872945392}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -112,7 +112,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1f3836c732d661b4eb0ae36d6b812be9, type: 2}
+  - {fileID: 2100000, guid: 6934611e274493b4e85d7d9ddbf38842, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -157,7 +157,7 @@ GameObject:
   - component: {fileID: 9189987515231455607}
   - component: {fileID: 7890164593098808494}
   - component: {fileID: 801255348245479323}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Building_Books Shop.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +176,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2368125488632048178}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7890164593098808494
 MeshFilter:
@@ -301,6 +301,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c7af02c7d555d1c4d9e37b0bbcf8afce,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7af02c7d555d1c4d9e37b0bbcf8afce, type: 3}

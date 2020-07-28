@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8042925047648004866}
   - component: {fileID: 4535845809595811390}
   - component: {fileID: 2508103844671293796}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Building_Residential_color03.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ Transform:
   m_LocalScale: {x: 0.75, y: 1, z: 0.8}
   m_Children: []
   m_Father: {fileID: 8824547259921527791}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4535845809595811390
 MeshFilter:
@@ -91,7 +91,7 @@ GameObject:
   - component: {fileID: 4384631477227709157}
   - component: {fileID: 7291851544231436500}
   - component: {fileID: 7989299957461818659}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,7 +110,7 @@ Transform:
   m_LocalScale: {x: 1, y: 0.01, z: 1}
   m_Children: []
   m_Father: {fileID: 8824547259921527791}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4384631477227709157
 MeshFilter:
@@ -128,7 +128,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5462128668260336392}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -138,7 +138,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1f3836c732d661b4eb0ae36d6b812be9, type: 2}
+  - {fileID: 2100000, guid: 6934611e274493b4e85d7d9ddbf38842, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -200,8 +200,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 8042925047648004866}
   - {fileID: 4262435940187272418}
+  - {fileID: 8042925047648004866}
   - {fileID: 832496803766340634}
   - {fileID: 4653287055939937243}
   m_Father: {fileID: 0}
@@ -318,6 +318,11 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 02b47e5412d2c584c8836f483ac8fb08,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02b47e5412d2c584c8836f483ac8fb08, type: 3}
 --- !u!4 &832496803766340634 stripped
@@ -402,6 +407,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 928f6809ff7fa8341a3cddca48cef9bb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 928f6809ff7fa8341a3cddca48cef9bb, type: 3}
