@@ -46,6 +46,13 @@ namespace MicroUniverse {
         public PropCollection propCollection;
         public Transform propRoot;
 
+        [Header("Step.8 AO")]
+        public CaptureOverviewMask aoCapturer;
+        public int aoCaptureResolution = 2048;
+        public int aoResolution = 256;
+        public int blurSpreadSize = 5;
+        public int blurIterations = 4;
+
         [Header("Debug")]
         public List<RawImage> debugImages;
         public bool loadOnStart = false;
@@ -68,6 +75,9 @@ namespace MicroUniverse {
 
         // Step.6:
         private WFC wfc;
+
+        // Step.8:
+        private Texture aoTex;
 
         private bool loaded = false;
 
@@ -227,6 +237,13 @@ namespace MicroUniverse {
             }
 
             // DebugTex(regionInfos[0].DebugTransformBackToTex(), 3);
+
+
+            // ----------
+            // Step.8 AO
+            aoTex = aoCapturer.Capture(FilterMode.Bilinear, cityWH, aoCaptureResolution);
+            aoTex = GaussianBlur.Blur(aoTex, aoCaptureResolution / aoResolution, blurSpreadSize, blurIterations);
+            DebugTex(aoTex, 4);
 
 
             print("[LoadingJob] Loading finished." + Timestamp);
