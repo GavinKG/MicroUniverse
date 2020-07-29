@@ -142,6 +142,7 @@ namespace MicroUniverse {
 
             coverGO.GetComponent<MeshFilter>().mesh = cityWallGenerator.CoverMesh;
             wallGO.GetComponent<MeshFilter>().mesh = cityWallGenerator.WallMesh;
+            wallGO.GetComponent<MeshCollider>().sharedMesh = cityWallGenerator.WallMesh;
 
             Vector3 coverWallPos = new Vector3(0f, wallHeight, 0f);
             coverGO.transform.position = coverWallPos;
