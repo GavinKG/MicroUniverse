@@ -6,9 +6,9 @@ PhysicMaterial:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: RubberWall
+  m_Name: Ball
   dynamicFriction: 0.6
-  staticFriction: 0.6
+  staticFriction: 0
   bounciness: 0.5
   frictionCombine: 0
   bounceCombine: 0

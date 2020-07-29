@@ -402,8 +402,8 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.1
-  far clip plane: 5000
-  field of view: 40
+  far clip plane: 300
+  field of view: 90
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -429,7 +429,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150760874}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 44.1, y: 20.000004, z: -12.500001}
+  m_LocalPosition: {x: 44.1, y: 10.000002, z: -12.500002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -553,10 +553,10 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 1511738564}
   m_Lens:
-    FieldOfView: 40
+    FieldOfView: 90
     OrthographicSize: 10
     NearClipPlane: 0.1
-    FarClipPlane: 5000
+    FarClipPlane: 300
     Dutch: 0
     LensShift: {x: 0, y: 0}
   m_Transitions:
@@ -575,7 +575,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 213770385}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 44.1, y: 20.000004, z: -12.500001}
+  m_LocalPosition: {x: 44.1, y: 10.000002, z: -12.500002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 237282409}
@@ -635,7 +635,7 @@ MonoBehaviour:
   m_TargetMovementOnly: 0
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 15
+  m_CameraDistance: 5
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
@@ -1399,7 +1399,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1056325219}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 06bbda7309e2e674d9752ee91733eddb, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -1844,6 +1844,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8996153154897759745, guid: 9a72f0b9b2b455a438bf84c9d619f60a,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996153154897759745, guid: 9a72f0b9b2b455a438bf84c9d619f60a,
+        type: 3}
+      propertyPath: m_Drag
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996153154897759745, guid: 9a72f0b9b2b455a438bf84c9d619f60a,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 8996153154897759746, guid: 9a72f0b9b2b455a438bf84c9d619f60a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1903,6 +1918,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BallTest
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996153154897759759, guid: 9a72f0b9b2b455a438bf84c9d619f60a,
+        type: 3}
+      propertyPath: moveForce
+      value: 0.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a72f0b9b2b455a438bf84c9d619f60a, type: 3}
@@ -2196,7 +2216,7 @@ GameObject:
   - component: {fileID: 2120364407}
   - component: {fileID: 2120364406}
   m_Layer: 0
-  m_Name: Ground
+  m_Name: WaterPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2209,7 +2229,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2120364405}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 964a3147030672949a18db4efd940baa, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
