@@ -130,11 +130,12 @@ namespace MicroUniverse {
 
             // ----------
             // Step.0
-            print("Step.0: Sanity Check.");
+            print("Step.0: Prep.");
             if (source.width != source.height) {
                 throw new System.Exception("Source texture should be a fucking square.");
             }
             int currResolution = source.width;
+            Shader.SetGlobalFloat("CityWH", cityWH);
 
             // ----------
             // Step.1
@@ -243,7 +244,8 @@ namespace MicroUniverse {
             // Step.8 AO
             aoTex = aoCapturer.Capture(FilterMode.Bilinear, cityWH, aoCaptureResolution);
             aoTex = GaussianBlur.Blur(aoTex, aoCaptureResolution / aoResolution, blurSpreadSize, blurIterations);
-            DebugTex(aoTex, 4);
+            Shader.SetGlobalTexture("FloorAO", aoTex);
+            // DebugTex(aoTex, 4);
 
 
             print("[LoadingJob] Loading finished." + Timestamp);

@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: WaterPlane
   m_Shader: {fileID: 4800000, guid: 9196e996c691c71408c187724b2d3ec3, type: 3}
-  m_ShaderKeywords: _EMISSION_ON _SPECULAR_ON _SURRARC_ON
+  m_ShaderKeywords: _EMISSION_ON _FLOORAO_ON _SPECULAR_ON _SURRARC_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -64,8 +64,8 @@ Material:
     - _Flatten: 0
     - _FlattenHalfLambert: 0
     - _FlipNormal: 0
-    - _FloorAO: 0
-    - _FloorAOIntensity: 0.788
+    - _FloorAO: 1
+    - _FloorAOIntensity: 1
     - _FloorAORadius: 0.1
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -87,6 +87,9 @@ Material:
     - _SrcBlend: 1
     - _Surface: 0
     - _SurrArc: 1
+    - _VerticalAO: 0
+    - _VerticalAOIntensity: 0.05
+    - _VerticalAORadius: 0.3
     - _WorkflowMode: 1
     - _ZWrite: 1
     - _dWSCandyEffect: 0

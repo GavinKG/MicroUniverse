@@ -548,7 +548,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150760874}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 44.1, y: 10.000002, z: -12.500002}
+  m_LocalPosition: {x: 44.1, y: 13.000002, z: -12.500002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -694,7 +694,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 213770385}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 44.1, y: 10.000002, z: -12.500002}
+  m_LocalPosition: {x: 44.1, y: 13.000002, z: -12.500002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 237282409}
@@ -754,7 +754,7 @@ MonoBehaviour:
   m_TargetMovementOnly: 0
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 5
+  m_CameraDistance: 8
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
@@ -1839,7 +1839,7 @@ MonoBehaviour:
   aoCapturer: {fileID: 113928716}
   aoCaptureResolution: 2048
   aoResolution: 1024
-  blurSpreadSize: 3
+  blurSpreadSize: 1
   blurIterations: 2
   debugImages:
   - {fileID: 1176948277}
