@@ -82,6 +82,7 @@ Material:
     - _FlattenHalfLambert: 0
     - _FlipNormal: 0
     - _FloorAO: 0
+    - _FloorAODiffuseTap: 0.5
     - _FloorAOIntensity: 0.3
     - _FloorAORadius: 0.05
     - _GlossMapScale: 0
@@ -112,8 +113,8 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Diffuse: {r: 0.857783, g: 1, b: 0.6839622, a: 0}
-    - _EmissionColor: {r: 0.31910822, g: 0.51216775, b: 0.6698113, a: 1}
+    - _Diffuse: {r: 1, g: 1, b: 1, a: 0}
+    - _EmissionColor: {r: 0.31764707, g: 0.6311188, b: 0.67058825, a: 1}
     - _ObjectCenterWS: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Tint: {r: 1, g: 1, b: 1, a: 0}
