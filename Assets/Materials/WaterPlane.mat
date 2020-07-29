@@ -65,7 +65,8 @@ Material:
     - _FlattenHalfLambert: 0
     - _FlipNormal: 0
     - _FloorAO: 1
-    - _FloorAOIntensity: 1
+    - _FloorAODiffuseTap: 0.5
+    - _FloorAOIntensity: 2
     - _FloorAORadius: 0.1
     - _GlossMapScale: 0
     - _Glossiness: 0
