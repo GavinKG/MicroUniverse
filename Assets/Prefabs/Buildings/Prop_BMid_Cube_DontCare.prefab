@@ -51,6 +51,8 @@ MonoBehaviour:
   - {fileID: 6960670719821467999}
   heightType: 1
   buildingType: 5
+  baseGO: {fileID: 0}
+  destroyedPrefab: {fileID: 0}
 --- !u!65 &46052845756451099
 BoxCollider:
   m_ObjectHideFlags: 0

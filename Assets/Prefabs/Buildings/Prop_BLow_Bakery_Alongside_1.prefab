@@ -132,6 +132,8 @@ MonoBehaviour:
   - {fileID: 4196348119601702868}
   heightType: 0
   buildingType: 1
+  baseGO: {fileID: 8694179934384932970}
+  destroyedPrefab: {fileID: 0}
 --- !u!1001 &91169692015238402
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -201,6 +203,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f144f22be7db5b48a408605c02a9b89, type: 3}
+--- !u!1 &8694179934384932970 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8783154846494512488, guid: 9f144f22be7db5b48a408605c02a9b89,
+    type: 3}
+  m_PrefabInstance: {fileID: 91169692015238402}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8931766787023371788 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8842787957920326414, guid: 9f144f22be7db5b48a408605c02a9b89,
