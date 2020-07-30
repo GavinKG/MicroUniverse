@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4394336968570188245}
   - component: {fileID: 4482411506749949097}
   - component: {fileID: 4482920805702255549}
-  m_Layer: 0
-  m_Name: PillarMask
+  m_Layer: 14
+  m_Name: Mask_Pillar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

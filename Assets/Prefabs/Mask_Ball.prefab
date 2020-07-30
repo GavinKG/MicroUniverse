@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4235297873771925388}
   - component: {fileID: 4037942498292595440}
   - component: {fileID: 4038486909164322276}
-  m_Layer: 0
-  m_Name: Steam
+  m_Layer: 14
+  m_Name: Mask_Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
