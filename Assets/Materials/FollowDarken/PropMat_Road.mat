@@ -61,6 +61,7 @@ Material:
     - _DarkDiffuseCompensate: 0.5
     - _DarkMask: 1
     - _DarkMaskMinValue: 0
+    - _DarkenDiffuseGrayscale: 0.01
     - _DstBlend: 0
     - _Emission: 0
     - _EnvironmentReflections: 1
