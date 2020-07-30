@@ -2045,7 +2045,7 @@ MonoBehaviour:
     emptys:
     - {fileID: 5405142518907150954, guid: ad03108bbe2304b43b7c6454b0efa875, type: 3}
     pillars:
-    - {fileID: 3566403346147398715, guid: eb521fbf3ba8d6346be684fb5786199c, type: 3}
+    - {fileID: 6843824785612865833, guid: eb521fbf3ba8d6346be684fb5786199c, type: 3}
     buildingLMSep: 0.4
     buildingMHSep: 0.8
   propRoot: {fileID: 1002798681}

@@ -76,7 +76,7 @@ Material:
     - _DarkMask1: 0
     - _DarkMaskMinValue: 0
     - _DarkenDiffuseGraylevel: 0.2
-    - _DarkenDiffuseGrayscale: 0.01
+    - _DarkenDiffuseGrayscale: 0.05
     - _DstBlend: 0
     - _Emission: 1
     - _Emission2: 0

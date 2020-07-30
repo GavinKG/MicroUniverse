@@ -25,6 +25,7 @@ namespace MicroUniverse {
 
         public bool debug = false;
 
+        // Compensate scale when move back from flatten space to world space
         public bool compensateScale = true;
 
         // Listed MeshFilters' meshes will be transformed from flatten space to world space in per-vertex basis.
