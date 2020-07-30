@@ -18,6 +18,7 @@ namespace MicroUniverse {
 
         [Header("General Settings")]
         public int cityWH = 128;
+        public RenderTexture dynamicMaskTex;
 
         [Header("Step.2: Marching Square")]
         public GameObject coverGO;
@@ -136,6 +137,7 @@ namespace MicroUniverse {
             }
             int currResolution = source.width;
             Shader.SetGlobalFloat("CityWH", cityWH);
+            Shader.SetGlobalTexture("DarkMaskTex", dynamicMaskTex); // TODO: combine dynamic + static
 
             // ----------
             // Step.1
@@ -246,6 +248,7 @@ namespace MicroUniverse {
             aoTex = GaussianBlur.Blur(aoTex, aoCaptureResolution / aoResolution, blurSpreadSize, blurIterations);
             Shader.SetGlobalTexture("FloorAO", aoTex);
             // DebugTex(aoTex, 4);
+
 
 
             print("[LoadingJob] Loading finished." + Timestamp);
