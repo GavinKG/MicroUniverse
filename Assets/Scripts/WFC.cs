@@ -148,7 +148,7 @@ namespace MicroUniverse {
                 }
             }
 
-            Debug.Log("WFC loaded and baked from given sample. " + patternCount.ToString() + " pattern(s) generated.");
+            Debug.Log("WFC loaded and baked from given " + sampleWidth.ToString() + "x" + sampleHeight.ToString() + " sample. " + patternCount.ToString() + " pattern(s) generated.");
         }
 
 

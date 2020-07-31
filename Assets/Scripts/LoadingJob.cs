@@ -200,26 +200,16 @@ namespace MicroUniverse {
 
             // ----------
             // Step.5
-            /* Disabled for faster demo performance.
             print("Step.5: MST." + Timestamp);
             List<IGraphNode> graphNodes = new List<IGraphNode>(regionInfos.Count);
             foreach (RegionInfo regionInfo in regionInfos) {
                 graphNodes.Add(regionInfo as IGraphNode);
             }
             rootRegion = MST.Run(graphNodes, registerBidirectional: false) as RegionInfo;
-            */
 
             // ----------
             // Step.6
             print("Step.6: WFC." + Timestamp);
-
-            // ID rules:
-            // Empty = 0
-            // Road = 1
-            // FountainRoad = 2
-            // PillarRoad = 3
-            // *Wall = 4
-
             string sampleString = Util.ReadStringFromResource(sampleFilePath);
             byte[,] sample = Util.StringToByteMapWithSingleDigit(sampleString, '#');
             wfc = new WFC(sample, N, false, false, symmetryVariantCount);

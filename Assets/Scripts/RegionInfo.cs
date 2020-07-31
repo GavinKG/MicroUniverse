@@ -37,7 +37,7 @@ namespace MicroUniverse {
         // public Texture2D debugTex4;
         // ---
 
-        private int flattenedMapHeight, flattenedMapWidth; // float -> int
+        int flattenedMapHeight, flattenedMapWidth; // float -> int
 
         FloodFill.FillResult fillResult;
 
@@ -49,12 +49,12 @@ namespace MicroUniverse {
         float occupiedAngle;
 
         // ID rules:
-        const int empty = 0;
-        const int road = 1;
-        const int fountainRoad = 2;
-        const int pillarRoad = 3;
-        const int wall = 4;
-        const int building = 5;
+        const int id_empty = 0;
+        const int id_road = 1;
+        const int id_pillar = 2;
+        const int id_crossroad = 3; // crossroad must have a super-pillar
+        const int id_wall = 4;
+        const int id_building = 5;
 
 
         // spawn params (for cross-function generate):
@@ -90,7 +90,7 @@ namespace MicroUniverse {
                 for (int y = 0; y < height; ++y) {
                     if (FlattenedMap[x, y]) { // ground
                         if (x == 0 || x == width - 1 || y == 0 || y == height - 1) { // on the edge
-                            mask[x, y] = road;
+                            mask[x, y] = id_road;
                         } else {
                             if (FlattenedMap[x - 1, y] &&
                                 FlattenedMap[x + 1, y] &&
@@ -100,13 +100,13 @@ namespace MicroUniverse {
                                 FlattenedMap[x - 1, y - 1] &&
                                 FlattenedMap[x + 1, y + 1] &&
                                 FlattenedMap[x - 1, y + 1]) {
-                                mask[x, y] = empty;
+                                mask[x, y] = id_empty;
                             } else {
-                                mask[x, y] = road;
+                                mask[x, y] = id_road;
                             }
                         }
                     } else { // wall
-                        mask[x, y] = wall;
+                        mask[x, y] = id_wall;
                     }
                 }
             }
@@ -123,9 +123,9 @@ namespace MicroUniverse {
             //debug:
             // Debug.Log(Util.ByteMapWithSingleDigitToString(FlattenedMapWFC));
             HashSet<int> maskSet = new HashSet<int> {
-                road,
-                fountainRoad,
-                pillarRoad
+                id_road,
+                id_crossroad,
+                id_pillar
             };
             // debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
         }
@@ -148,9 +148,9 @@ namespace MicroUniverse {
             int width = FlattenedMapWFC.GetLength(0), height = FlattenedMapWFC.GetLength(1);
             for (int x = 1; x < width - 1; ++x) {
                 for (int y = 1; y < height - 1; ++y) {
-                    if (FlattenedMapWFC[x, y] == empty && (
+                    if (FlattenedMapWFC[x, y] == id_empty && (
                         IsRoad(FlattenedMapWFC[x - 1, y]) || IsRoad(FlattenedMapWFC[x, y - 1]) || IsRoad(FlattenedMapWFC[x + 1, y]) || IsRoad(FlattenedMapWFC[x, y + 1]))) {
-                        FlattenedMapWFC[x, y] = building;
+                        FlattenedMapWFC[x, y] = id_building;
                     }
                 }
             }
@@ -161,16 +161,16 @@ namespace MicroUniverse {
                 for (int y = 0; y < height; ++y) {
                     GameObject spawned = null;
                     switch (FlattenedMapWFC[x, y]) {
-                        case fountainRoad:
+                        case id_crossroad:
                             spawned = GameObject.Instantiate(collection.GetFountainPrefab(), Vector3.zero, Quaternion.identity);
                             break;
-                        case building:
+                        case id_building:
                             spawned = SpawnBuilding(FlattenedMapWFC, x, y);
                             break;
-                        case pillarRoad:
+                        case id_pillar:
                             spawned = GameObject.Instantiate(collection.GetPillarPrefab(), Vector3.zero, Quaternion.identity);
                             break;
-                        case empty:
+                        case id_empty:
                             spawned = GameObject.Instantiate(collection.GetEmptyPrefab(), Vector3.zero, Quaternion.identity);
                             break;
                         default:
@@ -338,7 +338,7 @@ namespace MicroUniverse {
         }
 
         bool IsRoad(byte id) {
-            return id == road || id == fountainRoad || id == pillarRoad;
+            return id == id_road || id == id_crossroad || id == id_pillar;
         }
 
         bool IsRoad(byte[,] map, int x, int y) {
