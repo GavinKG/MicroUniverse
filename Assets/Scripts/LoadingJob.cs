@@ -137,7 +137,6 @@ namespace MicroUniverse {
             }
             int currResolution = source.width;
             Shader.SetGlobalFloat("CityWH", cityWH);
-            Shader.SetGlobalTexture("DarkMaskTex", dynamicMaskTex); // TODO: combine dynamic + static
 
             // ----------
             // Step.1

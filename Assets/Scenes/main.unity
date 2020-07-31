@@ -1754,6 +1754,7 @@ GameObject:
   - component: {fileID: 1347520941}
   - component: {fileID: 1347520940}
   - component: {fileID: 1347520939}
+  - component: {fileID: 1347520938}
   m_Layer: 0
   m_Name: DynamicMaskCamera
   m_TagString: Untagged
@@ -1761,6 +1762,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1347520938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347520937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bb3a099ecc9b8848a4a9c841cc1e8e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderTexture: {fileID: 8400000, guid: 7c71aa41f0c61364c90451877eafa181, type: 2}
+  resDownRate: 2
 --- !u!114 &1347520939
 MonoBehaviour:
   m_ObjectHideFlags: 0
