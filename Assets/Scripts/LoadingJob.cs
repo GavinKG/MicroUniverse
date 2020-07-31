@@ -18,7 +18,6 @@ namespace MicroUniverse {
 
         [Header("General Settings")]
         public int cityWH = 128;
-        public RenderTexture dynamicMaskTex;
 
         [Header("Step.2: Marching Square")]
         public GameObject coverGO;

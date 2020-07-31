@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PropMat_Pillar
+  m_Name: PropMat_MasterPillar
   m_Shader: {fileID: 4800000, guid: 9196e996c691c71408c187724b2d3ec3, type: 3}
   m_ShaderKeywords: _EMISSION_ON
   m_LightmapFlags: 4
@@ -62,6 +62,7 @@ Material:
     - _DarkMask: 0
     - _DarkMask1: 0
     - _DarkMaskMinValue: 0.05
+    - _DarkenDiffuseGrayscale: 0.05
     - _DstBlend: 0
     - _Emission: 1
     - _Emission2: 0

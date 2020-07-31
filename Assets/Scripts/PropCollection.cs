@@ -9,9 +9,9 @@ namespace MicroUniverse {
     public class PropCollection {
 
         public List<BuildingProp> buildings;
-        public List<CityProp> masterPillars;
+        public List<MasterPillarProp> masterPillars;
         public List<CityProp> emptys;
-        public List<CityProp> pillars;
+        public List<PillarProp> pillars;
 
         [Range(0f, 1f)] public float buildingLMSep = 0.4f;
         [Range(0f, 1f)] public float buildingMHSep = 0.8f;

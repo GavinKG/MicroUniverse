@@ -11,7 +11,7 @@ namespace MicroUniverse {
 
         bool activated = false;
 
-        private void OnTriggerEnter(Collider other) {
+        protected virtual void OnTriggerEnter(Collider other) {
             if (!activated) {
 
                 GameObject go = other.gameObject;
