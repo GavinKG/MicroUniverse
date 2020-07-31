@@ -2035,7 +2035,7 @@ MonoBehaviour:
     - {fileID: 6196278542483721000, guid: 97806d46311d16248a8f3f2b38c4d512, type: 3}
     - {fileID: 974262603581453362, guid: a6b5c88a29790ac4e9bbf43a0edfe879, type: 3}
     - {fileID: 4562015572639445510, guid: e1fcb6cc231d97343862fc25cd79cef2, type: 3}
-    fountains:
+    masterPillars:
     - {fileID: 6843824785612865833, guid: eb521fbf3ba8d6346be684fb5786199c, type: 3}
     emptys:
     - {fileID: 5405142518907150954, guid: ad03108bbe2304b43b7c6454b0efa875, type: 3}
@@ -2049,6 +2049,7 @@ MonoBehaviour:
   aoResolution: 1024
   blurSpreadSize: 1
   blurIterations: 2
+  gameplayController: {fileID: 0}
   debugImages:
   - {fileID: 1176948277}
   - {fileID: 1373616944}
@@ -2607,7 +2608,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravity: 9.8
-  maxTiltDegree: 30
+  maxTiltDistance: 0.3
   onGravityUpdate:
     m_PersistentCalls:
       m_Calls: []
