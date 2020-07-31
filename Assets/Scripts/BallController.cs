@@ -33,7 +33,6 @@ public class BallController : MonoBehaviour {
         if (sqrDistance > 1) {
             inputMovementAxis.Normalize();
         }
-        print(inputMovementAxis);
     }
 
     // Start is called before the first frame update
