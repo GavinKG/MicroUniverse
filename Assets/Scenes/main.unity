@@ -675,6 +675,7 @@ GameObject:
   m_Component:
   - component: {fileID: 213770387}
   - component: {fileID: 213770386}
+  - component: {fileID: 213770388}
   m_Layer: 0
   m_Name: Player VCam
   m_TagString: Untagged
@@ -732,6 +733,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &213770388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 213770385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9b999c71e7281c4383a2ea2a1e3888c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldRotationEffect: 0
 --- !u!1 &237282408
 GameObject:
   m_ObjectHideFlags: 3
@@ -898,6 +912,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 578662493}
+  - component: {fileID: 578662494}
   m_Layer: 0
   m_Name: GameplayController
   m_TagString: Untagged
@@ -919,6 +934,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &578662494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578662492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0659dd3570f53d43b65c63b1dfb53dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &587798394
 GameObject:
   m_ObjectHideFlags: 0
@@ -2717,7 +2744,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9163c2d9090c914083ef52ba8ec6e86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveForce: 0.75
+  gravity: 9.8
+  maxGravityTilt: 0.2
+  onGravityUpdate:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!135 &8996153153341454440
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2802,7 +2833,7 @@ Rigidbody:
   m_Mass: 0.1
   m_Drag: 0.02
   m_AngularDrag: 0.02
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
