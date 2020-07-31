@@ -1774,8 +1774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bb3a099ecc9b8848a4a9c841cc1e8e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderTexture: {fileID: 8400000, guid: 7c71aa41f0c61364c90451877eafa181, type: 2}
-  resDownRate: 2
+  resDownRate: 4
 --- !u!114 &1347520939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2026,7 +2025,7 @@ MonoBehaviour:
     - {fileID: 974262603581453362, guid: a6b5c88a29790ac4e9bbf43a0edfe879, type: 3}
     - {fileID: 4562015572639445510, guid: e1fcb6cc231d97343862fc25cd79cef2, type: 3}
     fountains:
-    - {fileID: 4948575356226954429, guid: 8d05ae25271776449bbe52e0e765901a, type: 3}
+    - {fileID: 6843824785612865833, guid: eb521fbf3ba8d6346be684fb5786199c, type: 3}
     emptys:
     - {fileID: 5405142518907150954, guid: ad03108bbe2304b43b7c6454b0efa875, type: 3}
     pillars:

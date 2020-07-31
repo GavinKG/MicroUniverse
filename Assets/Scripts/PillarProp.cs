@@ -9,10 +9,21 @@ namespace MicroUniverse {
 
         public GameObject maskParticle;
 
+        bool activated = false;
+
         private void OnTriggerEnter(Collider other) {
-            GameObject go = other.gameObject;
-            //TODO: 
-            maskParticle.SetActive(true);
+            if (!activated) {
+
+                GameObject go = other.gameObject;
+                //TODO: 
+                maskParticle.SetActive(true);
+                ParticleSystem ps = maskParticle.GetComponent<ParticleSystem>();
+                ParticleSystem.Burst burst = new ParticleSystem.Burst(0, 2);
+                ps.emission.SetBursts(new ParticleSystem.Burst[] { burst });
+
+                activated = true;
+            }
+
         }
 
     }
