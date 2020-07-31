@@ -29,12 +29,17 @@ public class BallController : MonoBehaviour {
 
     public void OnPlayerMovementInput(InputAction.CallbackContext context) {
         inputMovementAxis = context.ReadValue<Vector2>();
+        float sqrDistance = inputMovementAxis.sqrMagnitude;
+        if (sqrDistance > 1) {
+            inputMovementAxis.Normalize();
+        }
+        print(inputMovementAxis);
     }
 
     // Start is called before the first frame update
     void Start() {
         rb = GetComponent<Rigidbody>();
-        if (GravitySensor.current != null) {
+        if (preferGravitySensor && GravitySensor.current != null) {
             InputSystem.EnableDevice(GravitySensor.current);
         }
         
