@@ -8,19 +8,6 @@ namespace MicroUniverse {
 
     public class CityProp : MonoBehaviour {
 
-        /*
-        public enum PropType {
-            BLow,
-            BMid,
-            BHigh,
-            Fountain,
-            Pillar,
-            Empty
-        }
-
-        public PropType propType;
-        */
-
         [Range(1, 100)] public int propWeight = 1;
 
         public bool debug = false;

@@ -16,10 +16,11 @@ namespace MicroUniverse {
 
         // ------------ PUBLIC PROPERTIES:
 
-        public Vector2Int Center { get { return fillResult.FilledAreaCenterPoint; } }
-        public int TileCount { get { return fillResult.FilledPoints.Count; } }
+        // ------- Loading time:
 
-        // TODO: Lazy fetch!!!!!
+        public int RegionID { get; set; }
+
+        public Vector2Int Center { get { return fillResult.FilledAreaCenterPoint; } }
 
         // Ring border
         public float BorderSectorLeftAngle { get; private set; } = float.MaxValue; // Angle is in degrees, with range (-180, 180)
@@ -30,15 +31,46 @@ namespace MicroUniverse {
         public float FlattenedHeight { get; private set; }
         public float FlattenedWidth { get; private set; }
 
-        public bool[,] Map { get; private set; }
-        public bool[,] SubMap { get; private set; } // clipped region area.
-        public bool[,] FlattenedMap { get; private set; }// flattened clipped region area. true = ground, false = wall
+        public bool[,] Map { get; private set; } // filled map
+        public bool[,] SubMap { get; private set; } // clipped filled region area.
+        public bool[,] FlattenedMap { get; private set; }// flattened clipped filled region area. true = ground, false = wall
         public byte[,] FlattenedMapId { get; private set; } // flattened region with prop_id, see id rules below...
-        public Texture2D MapTex { get; private set; }
-        public Texture2D SubMapTex { get; private set; }
-        public Texture2D FlattenedMapTex { get; private set; }
+
+        private Texture2D mapTex;
+        public Texture2D MapTex {
+            get {
+                if (mapTex == null) {
+                    mapTex = Util.BoolMap2Tex(Map, brighterEquals: true);
+                }
+                return mapTex;
+            }
+        }
+        private Texture2D submapTex;
+        public Texture2D SubMapTex {
+            get {
+                if (submapTex == null) {
+                    submapTex = Util.BoolMap2Tex(SubMap, brighterEquals: true);
+                }
+                return submapTex;
+            }
+        }
+        private Texture2D flattenedMapTex;
+        public Texture2D FlattenedMapTex {
+            get {
+                if (flattenedMapTex == null) {
+                    flattenedMapTex = Util.BoolMap2Tex(FlattenedMap, brighterEquals: true);
+                }
+                return flattenedMapTex;
+            }
+        }
 
         public List<RegionInfo> ConnectedRegion { get; private set; } = new List<RegionInfo>();
+
+        public int PillarCount { get; private set; } = 0;
+        public int MasterPillarCount { get; private set; } = 0;
+        public int BuildingCount { get; private set; } = 0;
+        public int RoadCount { get; private set; } = 0;
+        public int AllPillarCount { get { return PillarCount + MasterPillarCount; } }
 
         // debug:
         // public Texture2D debugTex1;
@@ -46,6 +78,11 @@ namespace MicroUniverse {
         // public Texture2D debugTex3;
         // public Texture2D debugTex4;
         // ---
+
+        // ------- Gameplay:
+
+        public bool RegionUnlocked { get; set; }
+
 
         // ------------ PUBLIC PROPERTIES END
 
@@ -60,21 +97,19 @@ namespace MicroUniverse {
         Vector2 mapCenter;
         float occupiedAngle;
 
-        // spawn params (for cross-function generate):
+        // spawn params (for cross-function spawn):
         float[,] heatmap;
         PropCollection collection;
 
+        // ---------- public interface ----------
 
         public RegionInfo(FloodFill.FillResult _fillResult) {
             if (!_fillResult.Finished) {
                 throw new System.Exception("Fill result not finished");
             }
             fillResult = _fillResult;
-            DoCalc();
+            Init();
         }
-
-
-        // ---------- public interface ----------
 
         // used in MST
         public void RegisterConnected(IGraphNode other) {
@@ -158,7 +193,7 @@ namespace MicroUniverse {
                 }
             }
 
-            // Step.3: change crossroad-pillar to id_crossroad, for spawning fountain (a kind of pillar that spit out multiple balls like a fountain..)
+            // Step.3: change crossroad-pillar to id_crossroad, for spawning master pillar (a kind of pillar that spit out multiple balls..)
             for (int x = 0; x < flattenedMapWidth; ++x) {
                 for (int y = 0; y < flattenedMapHeight; ++y) {
                     if (FlattenedMapId[x, y] == id_pillar && CountSurroundingRoad(FlattenedMapId, x, y) == 4) {
@@ -174,13 +209,16 @@ namespace MicroUniverse {
                     GameObject spawned = null;
                     switch (FlattenedMapId[x, y]) {
                         case id_crossroad:
-                            spawned = GameObject.Instantiate(collection.GetFountainPrefab(), Vector3.zero, Quaternion.identity);
+                            spawned = GameObject.Instantiate(collection.GetMasterPillarPrefab(), Vector3.zero, Quaternion.identity);
+                            ++MasterPillarCount;
                             break;
                         case id_building:
                             spawned = SpawnBuilding(FlattenedMapId, x, y);
+                            ++BuildingCount;
                             break;
                         case id_pillar:
                             spawned = GameObject.Instantiate(collection.GetPillarPrefab(), Vector3.zero, Quaternion.identity);
+                            ++PillarCount;
                             break;
                         case id_empty:
                             spawned = GameObject.Instantiate(collection.GetEmptyPrefab(), Vector3.zero, Quaternion.identity);
@@ -274,14 +312,6 @@ namespace MicroUniverse {
         // ---------- public interface ---------- [END]
 
 
-
-
-
-
-
-
-
-
         GameObject SpawnBuilding(byte[,] map, int x, int y) {
             GameObject spawned;
             Vector3 flattenSpacePos = new Vector3(x, 0, y);
@@ -365,15 +395,10 @@ namespace MicroUniverse {
             return x < 0 || x >= map.GetLength(0) || y < 0 || y >= map.GetLength(1);
         }
 
-
-
-        void DoCalc() {
+        void Init() {
             GenerateMap();
             GenerateSubMap();
             Ring2FlattenTransform();
-            MapTex = Util.BoolMap2Tex(Map, brighterEquals: true);
-            SubMapTex = Util.BoolMap2Tex(SubMap, brighterEquals: true);
-            FlattenedMapTex = Util.BoolMap2Tex(FlattenedMap, brighterEquals: true);
         }
 
         void GenerateSubMap(bool fillValue = true) {

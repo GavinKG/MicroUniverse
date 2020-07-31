@@ -9,7 +9,7 @@ namespace MicroUniverse {
     public class PropCollection {
 
         public List<BuildingProp> buildings;
-        public List<CityProp> fountains;
+        public List<CityProp> masterPillars;
         public List<CityProp> emptys;
         public List<CityProp> pillars;
 
@@ -59,7 +59,7 @@ namespace MicroUniverse {
             return null;
         }
 
-        public GameObject GetFountainPrefab() { return RandomPropPrefab(fountains); }
+        public GameObject GetMasterPillarPrefab() { return RandomPropPrefab(masterPillars); }
         public GameObject GetEmptyPrefab() { return RandomPropPrefab(emptys); }
         public GameObject GetPillarPrefab() { return RandomPropPrefab(pillars); }
     }

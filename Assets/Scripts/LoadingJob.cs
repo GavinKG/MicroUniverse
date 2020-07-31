@@ -54,6 +54,9 @@ namespace MicroUniverse {
         public int blurSpreadSize = 5;
         public int blurIterations = 4;
 
+        [Header("Finilize")]
+        public GameplayController gameplayController;
+
         [Header("Debug")]
         public List<RawImage> debugImages;
         public bool loadOnStart = false;
@@ -220,9 +223,10 @@ namespace MicroUniverse {
 
             // ----------
             // Step.7
-            print("Step.7: Plant props (fountain + pillar + building)." + Timestamp);
+            print("Step.7: Plant props (pillar + building)." + Timestamp);
             float scaleFactor = (float)cityWH / (float)currResolution;
             for (int i = 0; i < regionInfos.Count; ++i) {
+                regionInfos[i].RegionID = i;
                 GameObject subRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, propRoot);
                 subRootGO.name = "Region #" + i.ToString();
                 regionInfos[i].PlantProps(scaleFactor, propCollection, subRootGO.transform, perlinFreq);
