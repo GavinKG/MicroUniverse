@@ -6,6 +6,16 @@ namespace MicroUniverse {
 
     public class RegionInfo : IGraphNode {
 
+        // ID rules:
+        const int id_empty = 0;
+        const int id_road = 1;
+        const int id_pillar = 2;
+        const int id_crossroad = 3; // crossroad must have a super-pillar
+        const int id_wall = 4;
+        const int id_building = 5;
+
+        // ------------ PUBLIC PROPERTIES:
+
         public Vector2Int Center { get { return fillResult.FilledAreaCenterPoint; } }
         public int TileCount { get { return fillResult.FilledPoints.Count; } }
 
@@ -23,7 +33,7 @@ namespace MicroUniverse {
         public bool[,] Map { get; private set; }
         public bool[,] SubMap { get; private set; } // clipped region area.
         public bool[,] FlattenedMap { get; private set; }// flattened clipped region area. true = ground, false = wall
-        public byte[,] FlattenedMapWFC { get; private set; }
+        public byte[,] FlattenedMapId { get; private set; } // flattened region with prop_id, see id rules below...
         public Texture2D MapTex { get; private set; }
         public Texture2D SubMapTex { get; private set; }
         public Texture2D FlattenedMapTex { get; private set; }
@@ -37,6 +47,8 @@ namespace MicroUniverse {
         // public Texture2D debugTex4;
         // ---
 
+        // ------------ PUBLIC PROPERTIES END
+
         int flattenedMapHeight, flattenedMapWidth; // float -> int
 
         FloodFill.FillResult fillResult;
@@ -47,15 +59,6 @@ namespace MicroUniverse {
         float moveRightLength;
         Vector2 mapCenter;
         float occupiedAngle;
-
-        // ID rules:
-        const int id_empty = 0;
-        const int id_road = 1;
-        const int id_pillar = 2;
-        const int id_crossroad = 3; // crossroad must have a super-pillar
-        const int id_wall = 4;
-        const int id_building = 5;
-
 
         // spawn params (for cross-function generate):
         float[,] heatmap;
@@ -81,7 +84,7 @@ namespace MicroUniverse {
         public void DoWFC(WFC wfc, int seed) {
 
 
-            FlattenedMapWFC = wfc.Run(flattenedMapWidth, flattenedMapHeight, seed);
+            FlattenedMapId = wfc.Run(flattenedMapWidth, flattenedMapHeight, seed);
 
             // expand road alongside border (for safety reason)
             int width = FlattenedMap.GetLength(0), height = FlattenedMap.GetLength(1);
@@ -115,7 +118,7 @@ namespace MicroUniverse {
             for (int y = 0; y < flattenedMapHeight; ++y) {
                 for (int x = 0; x < flattenedMapWidth; ++x) {
                     if (mask[x, y] != 0) { // mask not empty(0) -> use mask value
-                        FlattenedMapWFC[x, y] = mask[x, y];
+                        FlattenedMapId[x, y] = mask[x, y];
                     }
                 }
             }
@@ -145,27 +148,36 @@ namespace MicroUniverse {
             }
 
             // Step.2: analyze where to place building (alongside road):
-            int width = FlattenedMapWFC.GetLength(0), height = FlattenedMapWFC.GetLength(1);
+            int width = FlattenedMapId.GetLength(0), height = FlattenedMapId.GetLength(1);
             for (int x = 1; x < width - 1; ++x) {
                 for (int y = 1; y < height - 1; ++y) {
-                    if (FlattenedMapWFC[x, y] == id_empty && (
-                        IsRoad(FlattenedMapWFC[x - 1, y]) || IsRoad(FlattenedMapWFC[x, y - 1]) || IsRoad(FlattenedMapWFC[x + 1, y]) || IsRoad(FlattenedMapWFC[x, y + 1]))) {
-                        FlattenedMapWFC[x, y] = id_building;
+                    if (FlattenedMapId[x, y] == id_empty && (
+                        IsRoad(FlattenedMapId[x - 1, y]) || IsRoad(FlattenedMapId[x, y - 1]) || IsRoad(FlattenedMapId[x + 1, y]) || IsRoad(FlattenedMapId[x, y + 1]))) {
+                        FlattenedMapId[x, y] = id_building;
                     }
                 }
             }
 
-            // Step.3: place actual props (in FlattenedMap coord, 1 pixel = 1 unity unit):
+            // Step.3: change crossroad-pillar to id_crossroad, for spawning fountain (a kind of pillar that spit out multiple balls like a fountain..)
+            for (int x = 0; x < flattenedMapWidth; ++x) {
+                for (int y = 0; y < flattenedMapHeight; ++y) {
+                    if (FlattenedMapId[x, y] == id_pillar && CountSurroundingRoad(FlattenedMapId, x, y) == 4) {
+                        FlattenedMapId[x, y] = id_crossroad;
+                    }
+                }
+            }
+
+            // Step.4: place actual props (in FlattenedMap coord, 1 pixel = 1 unity unit):
             List<CityProp> spawnedList = new List<CityProp>();
             for (int x = 0; x < width; ++x) {
                 for (int y = 0; y < height; ++y) {
                     GameObject spawned = null;
-                    switch (FlattenedMapWFC[x, y]) {
+                    switch (FlattenedMapId[x, y]) {
                         case id_crossroad:
                             spawned = GameObject.Instantiate(collection.GetFountainPrefab(), Vector3.zero, Quaternion.identity);
                             break;
                         case id_building:
-                            spawned = SpawnBuilding(FlattenedMapWFC, x, y);
+                            spawned = SpawnBuilding(FlattenedMapId, x, y);
                             break;
                         case id_pillar:
                             spawned = GameObject.Instantiate(collection.GetPillarPrefab(), Vector3.zero, Quaternion.identity);
@@ -188,7 +200,7 @@ namespace MicroUniverse {
                 }
             }
 
-            // Step.4: transform back:
+            // Step.5: transform back:
             foreach (CityProp prop in spawnedList) {
 
                 // 1: Prepare per-vertex transform to world position
@@ -247,9 +259,9 @@ namespace MicroUniverse {
 
         public Texture2D DebugTransformBackToTex() {
             List<Vector2> vec2s = new List<Vector2>();
-            for (int x = 0; x < FlattenedMapWFC.GetLength(0); ++x) {
-                for (int y = 0; y < FlattenedMapWFC.GetLength(1); ++y) {
-                    if (IsRoad(FlattenedMapWFC[x, y])) {
+            for (int x = 0; x < FlattenedMapId.GetLength(0); ++x) {
+                for (int y = 0; y < FlattenedMapId.GetLength(1); ++y) {
+                    if (IsRoad(FlattenedMapId[x, y])) {
                         Vector2 v = TransformBack(new Vector2(x, y));
                         vec2s.Add(v);
                     }
@@ -279,11 +291,7 @@ namespace MicroUniverse {
             BuildingProp.BuildingType buildingType = BuildingProp.BuildingType.DontCare;
             int turn = 0;
 
-            int surrRoadCount =
-                (IsRoad(map, x - 1, y) ? 1 : 0) +
-                (IsRoad(map, x + 1, y) ? 1 : 0) +
-                (IsRoad(map, x, y + 1) ? 1 : 0) +
-                (IsRoad(map, x, y - 1) ? 1 : 0);
+            int surrRoadCount = CountSurroundingRoad(map, x, y);
             if (surrRoadCount == 4) {
                 buildingType = BuildingProp.BuildingType.Alone;
                 turn = Random.Range(0, 3); // whatever the rotation is...
@@ -335,6 +343,13 @@ namespace MicroUniverse {
 
             return spawned;
 
+        }
+
+        int CountSurroundingRoad(byte[,] map, int x, int y) {
+            return (IsRoad(map, x - 1, y) ? 1 : 0) +
+                   (IsRoad(map, x + 1, y) ? 1 : 0) +
+                   (IsRoad(map, x, y + 1) ? 1 : 0) +
+                   (IsRoad(map, x, y - 1) ? 1 : 0);
         }
 
         bool IsRoad(byte id) {
