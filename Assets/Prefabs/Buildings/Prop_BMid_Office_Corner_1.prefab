@@ -29,10 +29,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4931726530369687941}
-  - {fileID: 567726177624388643}
   - {fileID: 6727326030971949497}
   - {fileID: 2865047367907466817}
   - {fileID: 5770812754120614926}
+  - {fileID: 7896525328998589981}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -57,7 +57,7 @@ MonoBehaviour:
   buildingType: 0
   baseGO: {fileID: 6029693533513599913}
   destroyedPrefab: {fileID: 0}
---- !u!1 &5695222601171339177
+--- !u!1 &7412299769879837863
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65,45 +65,45 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 567726177624388643}
-  - component: {fileID: 6245280832042952433}
-  - component: {fileID: 7208922476761200531}
+  - component: {fileID: 7896525328998589981}
+  - component: {fileID: 6501452283008182712}
+  - component: {fileID: 9069470294804667762}
   m_Layer: 13
-  m_Name: Building Sky_small_color03.002
+  m_Name: house-sky-small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &567726177624388643
+--- !u!4 &7896525328998589981
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5695222601171339177}
+  m_GameObject: {fileID: 7412299769879837863}
   m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 0.602, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.9, z: 0.6}
+  m_LocalPosition: {x: -0.025, y: 0, z: -0.017}
+  m_LocalScale: {x: 4.7105203, y: 7.18976, z: 4.94645}
   m_Children: []
   m_Father: {fileID: 3419239515591653153}
-  m_RootOrder: 1
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
---- !u!33 &6245280832042952433
+--- !u!33 &6501452283008182712
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5695222601171339177}
-  m_Mesh: {fileID: 5475192348298162314, guid: ca1d23916a6d31946b0e346cde4030a7, type: 3}
---- !u!23 &7208922476761200531
+  m_GameObject: {fileID: 7412299769879837863}
+  m_Mesh: {fileID: 2137474734335795338, guid: b70ad1b6ccecd534a99495f584d76ce0, type: 3}
+--- !u!23 &9069470294804667762
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5695222601171339177}
+  m_GameObject: {fileID: 7412299769879837863}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -181,7 +181,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 52d2f436ec5f6be4b9f8c831377345dc,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 52d2f436ec5f6be4b9f8c831377345dc,
         type: 3}
@@ -358,7 +358,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 52d2f436ec5f6be4b9f8c831377345dc,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 52d2f436ec5f6be4b9f8c831377345dc,
         type: 3}
@@ -448,7 +448,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 52d2f436ec5f6be4b9f8c831377345dc,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 52d2f436ec5f6be4b9f8c831377345dc,
         type: 3}
