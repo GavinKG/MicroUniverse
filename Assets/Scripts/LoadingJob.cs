@@ -56,13 +56,9 @@ namespace MicroUniverse {
         [Header("Step.9 Raycast portal")]
         public GameObject portalPrefab;
 
-        [Header("Finilize")]
-        public GameplayController gameplayController;
-
         [Header("Debug")]
         public GameObject debugBall;
         public List<RawImage> debugImages;
-        public bool loadOnStart = false;
         public Text cityGenTimeText;
 
         // --------------------
@@ -94,10 +90,6 @@ namespace MicroUniverse {
 
             Application.targetFrameRate = 60;
             // setting the framerate: (will be removed when gameplay framework is constructed)
-
-            if (loadOnStart) {
-                Load();
-            }
         }
 
         void DebugTex(Texture tex, int index, bool shouldTerminate = false) {
@@ -252,6 +244,9 @@ namespace MicroUniverse {
             // Step.9 Raycast & construct portal
             int cityWallLayerMask = LayerMask.GetMask(new string[] { "CityWall" });
             foreach (RegionInfo currRegion in regionInfos) {
+                GameObject portalRoot = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, propRoot.GetChild(currRegion.RegionID));
+                portalRoot.name = "Portals";
+                currRegion.portals = new List<RegionPortal>(currRegion.ConnectedRegion.Count);
                 foreach (RegionInfo toRegion in currRegion.ConnectedRegion) {
                     RaycastHit hit;
                     bool result = Physics.Raycast(currRegion.CenterWS, toRegion.CenterWS - currRegion.CenterWS, out hit, Mathf.Infinity, cityWallLayerMask);
@@ -260,13 +255,22 @@ namespace MicroUniverse {
                     }
                     Vector3 position = hit.point;
                     Quaternion rotation = Quaternion.LookRotation(hit.normal);
-                    GameObject portal = Instantiate(portalPrefab, position, rotation, propRoot.GetChild(currRegion.RegionID));
+                    GameObject portal = Instantiate(portalPrefab, position, rotation, portalRoot.transform);
                     portal.name = "Portal: #" + currRegion.RegionID.ToString() +  " -> #" + toRegion.RegionID.ToString();
                     RegionPortal regionPortal = portal.GetComponent<RegionPortal>();
                     regionPortal.currRegionId = currRegion.RegionID;
                     regionPortal.toRegionId = toRegion.RegionID;
+                    currRegion.portals.Add(regionPortal);
                 }
             }
+
+
+            // ---------
+            // Last: pass on all useful data to game controller...
+            MainGameplayController controller =  GameManager.Instance.CurrController as MainGameplayController;
+            controller.RegionInfos = regionInfos;
+            controller.StartRegion = rootRegion;
+
 
 
             print("[LoadingJob] Loading finished." + Timestamp);

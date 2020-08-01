@@ -95,7 +95,7 @@ namespace MicroUniverse {
         // ------- Gameplay:
 
         public bool regionUnlocked = false;
-        public List<GameObject> portals;
+        public List<RegionPortal> portals;
 
 
         // ------------ PUBLIC PROPERTIES END
