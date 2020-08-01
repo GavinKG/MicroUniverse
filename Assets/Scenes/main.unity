@@ -1570,7 +1570,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1002798681}
   m_Layer: 0
-  m_Name: Props
+  m_Name: Regions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2205,6 +2205,8 @@ MonoBehaviour:
   aoResolution: 1024
   blurSpreadSize: 1
   blurIterations: 2
+  portalPrefab: {fileID: 4448100067130439451, guid: 9f5dc6ac6e6787e48923b1259870ec33,
+    type: 3}
   gameplayController: {fileID: 578662494}
   debugImages:
   - {fileID: 1176948277}

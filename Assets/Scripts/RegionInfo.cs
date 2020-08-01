@@ -20,7 +20,20 @@ namespace MicroUniverse {
 
         public int RegionID { get; set; }
 
+        /// <summary>
+        /// Region center point in filled space.
+        /// </summary>
         public Vector2Int Center { get { return fillResult.FilledAreaCenterPoint; } }
+
+        /// <summary>
+        /// Region center point in world space (XZ).
+        /// </summary>
+        public Vector2 CenterWS2 { get { return new Vector2(Center.x - fillResult.MapWidth / 2, Center.y - fillResult.MapHeight / 2); } }
+
+        /// <summary>
+        /// Region center point in world space.
+        /// </summary>
+        public Vector3 CenterWS { get { return new Vector3(CenterWS2.x, 0f, CenterWS2.y); } }
 
         // Ring border
         public float BorderSectorLeftAngle { get; private set; } = float.MaxValue; // Angle is in degrees, with range (-180, 180)
@@ -81,7 +94,8 @@ namespace MicroUniverse {
 
         // ------- Gameplay:
 
-        public bool RegionUnlocked { get; set; }
+        public bool regionUnlocked = false;
+        public List<GameObject> portals;
 
 
         // ------------ PUBLIC PROPERTIES END
@@ -113,7 +127,8 @@ namespace MicroUniverse {
 
         // used in MST
         public void RegisterConnected(IGraphNode other) {
-            ConnectedRegion.Add(other as RegionInfo);
+            RegionInfo otherRegion = other as RegionInfo;
+            ConnectedRegion.Add(otherRegion);
         }
 
         public void DoWFC(WFC wfc, int seed) {
@@ -202,7 +217,7 @@ namespace MicroUniverse {
                 }
             }
 
-            // Step.4: place actual props (in FlattenedMap coord, 1 pixel = 1 unity unit):
+            // Step.4: place actual props:
             List<CityProp> spawnedList = new List<CityProp>();
             for (int x = 0; x < width; ++x) {
                 for (int y = 0; y < height; ++y) {
@@ -308,6 +323,13 @@ namespace MicroUniverse {
             bool[,] debugBoolMap = Util.PlotPointsToBoolMap(vec2s, MapTex.width, MapTex.height);
             return Util.BoolMap2Tex(debugBoolMap, true);
         }
+
+        public void DebugConnectedRegions() {
+            foreach (RegionInfo connected in ConnectedRegion) {
+                Debug.Log("Connected: " + RegionID.ToString() + "->" + connected.RegionID.ToString());
+            }
+        }
+
 
         // ---------- public interface ---------- [END]
 

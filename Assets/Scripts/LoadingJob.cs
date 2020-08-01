@@ -53,10 +53,14 @@ namespace MicroUniverse {
         public int blurSpreadSize = 5;
         public int blurIterations = 4;
 
+        [Header("Step.9 Raycast portal")]
+        public GameObject portalPrefab;
+
         [Header("Finilize")]
         public GameplayController gameplayController;
 
         [Header("Debug")]
+        public GameObject debugBall;
         public List<RawImage> debugImages;
         public bool loadOnStart = false;
         public Text cityGenTimeText;
@@ -71,7 +75,7 @@ namespace MicroUniverse {
         private Texture2D texAfterRecapture;
 
         // Step.3:
-        private List<RegionInfo> regionInfos;
+        private List<RegionInfo> regionInfos; // SHOULD FOLLOW: index = region id
 
         // Step.4:
         private RegionInfo rootRegion;
@@ -206,7 +210,7 @@ namespace MicroUniverse {
             foreach (RegionInfo regionInfo in regionInfos) {
                 graphNodes.Add(regionInfo as IGraphNode);
             }
-            rootRegion = MST.Run(graphNodes, registerBidirectional: false) as RegionInfo;
+            rootRegion = MST.Run(graphNodes, registerBidirectional: true) as RegionInfo;
 
             // ----------
             // Step.6
@@ -228,7 +232,9 @@ namespace MicroUniverse {
                 regionInfos[i].RegionID = i;
                 GameObject subRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, propRoot);
                 subRootGO.name = "Region #" + i.ToString();
-                regionInfos[i].PlantProps(scaleFactor, propCollection, subRootGO.transform, perlinFreq);
+                GameObject propRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, subRootGO.transform);
+                propRootGO.name = "Props";
+                regionInfos[i].PlantProps(scaleFactor, propCollection, propRootGO.transform, perlinFreq);
             }
 
             // DebugTex(regionInfos[0].DebugTransformBackToTex(), 3);
@@ -241,6 +247,26 @@ namespace MicroUniverse {
             Shader.SetGlobalTexture("FloorAO", aoTex);
             // DebugTex(aoTex, 4);
 
+
+            // ---------
+            // Step.9 Raycast & construct portal
+            int cityWallLayerMask = LayerMask.GetMask(new string[] { "CityWall" });
+            foreach (RegionInfo currRegion in regionInfos) {
+                foreach (RegionInfo toRegion in currRegion.ConnectedRegion) {
+                    RaycastHit hit;
+                    bool result = Physics.Raycast(currRegion.CenterWS, toRegion.CenterWS - currRegion.CenterWS, out hit, Mathf.Infinity, cityWallLayerMask);
+                    if (!result) {
+                        throw new Exception("WHAT?");
+                    }
+                    Vector3 position = hit.point;
+                    Quaternion rotation = Quaternion.LookRotation(hit.normal);
+                    GameObject portal = Instantiate(portalPrefab, position, rotation, propRoot.GetChild(currRegion.RegionID));
+                    portal.name = "Portal: #" + currRegion.RegionID.ToString() +  " -> #" + toRegion.RegionID.ToString();
+                    RegionPortal regionPortal = portal.GetComponent<RegionPortal>();
+                    regionPortal.currRegionId = currRegion.RegionID;
+                    regionPortal.toRegionId = toRegion.RegionID;
+                }
+            }
 
 
             print("[LoadingJob] Loading finished." + Timestamp);
