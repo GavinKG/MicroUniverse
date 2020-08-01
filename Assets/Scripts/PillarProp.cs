@@ -21,6 +21,9 @@ namespace MicroUniverse {
                 ParticleSystem.Burst burst = new ParticleSystem.Burst(0, 2);
                 ps.emission.SetBursts(new ParticleSystem.Burst[] { burst });
 
+                MainGameplayController controller = GameManager.Instance.CurrController as MainGameplayController;
+                controller.PillarEnabled(this);
+
                 activated = true;
             }
 

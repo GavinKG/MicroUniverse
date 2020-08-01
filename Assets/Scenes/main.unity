@@ -234,7 +234,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 45849016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 306.96454, y: -36.4341, z: -141.84637}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -646,7 +646,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 16183
+    m_Bits: 114487
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1098,7 +1098,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadingJob: {fileID: 1422580536}
   ballGO: {fileID: 8996153153341454443}
+  pillarUnlockToSuccessRate: 0.5
   skipIntro: 1
+  skipUnlocking: 1
+  skipRegionSwitching: 1
 --- !u!1 &587798394
 GameObject:
   m_ObjectHideFlags: 0
@@ -1486,7 +1489,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 791295360}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.1055222, y: -1.1129274, z: 0.1533348}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2601,8 +2604,8 @@ GameObject:
   - component: {fileID: 2120364408}
   - component: {fileID: 2120364407}
   - component: {fileID: 2120364406}
-  m_Layer: 0
-  m_Name: WaterPlane
+  m_Layer: 16
+  m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

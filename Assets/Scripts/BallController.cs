@@ -35,6 +35,10 @@ public class BallController : MonoBehaviour {
         }
     }
 
+    public void KillVelocity() {
+        rb.velocity = Vector3.zero;
+    }
+
     // Start is called before the first frame update
     void Start() {
         rb = GetComponent<Rigidbody>();

@@ -94,8 +94,12 @@ namespace MicroUniverse {
 
         // ------- Gameplay:
 
-        public bool regionUnlocked = false;
+        public enum RegionState {
+            Locked, Unlocking, Unlocked
+        }
+        public RegionState currState = RegionState.Locked;
         public List<RegionPortal> portals;
+        public int unlockedPillar = 0;
 
 
         // ------------ PUBLIC PROPERTIES END
@@ -308,6 +312,15 @@ namespace MicroUniverse {
 
             }
 
+        }
+
+        public RegionPortal FindPortalFromHereTo(int regionId) {
+            foreach (RegionPortal portal in portals) {
+                if (portal.toRegionId == regionId) {
+                    return portal;
+                }
+            }
+            return null;
         }
 
         public Texture2D DebugTransformBackToTex() {

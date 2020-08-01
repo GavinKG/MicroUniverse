@@ -256,6 +256,7 @@ namespace MicroUniverse {
                     Vector3 position = hit.point;
                     Quaternion rotation = Quaternion.LookRotation(hit.normal);
                     GameObject portal = Instantiate(portalPrefab, position, rotation, portalRoot.transform);
+                    portal.SetActive(false);
                     portal.name = "Portal: #" + currRegion.RegionID.ToString() +  " -> #" + toRegion.RegionID.ToString();
                     RegionPortal regionPortal = portal.GetComponent<RegionPortal>();
                     regionPortal.currRegionId = currRegion.RegionID;
