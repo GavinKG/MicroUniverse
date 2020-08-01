@@ -5,17 +5,15 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-[System.Serializable] public class GravityEvent : UnityEvent<Vector3> { }
-
-
 [RequireComponent(typeof(Rigidbody))]
 public class BallController : MonoBehaviour {
 
     public float gravity = 9.8f; // pointing -Y
     [Range(0.01f, 0.5f)] public float maxTiltDistance = 0.3f; // like tangent
 
-    public GravityEvent onGravityUpdate;
     public bool preferGravitySensor = true;
+
+    public Vector3 GravityDirection { get { return gravityDirection; } }
 
     // Input related:
     Vector2 inputMovementAxis;
@@ -50,7 +48,6 @@ public class BallController : MonoBehaviour {
 
     void Update() {
         UpdateWorldDirection();
-        DispatchEvent();
     }
 
     void FixedUpdate() {
@@ -70,10 +67,6 @@ public class BallController : MonoBehaviour {
             worldMovementDirection = Vector3.zero;
         }
 
-    }
-
-    void DispatchEvent() {
-        onGravityUpdate.Invoke(gravityDirection);
     }
 
     void UpdateGravity() {
