@@ -360,10 +360,12 @@ namespace MicroUniverse {
                     GenAndAddMeshFromPoints(square.topLeft, square.topRight, square.bottomRight, square.bottomLeft);
 
                     // no need to check these vertices.
+                    /*
                     checkedVertices.Add(square.topLeft.vertexIndex);
                     checkedVertices.Add(square.topRight.vertexIndex);
                     checkedVertices.Add(square.bottomRight.vertexIndex);
                     checkedVertices.Add(square.bottomLeft.vertexIndex);
+                    */
                     break;
             }
 

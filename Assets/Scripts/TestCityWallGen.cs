@@ -33,7 +33,7 @@ namespace MicroUniverse {
                 downsampled = cityTex;
             }
             
-            bool[,] map = Util.Tex2BoolMap(downsampled, brighterEquals: true);
+            bool[,] map = Util.Tex2BoolMap(downsampled, brighterEquals: false);
 
             MarchingSquare cityWallGenerator = new MarchingSquare();
             cityWallGenerator.GenerateMesh(map, wallLength / (cityTex.width / downsampleRatio), wallHeight, smoothCount, smoothRatio, faceOutside);
