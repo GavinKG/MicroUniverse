@@ -87,9 +87,7 @@ namespace MicroUniverse {
         // --------------------
 
         private void Start() {
-
-            Application.targetFrameRate = 60;
-            // setting the framerate: (will be removed when gameplay framework is constructed)
+            
         }
 
         void DebugTex(Texture tex, int index, bool shouldTerminate = false) {

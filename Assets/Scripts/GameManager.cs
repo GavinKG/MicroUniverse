@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace MicroUniverse {
     public class GameManager : MonoBehaviour {
@@ -25,10 +26,26 @@ namespace MicroUniverse {
         // ------- GLOBAL SETTINGS -------
 
         public bool preferSensorControl = false;
-        public bool examplePattern = false;
+        public bool exampleKaleido = false;
         public bool ftue = true;
 
         // ------- GLOBAL SETTINGS END
+
+        public enum Level { Intro, Start, Main }
+
+        public void SwitchLevel(Level level) {
+            switch (level) {
+                case Level.Intro:
+                    SceneManager.LoadScene("Intro");
+                    break;
+                case Level.Main:
+                    SceneManager.LoadScene("Main");
+                    break;
+                case Level.Start:
+                    SceneManager.LoadScene("Start");
+                    break;
+            }
+        }
 
 
         void Awake() {
@@ -38,6 +55,10 @@ namespace MicroUniverse {
                 Destroy(gameObject);
             }
             DontDestroyOnLoad(gameObject);
+        }
+
+        void Start() {
+            Application.targetFrameRate = 60;
         }
 
     }
