@@ -22,7 +22,10 @@ namespace MicroUniverse {
 
         public static GameManager Instance { get; private set; }
 
+
+        // Start -> Main.
         public Texture2D KaleidoTex { get; set; }
+        public Color CityWallColor { get; set; }
 
         // ------- GLOBAL SETTINGS -------
 

@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -781,7 +781,7 @@ PrefabInstance:
     - target: {fileID: 687232055975534003, guid: 7b089b06e2cee7d44a2f0d10b1c63940,
         type: 3}
       propertyPath: resetCanvasOnPlay
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b089b06e2cee7d44a2f0d10b1c63940, type: 3}
