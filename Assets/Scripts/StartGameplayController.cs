@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace MicroUniverse {
@@ -10,6 +11,7 @@ namespace MicroUniverse {
         public Texture2D maskTex;
         public Shader blitMaskShader;
         public Shader reverseShader;
+        public Shader thresholdShader;
 
         public RawImage debugImage;
 
@@ -22,23 +24,13 @@ namespace MicroUniverse {
         public override void Finish() {
             
         }
-
-        public void OnColorBallClick() {
-            print("!");
-            GameObject buttonGO = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
-            Image buttonImage = buttonGO.GetComponent<Image>();
-            Color color = buttonImage.color;
-            GameManager.Instance.CityWallColor = color;
-            foreach (SpriteRenderer spriteRenderer in spriteRenders) {
-                spriteRenderer.color = color;
-            }
-        }
-
+        
         public void OnPaintClick() {
             print("Paint!");
             GenerateKaleidoTex();
+            
             // debugImage.texture = GameManager.Instance.KaleidoTex;
-            GameManager.Instance.SwitchLevel(GameManager.Level.Main);
+            SceneManager.LoadScene("main");
         }
 
         public void GenerateKaleidoTex() {

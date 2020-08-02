@@ -43,8 +43,11 @@
 
             fixed4 frag (v2f i) : SV_Target
             {
+                // double clip.
                 fixed4 col = tex2D(_MainTex, i.uv);
+                if (col.a < 0.5) col = 1;
                 fixed4 maskCol = tex2D(_MaskTex, i.uv);
+                if (maskCol.a < 0.5) maskCol = 1;
                 return fixed4(col.r * maskCol.r, col.g * maskCol.g, col.b * maskCol.b, 1);
             }
             ENDCG

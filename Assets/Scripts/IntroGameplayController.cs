@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace MicroUniverse {
 
@@ -39,14 +40,9 @@ namespace MicroUniverse {
         }
         
         public void OnPlayClick() {
-            GameManager.Instance.SwitchLevel(GameManager.Level.Start);
+            SceneManager.LoadScene("Start");
         }
-
-
-
-        public void OnFTUEToggleClick(bool value) {
-            GameManager.Instance.ftue = value;
-        }
+        
 
         public void OnPreferSensorClick(bool value) {
             GameManager.Instance.preferSensorControl = value;

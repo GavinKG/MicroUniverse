@@ -249,7 +249,7 @@ namespace MicroUniverse {
                     RaycastHit hit;
                     bool result = Physics.Raycast(currRegion.CenterWS, toRegion.CenterWS - currRegion.CenterWS, out hit, Mathf.Infinity, cityWallLayerMask);
                     if (!result) {
-                        throw new Exception("WHAT?");
+                        throw new Exception("PORTAL RAYCAST FAILED...");
                     }
                     Vector3 position = hit.point;
                     Quaternion rotation = Quaternion.LookRotation(hit.normal);
