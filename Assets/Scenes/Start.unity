@@ -608,6 +608,7 @@ RectTransform:
   m_Children:
   - {fileID: 1853918891}
   - {fileID: 1034793650}
+  - {fileID: 1922571844}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -959,6 +960,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   painter: {fileID: 329502626}
+  maskTex: {fileID: 2800000, guid: f1d04b6ed96aeeb42b22901a510ab4ab, type: 3}
+  blitMaskShader: {fileID: 4800000, guid: 13043864f4bfcf848bfdda55f8f250e9, type: 3}
+  debugImage: {fileID: 1922571845}
   spriteRenders:
   - {fileID: 1374898170}
   - {fileID: 2073429707}
@@ -1212,6 +1216,21 @@ PrefabInstance:
     - target: {fileID: 687232055975534003, guid: 7b089b06e2cee7d44a2f0d10b1c63940,
         type: 3}
       propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 687232055975534003, guid: 7b089b06e2cee7d44a2f0d10b1c63940,
+        type: 3}
+      propertyPath: canvasColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 687232055975534003, guid: 7b089b06e2cee7d44a2f0d10b1c63940,
+        type: 3}
+      propertyPath: canvasColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 687232055975534003, guid: 7b089b06e2cee7d44a2f0d10b1c63940,
+        type: 3}
+      propertyPath: canvasColor.b
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -3046,6 +3065,77 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1907861096}
   m_CullTransparentMesh: 1
+--- !u!1 &1922571843
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1922571844}
+  - component: {fileID: 1922571846}
+  - component: {fileID: 1922571845}
+  m_Layer: 5
+  m_Name: DebugImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1922571844
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1922571843}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 208467673}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 256, y: 256}
+  m_Pivot: {x: 1, y: 0}
+--- !u!114 &1922571845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1922571843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &1922571846
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1922571843}
+  m_CullTransparentMesh: 0
 --- !u!1 &1938070377
 GameObject:
   m_ObjectHideFlags: 0
