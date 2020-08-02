@@ -15,6 +15,8 @@ namespace MicroUniverse {
         public bool skipIntro = false;
         public bool skipUnlocking = false;
         public bool skipRegionSwitching = false;
+        [Header("Debug")]
+        public bool useAlreadyAssignedSource = false;
         // Inspector END
 
         public List<RegionInfo> RegionInfos { get; set; }
@@ -25,6 +27,9 @@ namespace MicroUniverse {
 
         public override void Begin() {
 
+            if (!useAlreadyAssignedSource && GameManager.Instance.KaleidoTex != null) {
+                loadingJob.source = GameManager.Instance.KaleidoTex;
+            }
             loadingJob.Load();
 
             // loading job will fill these variables:

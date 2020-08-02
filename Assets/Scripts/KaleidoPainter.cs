@@ -54,6 +54,9 @@ namespace MicroUniverse {
             pointerHeldDown = context.performed;
         }
 
+        public Texture2D GetTexture() {
+            return drawableTex;
+        }
 
         //////////////////////////////////////////////////////////////////////////////
         // BRUSH TYPES. Implement your own here

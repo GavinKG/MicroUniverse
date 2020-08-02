@@ -22,6 +22,7 @@ namespace MicroUniverse {
 
         public static GameManager Instance { get; private set; }
 
+        public Texture2D KaleidoTex { get; set; }
 
         // ------- GLOBAL SETTINGS -------
 
