@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace MicroUniverse {
@@ -21,12 +22,16 @@ namespace MicroUniverse {
 
 
         public bool resetCanvasOnPlay = true;
+        public bool resetCanvasOnDraw = true;
         // The colour the canvas is reset to each time
         public Color canvasColor = new Color(0, 0, 0, 0);  // By default, reset the canvas to be transparent
+        public bool onInterruptStop = true;
 
         [Header("Kaleido Specifics")]
         public int kaleidoParts = 5;
         public bool mirror = true;
+
+        public UnityEvent OnDrawFinished;
 
         // MUST HAVE READ/WRITE enabled set in the file editor of Unity
         Sprite drawableSprite;
@@ -37,8 +42,8 @@ namespace MicroUniverse {
         Color[] initColors;
         Color transparent;
         Color32[] currColors;
-        bool mouse_was_previously_held_down = false;
-        bool no_drawing_on_current_drag = false;
+        bool mouseHeldDownOnLastFrame = false;
+        bool noDrawingOnCurrentDrag = false;
 
         // inputs:
         Vector2 pointerPosPS;
@@ -113,6 +118,9 @@ namespace MicroUniverse {
 
             if (prevDragPosition == Vector2.zero) {
                 // If this is the first time we've ever dragged on this image, simply colour the pixels at our mouse position
+                if (resetCanvasOnDraw) {
+                    ResetCanvas();
+                }
                 MarkPixelsToColour(pointPS, penWidth, penColor);
             } else {
                 // Colour in a line from where we were on the last update call
@@ -132,6 +140,9 @@ namespace MicroUniverse {
             currColors = drawableTex.GetPixels32();
 
             if (prevDragPosition == Vector2.zero) {
+                if (resetCanvasOnDraw) {
+                    ResetCanvas();
+                }
                 // If this is the first time we've ever dragged on this image, simply colour the pixels at our mouse position
                 for (int i = 0; i < kaleidoParts; ++i) {
                     Vector2 rotatedPixel = GetRotatedPixel(pointPS, centerPS, 360f / kaleidoParts * i);
@@ -170,33 +181,48 @@ namespace MicroUniverse {
         void Update() {
 
             // Is the user holding down the left mouse button?
-            if (pointerHeldDown && !no_drawing_on_current_drag) {
+            if (pointerHeldDown && !noDrawingOnCurrentDrag) {
                 // Convert mouse coordinates to world coordinates
                 Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(pointerPosPS);
                 // Check if the current mouse position overlaps our image
                 Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos, drawingLayers.value);
-                if (hit != null && hit.transform != null) {
+                if (hit != null && hit.gameObject == gameObject) {
                     // We're over the texture we're drawing on!
                     // Use whatever function the current brush is
                     CurrentBrush(mouseWorldPos);
                 } else {
                     // We're not over our destination texture
-                    prevDragPosition = Vector2.zero;
-                    if (!mouse_was_previously_held_down) {
-                        // This is a new drag where the user is left clicking off the canvas
-                        // Ensure no drawing happens until a new drag is started
-                        no_drawing_on_current_drag = true;
+                    if (onInterruptStop) {
+                        noDrawingOnCurrentDrag = true;
+                        if (prevDragPosition != Vector2.zero) {
+                            FinishDrawing();
+                        }
+                    } else {
+                        if (!mouseHeldDownOnLastFrame) {
+                            // This is a new drag where the user is left clicking off the canvas
+                            // Ensure no drawing happens until a new drag is started
+                            noDrawingOnCurrentDrag = true;
+                        }
                     }
+                    prevDragPosition = Vector2.zero;
                 }
             }
             // Mouse is released
             else if (!pointerHeldDown) {
+                if (prevDragPosition != Vector2.zero) {
+                    // When finished drawing:
+                    FinishDrawing();
+                }
                 prevDragPosition = Vector2.zero;
-                no_drawing_on_current_drag = false;
+                noDrawingOnCurrentDrag = false;
             }
-            mouse_was_previously_held_down = pointerHeldDown;
+            mouseHeldDownOnLastFrame = pointerHeldDown;
         }
 
+        void FinishDrawing() {
+            print("Done.");
+            OnDrawFinished.Invoke();
+        }
 
 
         // Set the colour of pixels in a straight line from start_point all the way to end_point, to ensure everything inbetween is coloured
@@ -275,7 +301,7 @@ namespace MicroUniverse {
 
         // Changes every pixel to be the reset colour
         public void ResetCanvas() {
-
+            print("Reset");
             // Initialize clean pixels to use
             initColors = new Color[(int)drawableSprite.rect.width * (int)drawableSprite.rect.height];
             for (int x = 0; x < initColors.Length; x++) {
