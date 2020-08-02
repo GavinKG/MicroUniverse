@@ -9,6 +9,7 @@ namespace MicroUniverse {
         public KaleidoPainter painter;
         public Texture2D maskTex;
         public Shader blitMaskShader;
+        public Shader reverseShader;
 
         public RawImage debugImage;
 
@@ -36,16 +37,20 @@ namespace MicroUniverse {
         public void OnPaintClick() {
             print("Paint!");
             GenerateKaleidoTex();
-            debugImage.texture = GameManager.Instance.KaleidoTex;
-            // GameManager.Instance.SwitchLevel(GameManager.Level.Main);
+            // debugImage.texture = GameManager.Instance.KaleidoTex;
+            GameManager.Instance.SwitchLevel(GameManager.Level.Main);
         }
 
         public void GenerateKaleidoTex() {
             Material blitMat = new Material(blitMaskShader);
             blitMat.SetTexture("_MaskTex", maskTex);
-            RenderTexture rt = new RenderTexture(maskTex.width, maskTex.height, 0);
-            Graphics.Blit(painter.GetTexture(), rt, blitMat);
-            GameManager.Instance.KaleidoTex = Util.RT2Tex(rt);
+            RenderTexture rt1 = new RenderTexture(maskTex.width, maskTex.height, 0);
+            RenderTexture rt2 = new RenderTexture(maskTex.width, maskTex.height, 0);
+            Graphics.Blit(painter.GetTexture(), rt1, blitMat);
+            Graphics.Blit(rt1, rt2, new Material(reverseShader));
+            GameManager.Instance.KaleidoTex = Util.RT2Tex(rt2);
+            rt1.Release();
+            rt2.Release();
         }
     }
 

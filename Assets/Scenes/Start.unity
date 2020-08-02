@@ -962,6 +962,7 @@ MonoBehaviour:
   painter: {fileID: 329502626}
   maskTex: {fileID: 2800000, guid: f1d04b6ed96aeeb42b22901a510ab4ab, type: 3}
   blitMaskShader: {fileID: 4800000, guid: 13043864f4bfcf848bfdda55f8f250e9, type: 3}
+  reverseShader: {fileID: 4800000, guid: f8c661d513cf26645aec4a9d892fe615, type: 3}
   debugImage: {fileID: 1922571845}
   spriteRenders:
   - {fileID: 1374898170}
@@ -2009,7 +2010,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1237418558
 Transform:
   m_ObjectHideFlags: 0
@@ -2019,7 +2020,7 @@ Transform:
   m_GameObject: {fileID: 1237418557}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1.5}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 2.2966, y: 2.2966, z: 2.2966}
   m_Children: []
   m_Father: {fileID: 342204549}
   m_RootOrder: 3
@@ -2064,7 +2065,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: abb437fefd03fc543b152af2915c2ed4, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.5019608}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3082,7 +3083,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1922571844
 RectTransform:
   m_ObjectHideFlags: 0
