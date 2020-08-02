@@ -139,7 +139,7 @@ namespace MicroUniverse {
             print("Step.1: binarize, downsample." + Timestamp);
             Texture afterBinarize = Util.Binarize(source, 0.5f);
             texAfterPrepare = Util.Downsample(afterBinarize, msDownsampleRate); // should be from 1024x1024 to 128x128, stroke should be in white, background black.
-            wallMap = Util.Tex2BoolMap(texAfterPrepare, true);
+            wallMap = Util.Tex2BoolMap(texAfterPrepare, false); // borders are black...
             currResolution /= msDownsampleRate;
 
             // ----------
