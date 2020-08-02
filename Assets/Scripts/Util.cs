@@ -234,6 +234,17 @@ namespace MicroUniverse {
             v.y = (sin * tx) + (cos * ty);
             return v;
         }
+
+        public static Vector2 Mirror(this Vector2 p, Vector2 center, Vector2 directionNormalized) {
+            Vector2 centerToSelf = p - center;
+            float distance = centerToSelf.magnitude;
+            Vector2 centerToSelfDir = centerToSelf / distance; // normalized.
+            float cosTheta = Vector2.Dot(centerToSelfDir, directionNormalized);
+            float centerToMidPointDistance = cosTheta * distance;
+            Vector2 midPoint = center + directionNormalized * centerToMidPointDistance;
+            Vector2 selfToMidpoint = midPoint - p;
+            return midPoint + selfToMidpoint; // mirroring
+        }
     }
 
 

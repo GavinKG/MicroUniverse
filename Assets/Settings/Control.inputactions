@@ -20,14 +20,6 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
-                },
-                {
-                    "name": "Aim",
-                    "type": "Button",
-                    "id": "86f1a5c5-786a-41fc-88e3-05e5df4702da",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -184,116 +176,52 @@
                     "action": "Action",
                     "isComposite": false,
                     "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Draw",
+            "id": "87140278-fbd4-43fa-8dc5-d920fdc05312",
+            "actions": [
+                {
+                    "name": "PointerMove",
+                    "type": "PassThrough",
+                    "id": "304a8f82-6ebc-4b87-8b7a-df6c0521e237",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
                 },
                 {
-                    "name": "Keyboard",
-                    "id": "b7fd0eba-408a-45cf-a784-b825273cb1bc",
-                    "path": "2DVector",
+                    "name": "PointerHeldDown",
+                    "type": "Button",
+                    "id": "0c7ad016-1003-4a96-93dd-29a4fcfd1c9d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "96dff625-1f3b-4017-892e-8d2593c51b0d",
+                    "path": "<Pointer>/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Aim",
-                    "isComposite": true,
+                    "action": "PointerMove",
+                    "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Controller",
-                    "id": "96b1962a-aabf-4402-ad63-8af6495c2369",
-                    "path": "2DVector(mode=1)",
+                    "name": "",
+                    "id": "c1689c22-da69-4481-8c34-3dd2878d7c69",
+                    "path": "<Pointer>/press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Aim",
-                    "isComposite": true,
+                    "action": "PointerHeldDown",
+                    "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "f726d195-7f6f-41cd-824e-27cf93d874a6",
-                    "path": "<Gamepad>/rightStick/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Aim",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "eb9c34cc-5a9c-4741-8b4e-c9de0dd5b011",
-                    "path": "<Gamepad>/rightStick/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Aim",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "87a681e3-8a46-42bf-952b-7d42e6d6fb15",
-                    "path": "<Gamepad>/rightStick/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Aim",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "b895f4e4-53af-4042-af1e-b001f35886f7",
-                    "path": "<Gamepad>/rightStick/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Aim",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "up",
-                    "id": "1717db63-c445-48a8-a471-4604172658bc",
-                    "path": "<Keyboard>/upArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Aim",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "27c00cb4-25a7-4c6a-9d66-ca610a7dd822",
-                    "path": "<Keyboard>/downArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Aim",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "0ff92e7c-ed96-4121-922a-775bafd2eead",
-                    "path": "<Keyboard>/leftArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Aim",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "6fe570fa-a1a3-4bfa-97f1-c8c4a967e94d",
-                    "path": "<Keyboard>/rightArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Aim",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 }
             ]
         }
