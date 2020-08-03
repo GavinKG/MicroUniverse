@@ -54,10 +54,8 @@ namespace MicroUniverse {
 
         public void OnHookActionPressed(InputAction.CallbackContext context) {
             if (context.started) {
-                print("START");
                 TransitionState(State.Hooking);
             } else if (context.canceled) {
-                print("CANCEL");
                 TransitionState(State.Normal);
             }
             hooking = context.performed;
@@ -201,6 +199,9 @@ namespace MicroUniverse {
         }
 
         void Update() {
+
+            sensor.transform.position = transform.position; // drive sensor around..
+
             UpdateWorldInputDirection();
             if (currState == State.Hooking) {
                 UpdateHooking();
@@ -216,7 +217,6 @@ namespace MicroUniverse {
         }
 
         void OnTriggerEnter(Collider other) {
-            print(other.name);
             PillarProp pillarProp = other.gameObject.GetComponent<PillarProp>();
             if (pillarProp != null) {
                 pillarProp.Activate();
