@@ -24,9 +24,9 @@ TagManager:
   - Floor
   - KaleidoSprite
   - CompanionBall
-  - 
-  - 
-  - 
+  - PillarSensor
+  - MasterPillerSensor
+  - MasterPillar
   - 
   - 
   - 
