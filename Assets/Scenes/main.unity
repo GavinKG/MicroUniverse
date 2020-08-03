@@ -2369,11 +2369,15 @@ MonoBehaviour:
     - {fileID: 5405142518907150954, guid: ad03108bbe2304b43b7c6454b0efa875, type: 3}
     pillars:
     - {fileID: 6843824785612865833, guid: eb521fbf3ba8d6346be684fb5786199c, type: 3}
+    roads:
+    - {fileID: 2155393276230795328, guid: 51ef1169f5d6cfc4a8108ac113ea4f69, type: 3}
+    badBallPrefab: {fileID: 6542959102796597474, guid: 6c290ba8a34426e4394803f4e109ab19,
+      type: 3}
     buildingLMSep: 0.4
     buildingMHSep: 0.8
   propRoot: {fileID: 1002798681}
   companionSpawnRatio: 0.2
-  badPillarRatio: 0.3
+  badPillarRatio: 0.1
   aoCapturer: {fileID: 113928716}
   aoCaptureResolution: 2048
   aoResolution: 1024

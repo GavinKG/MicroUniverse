@@ -53,7 +53,7 @@ namespace MicroUniverse {
         #region Controller StateMachine
 
         private enum GameplayState {
-            None, Intro, FTUE, Playing, Outro
+            None, Intro, Playing, Outro
         }
 
         GameplayState currState = GameplayState.None;
@@ -76,17 +76,15 @@ namespace MicroUniverse {
                         currState = newState;
                     } else if (newState == GameplayState.Playing) {
                         // skip to play
-                        OnEnterPlayingState();
+                        OnFirstEnterPlayingState();
                         currState = newState;
                     }
                     break;
                 case GameplayState.Intro:
                     break;
-                case GameplayState.FTUE:
-                    break;
                 case GameplayState.Playing:
                     if (newState == GameplayState.Playing) {
-                        OnReEnterPlayingState();
+                        OnEnterPlayingState();
                         // currState = newState;
                     }
                     break;
@@ -97,22 +95,21 @@ namespace MicroUniverse {
         }
 
         void OnEnterIntroState() {
+
         }
 
-        void OnEnterFTUEState() {
-        }
-
-        void OnEnterPlayingState() {
+        void OnFirstEnterPlayingState() {
             // player first enters the whole new world...
             currRegion = StartRegion;
             regionEnterPosition = StartRegion.portals[0].PortalSpawnPosition;
-            ballGO.transform.position = regionEnterPosition;
+            OnEnterPlayingState();
         }
 
-        void OnReEnterPlayingState() {
-            // player enters another region...
+        void OnEnterPlayingState() {
+            // player enters a region...
             ballGO.GetComponent<BallController>().KillVelocity();
             ballGO.transform.position = regionEnterPosition; // a new regionEnterPosition is already being updated by GotoRegion()
+            TransitionRegionState(RegionInfo.RegionState.Dark); // try triggering uninit -> dark to init.
         }
 
         #endregion
@@ -122,7 +119,13 @@ namespace MicroUniverse {
         void TransitionRegionState(RegionInfo.RegionState newState) {
             print("Region FSM: trying to transition from " + currRegion.currState.ToString() + " to " + newState.ToString());
             switch (currRegion.currState) {
-                case RegionInfo.RegionState.Locked:
+                case RegionInfo.RegionState.Uninitialized:
+                    if (newState == RegionInfo.RegionState.Dark) {
+                        OnInitRegion();
+                        currRegion.currState = newState;
+                    }
+                    break;
+                case RegionInfo.RegionState.Dark:
                     if (newState == RegionInfo.RegionState.Unlocking) {
                         OnRegionUnlocking();
                         currRegion.currState = newState;
@@ -141,6 +144,10 @@ namespace MicroUniverse {
 
         }
 
+        void OnInitRegion() {
+            currRegion.SetBadBallsActive(true);
+        }
+
         void OnRegionUnlocking() {
             print("Region unlocking: " + currRegion.RegionID.ToString());
             // play some timeline here...
@@ -151,6 +158,7 @@ namespace MicroUniverse {
             foreach (RegionPortal regionPortal in currRegion.portals) {
                 regionPortal.SetPortalActive();
             }
+            currRegion.SetBadBallsActive(false);
         }
 
         #endregion
@@ -159,7 +167,7 @@ namespace MicroUniverse {
         #region Logic Callback
 
         public void PillarEnabled(PillarProp pillarProp) {
-            if (currRegion.currState != RegionInfo.RegionState.Locked) {
+            if (currRegion.currState != RegionInfo.RegionState.Dark) {
                 return;
             }
             ++currRegion.unlockedPillar;
@@ -167,7 +175,7 @@ namespace MicroUniverse {
         }
 
         public void PillarDisabled(PillarProp pillarProp) {
-            if (currRegion.currState != RegionInfo.RegionState.Locked) {
+            if (currRegion.currState != RegionInfo.RegionState.Dark) {
                 return;
             }
             --currRegion.unlockedPillar;

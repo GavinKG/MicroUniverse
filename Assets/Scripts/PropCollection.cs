@@ -14,6 +14,8 @@ namespace MicroUniverse {
         public List<PillarProp> pillars;
         public List<RoadProp> roads;
 
+        public GameObject badBallPrefab;
+
         [Range(0f, 1f)] public float buildingLMSep = 0.4f;
         [Range(0f, 1f)] public float buildingMHSep = 0.8f;
 

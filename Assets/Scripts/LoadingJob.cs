@@ -226,7 +226,9 @@ namespace MicroUniverse {
                 subRootGO.name = "Region #" + i.ToString();
                 GameObject propRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, subRootGO.transform);
                 propRootGO.name = "Props";
-                regionInfos[i].PlantProps(scaleFactor, propCollection, propRootGO.transform, perlinFreq, companionSpawnRatio);
+                GameObject badBallRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, subRootGO.transform);
+                badBallRootGO.name = "Bad balls";
+                regionInfos[i].PlantProps(scaleFactor, propCollection, propRootGO.transform, badBallRootGO.transform, perlinFreq, companionSpawnRatio, badPillarRatio);
             }
 
             // DebugTex(regionInfos[0].DebugTransformBackToTex(), 3);

@@ -9,130 +9,162 @@ namespace MicroUniverse {
     /// Logic:
     /// Find nearest activated pillar -> deactivate it -> find next
     /// </summary>
-    [RequireComponent(typeof(Rigidbody))]
     public class BadBallController : MonoBehaviour {
 
-        public enum State {
-            Idle, Tracing
-        }
-        public State currState = State.Tracing;
-        public Sensor sensor;
-        public float tracingForce = 2;
-        public float tracingTiredTime = 3f;
-        public float slowdownDistance = 1f;
-        public Vector2 idleTime = new Vector2(3f, 7f);
-        public LayerMask raycastIgnoreLayer;
 
 
-        Vector3 tracingPos;
-        Rigidbody rb;
-        float tracingTime;
+        public float speed = 1f;
+
+        public RoadProp currRoadProp;
+        public RoadProp targetRoadProp;
+        public float targetReachDistance = 0.05f;
+
+        public enum Direction { Up, Left, Down, Right, Invalid }
+
+        Direction currDirection = Direction.Up;
+        bool running = false;
+        float ballRadius;
 
         private void Start() {
-            rb = GetComponent<Rigidbody>();
-            // hack:
-            if (currState == State.Idle) {
-                OnIdle();
-            } else if (currState == State.Tracing) {
-                OnFindingTarget();
-            }
+            currDirection = RandomDirection();
+            ballRadius = transform.localScale.x / 2f;
         }
 
-        void Update() {
-            if (currState == State.Tracing) {
-
-                Vector3 toTracing = tracingPos - transform.position;
-                float dis = toTracing.magnitude;
-                Vector3 toTracingDir = toTracing / dis;
-                rb.AddForce(toTracingDir * tracingForce);
-                tracingTime += Time.deltaTime;
-                if (dis < slowdownDistance || tracingTime > tracingTiredTime) {
-                    TransitionState(State.Idle);
-                }
-            }
-        }
-
-        void OnTriggerEnter(Collider other) {
-            PillarProp pillarProp = other.gameObject.GetComponent<PillarProp>();
-            if (pillarProp != null && pillarProp.Activated) {
-                print("Dead pillar!");
-                pillarProp.Deactivate();
-            }
-        }
-
-        private void TransitionState(State newState) {
-            switch (newState) {
-                case State.Idle:
-                    if (currState == State.Tracing) {
-                        OnIdle();
-                        currState = newState;
-                    }
+        private Direction RandomDirection() {
+            Direction ret = Direction.Invalid;
+            int dice = Random.Range(0, 4);
+            switch (dice) {
+                case 0:
+                    ret = Direction.Up;
                     break;
-                case State.Tracing:
-                    if (currState == State.Idle) {
-                        OnFindingTarget();
-                        currState = newState;
-                    }
+                case 1:
+                    ret = Direction.Left;
+                    break;
+                case 2:
+                    ret = Direction.Down;
+                    break;
+                case 3:
+                    ret = Direction.Right;
                     break;
             }
+            return ret;
         }
 
-        private void OnFindingTarget() {
-            tracingTime = 0f;
-
-            List<GameObject> sensorGOs = sensor.GetGOInRange();
-            sensorGOs.Sort((a, b) => {
-                float disToA = Vector3.Distance(a.transform.position, transform.position);
-                float disToB = Vector3.Distance(b.transform.position, transform.position);
-                if (disToA < disToB) {
-                    return -1;
-                } else if (disToA > disToB) {
-                    return 1;
-                } else { // float!!
-                    return 0;
-                }
-            });
-            List<GameObject> activePillars = sensorGOs.Where(a => a.gameObject.GetComponent<PillarProp>().Activated).ToList();
-
-            List<GameObject> visiblePillars = new List<GameObject>();
-            foreach (GameObject go in activePillars) {
-                RaycastHit hit;
-                if (Physics.Raycast(transform.position, go.transform.position, out hit, raycastIgnoreLayer)) {
-                    if (hit.transform.gameObject == go) {
-                        visiblePillars.Add(go);
-                    }
-                }
+        private RoadProp GetRoadOnDirection(Direction direction, RoadProp currProp) {
+            RoadProp ret = null;
+            switch (direction) {
+                case Direction.Down:
+                    ret = currProp.bottom;
+                    break;
+                case Direction.Left:
+                    ret = currProp.left;
+                    break;
+                case Direction.Right:
+                    ret = currProp.right;
+                    break;
+                case Direction.Up:
+                    ret = currProp.top;
+                    break;
+                default:
+                    break;
             }
+            return ret;
+        }
 
-
-            GameObject tracingGO = null;
-
-            if (visiblePillars.Count != 0) {
-                tracingGO = visiblePillars[Random.Range(0, visiblePillars.Count)];
-                print("attacking visible pillar");
-            } else if (activePillars.Count != 0) {
-                tracingGO = activePillars[0];
-                print("attacking nearest active pillar");
+        private Direction GetDirection(RoadProp from, RoadProp to) {
+            if (from.left == to) {
+                return Direction.Left;
+            } else if (from.right == to) {
+                return Direction.Right;
+            } else if (from.top == to) {
+                return Direction.Up;
+            } else if (from.bottom == to) {
+                return Direction.Down;
             } else {
-                Vector2 randomCircle = Random.insideUnitCircle;
-                tracingPos = transform.position + new Vector3(randomCircle.x, 0f, randomCircle.y);
-                tracingTime = tracingTiredTime / 2;
-                print("Sad story: active: " + activePillars.Count.ToString() + ", visible = 0");
+                return Direction.Invalid;
             }
-
         }
 
-        private void OnIdle() {
-            float waitTime = Random.Range(idleTime.x, idleTime.y);
-            StartCoroutine(WaitAndSwitchState(waitTime, State.Tracing));
+        private Direction GetInvDirection(Direction dir) {
+            switch (dir) {
+                case Direction.Down:
+                    return Direction.Up;
+                case Direction.Left:
+                    return Direction.Right;
+                case Direction.Right:
+                    return Direction.Left;
+                case Direction.Up:
+                    return Direction.Down;
+                default:
+                    return Direction.Invalid;
+            }
         }
 
-        private IEnumerator WaitAndSwitchState(float waitTime, State newState) {
-            yield return new WaitForSeconds(waitTime);
-            TransitionState(newState);
+        private List<RoadProp> GetPossibleTarget(Direction originalDirection, RoadProp currProp) {
+            List<RoadProp> ret = new List<RoadProp>();
+            if (originalDirection != Direction.Up && GetRoadOnDirection(Direction.Down, currProp) != null) {
+                ret.Add(GetRoadOnDirection(Direction.Down, currProp));
+            }
+            if (originalDirection != Direction.Down && GetRoadOnDirection(Direction.Up, currProp) != null) {
+                ret.Add(GetRoadOnDirection(Direction.Up, currProp));
+            }
+            if (originalDirection != Direction.Right && GetRoadOnDirection(Direction.Left, currProp) != null) {
+                ret.Add(GetRoadOnDirection(Direction.Left, currProp));
+            }
+            if (originalDirection != Direction.Left && GetRoadOnDirection(Direction.Right, currProp) != null) {
+                ret.Add(GetRoadOnDirection(Direction.Right, currProp));
+            }
+            return ret;
         }
 
+        private void Update() {
 
+            if (currRoadProp == null) {
+                gameObject.SetActive(false);
+            }
+            if (targetRoadProp == null) {
+                // select a new road prop to march.
+                List<RoadProp> possible = GetPossibleTarget(currDirection, currRoadProp);
+
+                if (possible.Count != 0) {
+                    // has way to go
+                    int dice = Random.Range(0, possible.Count);
+                    targetRoadProp = possible[dice];
+                    currDirection = GetDirection(currRoadProp, targetRoadProp);
+                } else {
+                    // dead end, return back
+                    currDirection = GetInvDirection(currDirection);
+                    targetRoadProp = GetRoadOnDirection(currDirection, currRoadProp);
+                    if (targetRoadProp == null) {
+                        running = false; // trapped??
+                    }
+                }
+            } else {
+                // marching
+                Vector3 targetPos = targetRoadProp.transform.position;
+                Vector3 selfPos = currRoadProp.transform.position;
+                Vector3 toTargetDir = (targetPos - selfPos).normalized;
+
+                float d = Vector3.Distance(transform.position, targetPos);
+                if (d < targetReachDistance + ballRadius) {
+                    // on target:
+                    currRoadProp = targetRoadProp;
+                    targetRoadProp = null;
+
+                    PillarProp pillarProp = currRoadProp.GetComponent<PillarProp>();
+                    if (pillarProp != null) {
+                        pillarProp.Deactivate();
+                    }
+
+                } else {
+                    Vector3 pos = transform.position;
+                    Vector3 newPos = pos + toTargetDir * speed * Time.deltaTime;
+                    newPos.y = ballRadius;
+                    transform.position = newPos;
+                }
+
+            }
+        }
 
     }
 

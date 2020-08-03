@@ -62,7 +62,9 @@ namespace MicroUniverse {
         }
 
         public void KillVelocity() {
-            rb.velocity = Vector3.zero;
+            if (rb != null) {
+                rb.velocity = Vector3.zero;
+            }
         }
 
 
