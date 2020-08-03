@@ -64,6 +64,7 @@ MonoBehaviour:
   compensateScale: 0
   meshesToTransform: []
   maskParticle: {fileID: 1097265825389532462}
+  companionBallCount: 1
 --- !u!1 &8918353316660073873
 GameObject:
   m_ObjectHideFlags: 0

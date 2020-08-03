@@ -20,9 +20,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Ball
+  m_Name: CompanionBall
   m_Shader: {fileID: 4800000, guid: 9196e996c691c71408c187724b2d3ec3, type: 3}
-  m_ShaderKeywords: _EMISSION_ON _SPECULAR_ON _VERTICALAO_ON
+  m_ShaderKeywords: _SPECULAR_ON _VERTICALAO_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -84,7 +84,7 @@ Material:
     - _DiffuseUseFourGrid: 0
     - _DiffuseUseTex: 0
     - _DstBlend: 0
-    - _Emission: 1
+    - _Emission: 0
     - _EnvironmentReflections: 1
     - _FlattenHalfLambert: 0
     - _FlipNormal: 0
@@ -118,8 +118,8 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Diffuse: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 0}
-    - _EmissionColor: {r: 0.022053624, g: 0, b: 0.6698113, a: 1}
+    - _Diffuse: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 0}
+    - _EmissionColor: {r: 0, g: 0.17796607, b: 0.3962264, a: 1}
     - _NE: {r: 0, g: 0, b: 0, a: 0}
     - _NW: {r: 0, g: 0, b: 0, a: 0}
     - _ObjectCenterWS: {r: 0, g: 0, b: 0, a: 0}

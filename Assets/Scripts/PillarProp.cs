@@ -9,10 +9,10 @@ namespace MicroUniverse {
 
         public GameObject maskParticle;
 
-        bool activated = false;
+        public bool Activated { get; private set; } = false;
 
         protected virtual void OnTriggerEnter(Collider other) {
-            if (!activated) {
+            if (!Activated) {
 
                 GameObject go = other.gameObject;
                 //TODO: 
@@ -24,7 +24,7 @@ namespace MicroUniverse {
                 MainGameplayController controller = GameManager.Instance.CurrController as MainGameplayController;
                 controller.PillarEnabled(this);
 
-                activated = true;
+                Activated = true;
             }
 
         }

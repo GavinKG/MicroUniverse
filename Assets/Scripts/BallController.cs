@@ -18,18 +18,21 @@ namespace MicroUniverse {
         public float hookDistance = 0.5f;
         public float hookedSpeedBoost = 1f;
         public Sensor sensor;
+        public GameObject companionPrefab;
+        public Transform companionRoot;
+        public float companionDelay = 0.1f;
+        public float companionGenInterval = 0.1f;
 
 
 
-
-        public Vector3 GravityDirection { get { return gravityDirection; } }
+        public Vector3 GravityDirection { get; private set; }
+        public Vector3 GravityForce { get; private set; }
 
         // Input related:
         Vector2 inputMovementAxis;
         Vector3 worldMovementDirection;
         bool hooking = false;
-
-        Vector3 gravityDirection;
+        
         Vector3 lastLegalGravityDirection = Vector3.down;
 
         Rigidbody rb;
@@ -124,15 +127,25 @@ namespace MicroUniverse {
 
         private void OnRelease() {
             rb.isKinematic = false;
-            
+
+            Vector3 outVelocityDir;
             if (inputMovementAxis.x == 0 && inputMovementAxis.y == 0) {
                 // along toHookingPillarDir
-                rb.velocity = toHookingPillarDir * hookingSpeed;
-                print("No input...");
+                outVelocityDir = toHookingPillarDir;
             } else {
-                rb.velocity = worldMovementDirection * hookingSpeed;
-                print("Has input...hooking speed = " + rb.velocity.ToString());
+                outVelocityDir = worldMovementDirection;
+            }
+            Vector3 outVelocity = outVelocityDir * hookingSpeed;
+            rb.velocity = outVelocity;
 
+            // Companion ball:
+            MasterPillarProp masterPillar = hookedPillarGO.GetComponent<MasterPillarProp>();
+            if (!masterPillar.CompanionSpawned) {
+                int companionCount = hookedPillarGO.GetComponent<MasterPillarProp>().companionBallCount;
+                if (companionCount != 0) {
+                    StartCoroutine(WaitAndGenCompanion(companionCount, hookedPillarGO.transform.position, outVelocity));
+                }
+                masterPillar.SetCompanionBallSpawned();
             }
 
             collider.enabled = true;
@@ -140,6 +153,9 @@ namespace MicroUniverse {
             hookedPillarGO = null;
             hookingSpeed = 0;
             toHookingPillarDir = Vector3.zero;
+
+
+            
             print("Ball released");
         }
 
@@ -157,6 +173,17 @@ namespace MicroUniverse {
             hookingSpeed = 0;
             toHookingPillarDir = Vector3.zero;
 
+        }
+
+        private IEnumerator WaitAndGenCompanion(int count, Vector3 pos, Vector3 velocity) {
+            yield return new WaitForSeconds(companionDelay);
+            for (int i = 0; i < count; ++i) {
+                GameObject companion = Instantiate(companionPrefab, pos, Quaternion.identity, companionRoot);
+                Rigidbody rb = companion.GetComponent<Rigidbody>();
+                rb.velocity = velocity;
+                yield return new WaitForSeconds(companionGenInterval);
+            }
+            yield return null;
         }
 
 
@@ -232,12 +259,12 @@ namespace MicroUniverse {
                 } else if (z < -maxTiltDistance) {
                     z = -maxTiltDistance;
                 }
-                gravityDirection = new Vector3(x, y, z).normalized;
+                GravityDirection = new Vector3(x, y, z).normalized;
             } else {
-                gravityDirection = new Vector3(worldMovementDirection.x * maxTiltDistance, -1, worldMovementDirection.z * maxTiltDistance).normalized;
+                GravityDirection = new Vector3(worldMovementDirection.x * maxTiltDistance, -1, worldMovementDirection.z * maxTiltDistance).normalized;
             }
-            Vector3 force = gravityDirection * 9.8f;
-            rb.AddForce(force);
+            GravityForce = GravityDirection * 9.8f;
+            rb.AddForce(GravityForce);
         }
     }
 }
