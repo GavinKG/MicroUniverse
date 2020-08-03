@@ -17,14 +17,16 @@ namespace MicroUniverse {
         public float hookingSpeedIncrease = 5f;
         public float hookDistance = 0.5f;
         public float hookedSpeedBoost = 1f;
+        public float maxReleaseSpeed = 15f;
         public Sensor sensor;
         public GameObject companionPrefab;
         public Transform companionRoot;
         public float companionDelay = 0.1f;
         public float companionGenInterval = 0.1f;
         public float damageSpeed = 10f;
+        public GameObject indicator;
 
-
+        public Text debugSpeedText;
 
         public Vector3 GravityDirection { get; private set; }
         public Vector3 GravityForce { get; private set; }
@@ -138,7 +140,7 @@ namespace MicroUniverse {
             } else {
                 outVelocityDir = worldMovementDirection;
             }
-            Vector3 outVelocity = outVelocityDir * hookingSpeed;
+            Vector3 outVelocity = outVelocityDir * Mathf.Min(hookingSpeed, maxReleaseSpeed);
             rb.velocity = outVelocity;
 
             // Companion ball:
@@ -189,6 +191,21 @@ namespace MicroUniverse {
             yield return null;
         }
 
+        void UpdateIndicator() {
+            if (currState == State.Hooked) {
+                if (inputMovementAxis.x == 0 && inputMovementAxis.y == 0) {
+                    indicator.SetActive(false);
+                } else {
+                    indicator.SetActive(true);
+                    indicator.transform.position = transform.position;
+                    Quaternion rot = Quaternion.LookRotation(worldMovementDirection);
+                    indicator.transform.rotation = rot;
+                }
+            } else {
+                indicator.SetActive(false);
+            }
+        }
+
 
 
         // Start is called before the first frame update
@@ -210,8 +227,10 @@ namespace MicroUniverse {
                 UpdateHooking();
             }
 
+            UpdateIndicator();
 
-            print(rb.velocity.magnitude);
+            debugSpeedText.text = "Speed: " + rb.velocity.magnitude.ToString();
+
         }
 
         void FixedUpdate() {

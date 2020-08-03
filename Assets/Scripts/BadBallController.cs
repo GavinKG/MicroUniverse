@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Cinemachine;
 
 namespace MicroUniverse {
 
@@ -13,26 +14,32 @@ namespace MicroUniverse {
 
 
 
-        public float speed = 1f;
+        public Vector2 speedRange = new Vector2(1f, 3f);
 
         public RoadProp currRoadProp;
         public RoadProp targetRoadProp;
         public float targetReachDistance = 0.05f;
+
+        CinemachineImpulseSource impulseSource;
 
         public enum Direction { Up, Left, Down, Right, Invalid }
 
         Direction currDirection = Direction.Up;
         bool running = false;
         float ballRadius;
+        private float speed;
 
         public void Die() {
             // TODO: explode!
+            impulseSource.GenerateImpulse();
             Destroy(gameObject);
         }
 
         private void Start() {
             currDirection = RandomDirection();
             ballRadius = transform.localScale.x / 2f;
+            speed = Random.Range(speedRange.x, speedRange.y);
+            impulseSource = GetComponent<CinemachineImpulseSource>();
         }
 
         private Direction RandomDirection() {

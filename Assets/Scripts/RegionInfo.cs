@@ -7,12 +7,12 @@ namespace MicroUniverse {
     public class RegionInfo : IGraphNode {
 
         // ID rules:
-        const int id_empty = 0;
-        const int id_road = 1;
-        const int id_pillarRoad = 2;
-        const int id_masterPillarRoad = 3;
-        const int id_wall = 4;
-        const int id_building = 5;
+        const byte id_empty = 0;
+        const byte id_road = 1;
+        const byte id_pillarRoad = 2;
+        const byte id_masterPillarRoad = 3;
+        const byte id_wall = 4;
+        const byte id_building = 5;
 
         // ------------ PUBLIC PROPERTIES:
 
@@ -224,11 +224,16 @@ namespace MicroUniverse {
                 }
             }
 
-            // Step.3: change crossroad-pillar to id_crossroad, for spawning master pillar (a kind of pillar that spit out multiple balls..)
+            // Step.3: change crossroad-pillar to id_masterPillarRoad, for spawning master pillar (a kind of pillar that spit out multiple balls..)
             for (int x = 0; x < flattenedMapWidth; ++x) {
                 for (int y = 0; y < flattenedMapHeight; ++y) {
-                    if (FlattenedMapId[x, y] == id_pillarRoad && CountSurroundingRoad(FlattenedMapId, x, y) == 4) {
-                        FlattenedMapId[x, y] = id_masterPillarRoad;
+                    if (FlattenedMapId[x, y] == id_pillarRoad) {
+                        int counter = CountSurroundingRoad(FlattenedMapId, x, y);
+                        if (counter  == 4) {
+                            FlattenedMapId[x, y] = id_masterPillarRoad;
+                        } else if (counter == 3) {
+                            FlattenedMapId[x, y] = Random.Range(0f, 1f) > 0.5f ? id_masterPillarRoad : id_pillarRoad; // half-half
+                        }
                     }
                 }
             }

@@ -22,7 +22,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: BadBall
   m_Shader: {fileID: 4800000, guid: 9196e996c691c71408c187724b2d3ec3, type: 3}
-  m_ShaderKeywords: _EMISSION_ON _SPECULAR_ON _VERTICALAO_ON
+  m_ShaderKeywords: _DARKMASK_ON _EMISSION_ON _SPECULAR_ON _VERTICALAO_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -79,7 +79,7 @@ Material:
     - _BumpScale: 1
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DarkMask: 0
+    - _DarkMask: 1
     - _DarkenDiffuseGrayscale: 0.05
     - _DiffuseUseFourGrid: 0
     - _DiffuseUseTex: 0
@@ -118,8 +118,8 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Diffuse: {r: 0.08632374, g: 0, b: 1, a: 0}
-    - _EmissionColor: {r: 1, g: 0, b: 0.008162975, a: 1}
+    - _Diffuse: {r: 0.8396226, g: 0, b: 0, a: 0}
+    - _EmissionColor: {r: 0, g: 0.0323883, b: 0.16037738, a: 1}
     - _NE: {r: 0, g: 0, b: 0, a: 0}
     - _NW: {r: 0, g: 0, b: 0, a: 0}
     - _ObjectCenterWS: {r: 0, g: 0, b: 0, a: 0}
