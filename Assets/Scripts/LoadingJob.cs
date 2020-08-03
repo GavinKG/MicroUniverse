@@ -46,6 +46,7 @@ namespace MicroUniverse {
         public PropCollection propCollection;
         public Transform propRoot;
         [Range(0f, 1f)] public float companionSpawnRatio = 0.4f;
+        [Range(0f, 1f)] public float badPillarRatio = 0.3f;
 
         [Header("Step.8 AO")]
         public CaptureOverviewMask aoCapturer;

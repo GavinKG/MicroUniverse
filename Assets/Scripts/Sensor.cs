@@ -10,36 +10,40 @@ namespace MicroUniverse {
     [RequireComponent(typeof(Collider))]
     public class Sensor : MonoBehaviour {
 
-        [HideInInspector]
-        public List<GameObject> InRangeGOs { get; private set; } = new List<GameObject>();
+        List<GameObject> inRangeGOs = new List<GameObject>();
 
         private void OnTriggerEnter(Collider other) {
-            InRangeGOs.Add(other.gameObject);
+            print("sensoring...");
+            inRangeGOs.Add(other.gameObject);
         }
 
         private void OnTriggerExit(Collider other) {
-            InRangeGOs.Remove(other.gameObject);
+            inRangeGOs.Remove(other.gameObject);
 
         }
 
         public void ClearInRangeList() {
-            InRangeGOs.Clear();
+            inRangeGOs.Clear();
         }
 
-        public GameObject getNearestGO() {
-            if (InRangeGOs.Count == 0) {
+        public GameObject GetNearestGO() {
+            if (inRangeGOs.Count == 0) {
                 return null;
             }
             float minSqrDis = float.MaxValue;
             int minIndex = 0;
-            for (int i = 0; i  < InRangeGOs.Count; ++i) {
-                float d = (transform.position - InRangeGOs[i].transform.position).sqrMagnitude;
+            for (int i = 0; i  < inRangeGOs.Count; ++i) {
+                float d = (transform.position - inRangeGOs[i].transform.position).sqrMagnitude;
                 if (d < minSqrDis) {
                     minSqrDis = d;
                     minIndex = i;
                 }
             }
-            return InRangeGOs[minIndex];
+            return inRangeGOs[minIndex];
+        }
+
+        public List<GameObject> GetGOInRange() {
+            return new List<GameObject>(inRangeGOs); // shallow copy.
         }
     }
 

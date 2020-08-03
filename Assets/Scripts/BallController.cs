@@ -115,7 +115,7 @@ namespace MicroUniverse {
         }
 
         private bool OnHooking() {
-            hookedPillarGO = sensor.getNearestGO();
+            hookedPillarGO = sensor.GetNearestGO();
             if (hookedPillarGO == null) {
                 return false;
             }
@@ -213,6 +213,14 @@ namespace MicroUniverse {
                 UpdateGravity();
             }
             
+        }
+
+        void OnTriggerEnter(Collider other) {
+            print(other.name);
+            PillarProp pillarProp = other.gameObject.GetComponent<PillarProp>();
+            if (pillarProp != null) {
+                pillarProp.Activate();
+            }
         }
 
         void UpdateHooking() {

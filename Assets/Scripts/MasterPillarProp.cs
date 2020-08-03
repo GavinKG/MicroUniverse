@@ -13,10 +13,7 @@ namespace MicroUniverse {
         public void SetCompanionBallSpawned() {
             CompanionSpawned = true;
         }
-
-        protected override void OnTriggerEnter(Collider other) {
-            base.OnTriggerEnter(other);
-        }
+        
     }
 
 }

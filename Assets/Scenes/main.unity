@@ -646,7 +646,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4177719
+    m_Bits: 8372023
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1414,11 +1414,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8996153153341454447}
     m_Modifications:
-    - target: {fileID: 4037942498292595440, guid: fff84ab400f095041bcfbf61ebba5ade,
-        type: 3}
-      propertyPath: useRigidbodyForVelocity
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4235297873771925388, guid: fff84ab400f095041bcfbf61ebba5ade,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2378,6 +2373,7 @@ MonoBehaviour:
     buildingMHSep: 0.8
   propRoot: {fileID: 1002798681}
   companionSpawnRatio: 0.2
+  badPillarRatio: 0.3
   aoCapturer: {fileID: 113928716}
   aoCaptureResolution: 2048
   aoResolution: 1024
@@ -3172,7 +3168,7 @@ MonoBehaviour:
   maxTiltDistance: 0.3
   hookingSpeedIncrease: 5
   hookDistance: 0.2
-  hookedSpeedBoost: 8
+  hookedSpeedBoost: 6
   sensor: {fileID: 1451609196}
   companionPrefab: {fileID: 9146328909615682929, guid: 35eef2bf31d39554a928436bc03c9833,
     type: 3}

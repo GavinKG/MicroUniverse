@@ -18,6 +18,13 @@ namespace MicroUniverse {
             rb.AddForce(ballController.GravityForce);
         }
 
+        void OnTriggerEnter(Collider other) {
+            PillarProp pillarProp = other.gameObject.GetComponent<PillarProp>();
+            if (pillarProp != null) {
+                pillarProp.Activate();
+            }
+        }
+
     }
 
 }
