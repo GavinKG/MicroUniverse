@@ -22,6 +22,7 @@ namespace MicroUniverse {
         public Transform companionRoot;
         public float companionDelay = 0.1f;
         public float companionGenInterval = 0.1f;
+        public float damageSpeed = 10f;
 
 
 
@@ -208,7 +209,9 @@ namespace MicroUniverse {
             if (currState == State.Hooking) {
                 UpdateHooking();
             }
-            
+
+
+            print(rb.velocity.magnitude);
         }
 
         void FixedUpdate() {
@@ -223,6 +226,18 @@ namespace MicroUniverse {
             if (pillarProp != null) {
                 pillarProp.Activate();
             }
+        }
+
+        private void OnCollisionEnter(Collision collision) {
+            GameObject otherGO = collision.transform.gameObject;
+
+            BadBallController badBallController = otherGO.GetComponent<BadBallController>();
+            if (badBallController != null) {
+                if (rb.velocity.magnitude > damageSpeed) {
+                    badBallController.Die();
+                }
+            }
+
         }
 
         void UpdateHooking() {

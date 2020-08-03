@@ -25,6 +25,11 @@ namespace MicroUniverse {
         bool running = false;
         float ballRadius;
 
+        public void Die() {
+            // TODO: explode!
+            Destroy(gameObject);
+        }
+
         private void Start() {
             currDirection = RandomDirection();
             ballRadius = transform.localScale.x / 2f;

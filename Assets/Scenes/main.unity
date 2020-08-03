@@ -2377,7 +2377,7 @@ MonoBehaviour:
     buildingMHSep: 0.8
   propRoot: {fileID: 1002798681}
   companionSpawnRatio: 0.2
-  badPillarRatio: 0.1
+  badPillarRatio: 0.05
   aoCapturer: {fileID: 113928716}
   aoCaptureResolution: 2048
   aoResolution: 1024
@@ -3179,6 +3179,7 @@ MonoBehaviour:
   companionRoot: {fileID: 931227873}
   companionDelay: 0.2
   companionGenInterval: 0.1
+  damageSpeed: 10
 --- !u!135 &8996153153341454440
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3267,7 +3268,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 3
 --- !u!33 &8996153153341454446
 MeshFilter:
   m_ObjectHideFlags: 0

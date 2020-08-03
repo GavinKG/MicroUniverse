@@ -13,7 +13,6 @@ namespace MicroUniverse {
         List<GameObject> inRangeGOs = new List<GameObject>();
 
         private void OnTriggerEnter(Collider other) {
-            print("sensoring...");
             inRangeGOs.Add(other.gameObject);
         }
 
