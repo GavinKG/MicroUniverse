@@ -186,7 +186,6 @@ namespace MicroUniverse {
         #endregion
 
         void CheckPillarStatus() {
-            print("Curr region unlock rate: " + (currRegion.unlockedPillar / (currRegion.PillarCount * pillarUnlockToSuccessRate)).ToString());
             if (currRegion.PillarCount * pillarUnlockToSuccessRate <= currRegion.unlockedPillar) {
 
                 UnlockCurrRegion();

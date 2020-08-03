@@ -54,8 +54,10 @@ namespace MicroUniverse {
 
         public void OnHookActionPressed(InputAction.CallbackContext context) {
             if (context.started) {
+                print("START");
                 TransitionState(State.Hooking);
             } else if (context.canceled) {
+                print("CANCEL");
                 TransitionState(State.Normal);
             }
             hooking = context.performed;
