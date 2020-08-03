@@ -9,8 +9,8 @@ namespace MicroUniverse {
         // ID rules:
         const int id_empty = 0;
         const int id_road = 1;
-        const int id_pillar = 2;
-        const int id_crossroad = 3; // crossroad must have a super-pillar
+        const int id_pillarRoad = 2;
+        const int id_masterPillarRoad = 3;
         const int id_wall = 4;
         const int id_building = 5;
 
@@ -48,6 +48,7 @@ namespace MicroUniverse {
         public bool[,] SubMap { get; private set; } // clipped filled region area.
         public bool[,] FlattenedMap { get; private set; }// flattened clipped filled region area. true = ground, false = wall
         public byte[,] FlattenedMapId { get; private set; } // flattened region with prop_id, see id rules below...
+        public CityProp[,] PropMap { get; private set; }
 
         private Texture2D mapTex;
         public Texture2D MapTex {
@@ -81,9 +82,12 @@ namespace MicroUniverse {
 
         public int PillarCount { get; private set; } = 0;
         public int MasterPillarCount { get; private set; } = 0;
-        public int BuildingCount { get; private set; } = 0;
+        public List<BuildingProp> buildings;
+        public int BuildingCount { get { return buildingProps?.Count ?? -1; } }
         public int RoadCount { get; private set; } = 0;
         public int AllPillarCount { get { return PillarCount + MasterPillarCount; } }
+
+        public List<BuildingProp> buildingProps;
 
         // debug:
         // public Texture2D debugTex1;
@@ -181,8 +185,8 @@ namespace MicroUniverse {
             // Debug.Log(Util.ByteMapWithSingleDigitToString(FlattenedMapWFC));
             HashSet<int> maskSet = new HashSet<int> {
                 id_road,
-                id_crossroad,
-                id_pillar
+                id_masterPillarRoad,
+                id_pillarRoad
             };
             // debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
         }
@@ -215,31 +219,43 @@ namespace MicroUniverse {
             // Step.3: change crossroad-pillar to id_crossroad, for spawning master pillar (a kind of pillar that spit out multiple balls..)
             for (int x = 0; x < flattenedMapWidth; ++x) {
                 for (int y = 0; y < flattenedMapHeight; ++y) {
-                    if (FlattenedMapId[x, y] == id_pillar && CountSurroundingRoad(FlattenedMapId, x, y) == 4) {
-                        FlattenedMapId[x, y] = id_crossroad;
+                    if (FlattenedMapId[x, y] == id_pillarRoad && CountSurroundingRoad(FlattenedMapId, x, y) == 4) {
+                        FlattenedMapId[x, y] = id_masterPillarRoad;
                     }
                 }
             }
 
             // Step.4: place actual props:
-            List<CityProp> spawnedList = new List<CityProp>();
+            // List<CityProp> spawnedList = new List<CityProp>();
+            
+            PropMap = new CityProp[width, height];
+            buildingProps = new List<BuildingProp>();
+            RoadProp[,] roadPropMap = new RoadProp[width, height];
             for (int x = 0; x < width; ++x) {
                 for (int y = 0; y < height; ++y) {
                     GameObject spawned = null;
                     switch (FlattenedMapId[x, y]) {
-                        case id_crossroad:
+                        case id_masterPillarRoad:
                             spawned = GameObject.Instantiate(collection.GetMasterPillarPrefab(), Vector3.zero, Quaternion.identity);
                             MasterPillarProp masterPillarProp = spawned.GetComponent<MasterPillarProp>();
                             masterPillarProp.companionBallCount = Random.Range(0f, 1f) < companionSpawnRatio ? 1 : 0;
+                            roadPropMap[x, y] = masterPillarProp;
                             ++MasterPillarCount;
                             break;
                         case id_building:
                             spawned = SpawnBuilding(FlattenedMapId, x, y);
-                            ++BuildingCount;
+                            buildingProps.Add(spawned.GetComponent<BuildingProp>()); // used by the big boss
                             break;
-                        case id_pillar:
+                        case id_pillarRoad:
                             spawned = GameObject.Instantiate(collection.GetPillarPrefab(), Vector3.zero, Quaternion.identity);
+                            PillarProp pillarProp = spawned.GetComponent<PillarProp>();
+                            roadPropMap[x, y] = pillarProp;
                             ++PillarCount;
+                            break;
+                        case id_road:
+                            spawned = GameObject.Instantiate(collection.GetRoadPrefab(), Vector3.zero, Quaternion.identity);
+                            RoadProp roadProp = spawned.GetComponent<RoadProp>();
+                            roadPropMap[x, y] = roadProp;
                             break;
                         case id_empty:
                             spawned = GameObject.Instantiate(collection.GetEmptyPrefab(), Vector3.zero, Quaternion.identity);
@@ -254,64 +270,87 @@ namespace MicroUniverse {
 
                     spawned.transform.position = new Vector3(x, 0, y);
                     spawned.transform.SetParent(propRoot);
-                    spawnedList.Add(spawned.GetComponent<CityProp>());
+                    PropMap[x, y] = spawned.GetComponent<CityProp>();
 
                 }
             }
 
-            // Step.5: transform back:
-            foreach (CityProp prop in spawnedList) {
 
-                // 1: Prepare per-vertex transform to world position
-                List<Vector3[]> tempRingPosVerts = new List<Vector3[]>(prop.meshesToTransform.Count);
-                for (int i = 0; i < prop.meshesToTransform.Count; ++i) {
-                    Vector3[] modelVerts = prop.meshesToTransform[i].sharedMesh.vertices;
-                    for (int j = 0; j < modelVerts.Length; ++j) {
-                        modelVerts[j] = prop.meshesToTransform[i].transform.TransformPoint(modelVerts[j]); // pre-process: local position -> flattenmap coord (also current world coord)
-                        modelVerts[j] = TransformBack(modelVerts[j]); // flattenmap coord -> ring coord
-                        modelVerts[j] = new Vector3(modelVerts[j].x - fillResult.MapWidth / 2, modelVerts[j].y, modelVerts[j].z - fillResult.MapHeight / 2); // filled map -> actual world pos
-                        modelVerts[j] *= scaleFactor;
+            // Step.5: transform back
+            for (int x = 0; x < width; ++x) {
+                for (int y = 0; y < height; ++y) {
+
+                    CityProp prop = PropMap[x, y];
+
+                    // 1: Prepare per-vertex transform to world position
+                    List<Vector3[]> tempRingPosVerts = new List<Vector3[]>(prop.meshesToTransform.Count);
+                    for (int i = 0; i < prop.meshesToTransform.Count; ++i) {
+                        Vector3[] modelVerts = prop.meshesToTransform[i].sharedMesh.vertices;
+                        for (int j = 0; j < modelVerts.Length; ++j) {
+                            modelVerts[j] = prop.meshesToTransform[i].transform.TransformPoint(modelVerts[j]); // pre-process: local position -> flattenmap coord (also current world coord)
+                            modelVerts[j] = TransformBack(modelVerts[j]); // flattenmap coord -> ring coord
+                            modelVerts[j] = new Vector3(modelVerts[j].x - fillResult.MapWidth / 2, modelVerts[j].y, modelVerts[j].z - fillResult.MapHeight / 2); // filled map -> actual world pos
+                            modelVerts[j] *= scaleFactor;
+                        }
+                        tempRingPosVerts.Add(modelVerts);
                     }
-                    tempRingPosVerts.Add(modelVerts);
-                }
 
-                // 2. Transform prop root pos/rot
-                Vector3 propOriginalPos = prop.transform.position;
-                Vector3 propOriginalPosForwardOne = prop.transform.TransformPoint(Vector3.forward); // move towards +Z for one unit.
+                    // 2. Transform prop root pos/rot
+                    Vector3 propOriginalPos = prop.transform.position;
+                    Vector3 propOriginalPosForwardOne = prop.transform.TransformPoint(Vector3.forward); // move towards +Z for one unit.
 
-                Vector3 propFilledBoolmapPos = TransformBack(propOriginalPos);
-                Vector3 propFilledBoolmapPosForwardOne = TransformBack(propOriginalPosForwardOne);
+                    Vector3 propFilledBoolmapPos = TransformBack(propOriginalPos);
+                    Vector3 propFilledBoolmapPosForwardOne = TransformBack(propOriginalPosForwardOne);
 
-                if (prop.compensateScale) {
-                    Vector3 propOriginalPosRightOne = prop.transform.position + Vector3.right; // move towards +X for one unit.
-                    Vector3 propFilledBoolmapPosRightOne = TransformBack(propOriginalPosRightOne);
-                    float forwardOneDistance = Vector3.Distance(propFilledBoolmapPos, propFilledBoolmapPosForwardOne);
-                    float rightOneDistance = Vector3.Distance(propFilledBoolmapPos, propFilledBoolmapPosRightOne);
-                    prop.transform.localScale = new Vector3(rightOneDistance, 1f, forwardOneDistance); // scale compensation
-                }
-
-
-                Vector3 propWorldPos = new Vector3(propFilledBoolmapPos.x - fillResult.MapWidth / 2, propFilledBoolmapPos.y, propFilledBoolmapPos.z - fillResult.MapHeight / 2);
-                Vector3 propWorldPosForwardOne = new Vector3(propFilledBoolmapPosForwardOne.x - fillResult.MapWidth / 2, propFilledBoolmapPosForwardOne.y, propFilledBoolmapPosForwardOne.z - fillResult.MapHeight / 2);
-                //Vector3 propWorldPosRightOne = new Vector3(propOriginalPosRightOne.x - fillResult.MapWidth / 2 , propOriginalPosRightOne.y, propOriginalPosRightOne.z - fillResult.MapHeight / 2);
-
-                propWorldPos *= scaleFactor;
-                propWorldPosForwardOne *= scaleFactor;
-                prop.transform.position = propWorldPos;
-                prop.transform.LookAt(propWorldPosForwardOne);
-
-                // 3. Transform vertex position from world to already transformed local
-                for (int i = 0; i < prop.meshesToTransform.Count; ++i) {
-                    Vector3[] verts = tempRingPosVerts[i];
-                    for (int j = 0; j < verts.Length; ++j) {
-                        verts[j] = prop.meshesToTransform[i].transform.InverseTransformPoint(verts[j]); // post-process: world (ring) position -> local position (with newly placed root)
+                    if (prop.compensateScale) {
+                        Vector3 propOriginalPosRightOne = prop.transform.position + Vector3.right; // move towards +X for one unit.
+                        Vector3 propFilledBoolmapPosRightOne = TransformBack(propOriginalPosRightOne);
+                        float forwardOneDistance = Vector3.Distance(propFilledBoolmapPos, propFilledBoolmapPosForwardOne);
+                        float rightOneDistance = Vector3.Distance(propFilledBoolmapPos, propFilledBoolmapPosRightOne);
+                        prop.transform.localScale = new Vector3(rightOneDistance, 1f, forwardOneDistance); // scale compensation
                     }
-                    prop.meshesToTransform[i].mesh.SetVertices(verts);
-                    prop.meshesToTransform[i].mesh.RecalculateNormals();
-                    prop.meshesToTransform[i].mesh.RecalculateBounds();
+
+
+                    Vector3 propWorldPos = new Vector3(propFilledBoolmapPos.x - fillResult.MapWidth / 2, propFilledBoolmapPos.y, propFilledBoolmapPos.z - fillResult.MapHeight / 2);
+                    Vector3 propWorldPosForwardOne = new Vector3(propFilledBoolmapPosForwardOne.x - fillResult.MapWidth / 2, propFilledBoolmapPosForwardOne.y, propFilledBoolmapPosForwardOne.z - fillResult.MapHeight / 2);
+                    //Vector3 propWorldPosRightOne = new Vector3(propOriginalPosRightOne.x - fillResult.MapWidth / 2 , propOriginalPosRightOne.y, propOriginalPosRightOne.z - fillResult.MapHeight / 2);
+
+                    propWorldPos *= scaleFactor;
+                    propWorldPosForwardOne *= scaleFactor;
+                    prop.transform.position = propWorldPos;
+                    prop.transform.LookAt(propWorldPosForwardOne);
+
+                    // 3. Transform vertex position from world to already transformed local
+                    for (int i = 0; i < prop.meshesToTransform.Count; ++i) {
+                        Vector3[] verts = tempRingPosVerts[i];
+                        for (int j = 0; j < verts.Length; ++j) {
+                            verts[j] = prop.meshesToTransform[i].transform.InverseTransformPoint(verts[j]); // post-process: world (ring) position -> local position (with newly placed root)
+                        }
+                        prop.meshesToTransform[i].mesh.SetVertices(verts);
+                        prop.meshesToTransform[i].mesh.RecalculateNormals();
+                        prop.meshesToTransform[i].mesh.RecalculateBounds();
+                    }
                 }
+            }
 
+            // Step.6 construct road network:
+            for (int x = 0; x < width; ++x) {
+                for (int y = 0; y < height; ++y) {
+                    RoadProp roadProp = roadPropMap[x, y];
 
+                    if (x != 0) {
+                        roadProp.left = roadPropMap[x - 1, y];
+                    }
+                    if (x != width - 1) {
+                        roadProp.right = roadPropMap[x + 1, y];
+                    }
+                    if (y != 0) {
+                        roadProp.top = roadPropMap[x, y - 1];
+                    }
+                    if (y != height - 1) {
+                        roadProp.bottom = roadPropMap[x, y + 1];
+                    }
+                }
             }
 
         }
@@ -420,7 +459,7 @@ namespace MicroUniverse {
         }
 
         bool IsRoad(byte id) {
-            return id == id_road || id == id_crossroad || id == id_pillar;
+            return id == id_road || id == id_masterPillarRoad || id == id_pillarRoad;
         }
 
         bool IsRoad(byte[,] map, int x, int y) {
@@ -428,7 +467,8 @@ namespace MicroUniverse {
             return IsRoad(map[x, y]);
         }
 
-        bool IsOutside(byte[,] map, int x, int y) {
+        
+        bool IsOutside<T>(T[,] map, int x, int y) {
             return x < 0 || x >= map.GetLength(0) || y < 0 || y >= map.GetLength(1);
         }
 

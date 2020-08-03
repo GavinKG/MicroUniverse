@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MicroUniverse {
 
     [RequireComponent(typeof(Collider))]
-    public class PillarProp : CityProp {
+    public class PillarProp : RoadProp {
 
         public GameObject maskParticle;
 

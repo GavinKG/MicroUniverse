@@ -12,6 +12,7 @@ namespace MicroUniverse {
         public List<MasterPillarProp> masterPillars;
         public List<CityProp> emptys;
         public List<PillarProp> pillars;
+        public List<RoadProp> roads;
 
         [Range(0f, 1f)] public float buildingLMSep = 0.4f;
         [Range(0f, 1f)] public float buildingMHSep = 0.8f;
@@ -62,6 +63,7 @@ namespace MicroUniverse {
         public GameObject GetMasterPillarPrefab() { return RandomPropPrefab(masterPillars); }
         public GameObject GetEmptyPrefab() { return RandomPropPrefab(emptys); }
         public GameObject GetPillarPrefab() { return RandomPropPrefab(pillars); }
+        public GameObject GetRoadPrefab() { return RandomPropPrefab(roads); }
     }
 
 }
