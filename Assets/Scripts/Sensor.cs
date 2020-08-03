@@ -15,12 +15,10 @@ namespace MicroUniverse {
 
         private void OnTriggerEnter(Collider other) {
             InRangeGOs.Add(other.gameObject);
-            print(InRangeGOs.Count);
         }
 
         private void OnTriggerExit(Collider other) {
             InRangeGOs.Remove(other.gameObject);
-            print(InRangeGOs.Count);
 
         }
 

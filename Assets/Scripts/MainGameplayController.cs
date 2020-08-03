@@ -37,9 +37,6 @@ namespace MicroUniverse {
                 throw new System.Exception("Init incomplete. WTF are you doing LoadingJob?");
             }
 
-            BallController bc = ballGO.GetComponent<BallController>();
-            bc.preferGravitySensor = GameManager.Instance.preferSensorControl;
-
             if (skipIntro) {
                 TransitionState(GameplayState.Playing);
             } else {

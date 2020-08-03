@@ -1335,7 +1335,18 @@ MonoBehaviour:
     m_ActionId: 52dc34fa-04e7-456b-b94b-c1429dc488c7
     m_ActionName: In-game/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8996153153341454434}
+        m_MethodName: OnHookActionPressed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 71b5f999-8ce7-43ba-b524-e8fa50ce2068
     m_ActionName: In-game/Action[/Mouse/leftButton,/Keyboard/space]
   - m_PersistentCalls:
@@ -2953,9 +2964,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9163c2d9090c914083ef52ba8ec6e86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: 9.8
-  maxTiltDistance: 0.3
-  preferGravitySensor: 0
+  maxTiltDistance: 0.1
+  sensor: {fileID: 1451609196}
 --- !u!135 &8996153153341454440
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3040,7 +3050,7 @@ Rigidbody:
   m_Mass: 0.1
   m_Drag: 0.02
   m_AngularDrag: 0.02
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
