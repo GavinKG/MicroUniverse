@@ -187,7 +187,7 @@ namespace MicroUniverse {
             // debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
         }
 
-        public void PlantProps(float scaleFactor, PropCollection collection, Transform propRoot, float perlinFreq) {
+        public void PlantProps(float scaleFactor, PropCollection collection, Transform propRoot, float perlinFreq, float companionSpawnRatio) {
 
             this.collection = collection;
 
@@ -229,6 +229,8 @@ namespace MicroUniverse {
                     switch (FlattenedMapId[x, y]) {
                         case id_crossroad:
                             spawned = GameObject.Instantiate(collection.GetMasterPillarPrefab(), Vector3.zero, Quaternion.identity);
+                            MasterPillarProp masterPillarProp = spawned.GetComponent<MasterPillarProp>();
+                            masterPillarProp.companionBallCount = Random.Range(0f, 1f) < companionSpawnRatio ? 1 : 0;
                             ++MasterPillarCount;
                             break;
                         case id_building:

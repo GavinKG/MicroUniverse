@@ -45,6 +45,7 @@ namespace MicroUniverse {
         public GameObject emptyGOPrefab;
         public PropCollection propCollection;
         public Transform propRoot;
+        [Range(0f, 1f)] public float companionSpawnRatio = 0.4f;
 
         [Header("Step.8 AO")]
         public CaptureOverviewMask aoCapturer;
@@ -224,7 +225,7 @@ namespace MicroUniverse {
                 subRootGO.name = "Region #" + i.ToString();
                 GameObject propRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, subRootGO.transform);
                 propRootGO.name = "Props";
-                regionInfos[i].PlantProps(scaleFactor, propCollection, propRootGO.transform, perlinFreq);
+                regionInfos[i].PlantProps(scaleFactor, propCollection, propRootGO.transform, perlinFreq, companionSpawnRatio);
             }
 
             // DebugTex(regionInfos[0].DebugTransformBackToTex(), 3);

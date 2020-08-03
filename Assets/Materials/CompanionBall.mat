@@ -118,8 +118,8 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Diffuse: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 0}
-    - _EmissionColor: {r: 0, g: 0.17796607, b: 0.3962264, a: 1}
+    - _Diffuse: {r: 0.495283, g: 0.59646904, b: 1, a: 0}
+    - _EmissionColor: {r: 0, g: 0.319447, b: 0.7169812, a: 1}
     - _NE: {r: 0, g: 0, b: 0, a: 0}
     - _NW: {r: 0, g: 0, b: 0, a: 0}
     - _ObjectCenterWS: {r: 0, g: 0, b: 0, a: 0}
