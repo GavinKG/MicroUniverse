@@ -47,6 +47,13 @@ namespace MicroUniverse {
         public Transform propRoot;
         [Range(0f, 1f)] public float companionSpawnRatio = 0.4f;
         [Range(0f, 1f)] public float badPillarRatio = 0.3f;
+        public List<Theme> themes;
+
+        // Material templates:
+        public Material buildingMat;
+        public Material baseMat;
+        public Material emptyMat;
+        public Material plantMat;
 
         [Header("Step.8 AO")]
         public CaptureOverviewMask aoCapturer;
@@ -217,8 +224,14 @@ namespace MicroUniverse {
 
 
             // ----------
-            // Step.7
-            print("Step.7: Plant props (pillar + building)." + Timestamp);
+            // Step.7: construct regions.
+            print("Step.7: Construct regions." + Timestamp);
+
+            // warm themes
+            foreach(Theme theme in themes) {
+                theme.CreateMaterialInstance(buildingMat, baseMat, emptyMat, plantMat);
+            }
+
             float scaleFactor = (float)cityWH / (float)currResolution;
             for (int i = 0; i < regionInfos.Count; ++i) {
                 regionInfos[i].RegionID = i;
@@ -228,7 +241,9 @@ namespace MicroUniverse {
                 propRootGO.name = "Props";
                 GameObject badBallRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, subRootGO.transform);
                 badBallRootGO.name = "Bad balls";
-                regionInfos[i].PlantProps(scaleFactor, propCollection, propRootGO.transform, badBallRootGO.transform, perlinFreq, companionSpawnRatio, badPillarRatio);
+                Theme theme = themes[UnityEngine.Random.Range(0, themes.Count)]; // TODO: shuffle instead of pure random.
+                print("Region #" + i.ToString() + " uses theme: " + theme.gameObject.name);
+                regionInfos[i].ConstructRegion(scaleFactor, propCollection, propRootGO.transform, badBallRootGO.transform, perlinFreq, companionSpawnRatio, badPillarRatio, theme);
             }
 
             // DebugTex(regionInfos[0].DebugTransformBackToTex(), 3);

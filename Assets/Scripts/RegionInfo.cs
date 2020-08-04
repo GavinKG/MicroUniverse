@@ -199,7 +199,7 @@ namespace MicroUniverse {
             // debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
         }
 
-        public void PlantProps(float scaleFactor, PropCollection collection, Transform propRoot, Transform badBallRoot, float perlinFreq, float companionSpawnRatio, float badPillarRatio) {
+        public void ConstructRegion(float scaleFactor, PropCollection collection, Transform propRoot, Transform badBallRoot, float perlinFreq, float companionSpawnRatio, float badPillarRatio, Theme theme) {
 
             this.collection = collection;
             this.propRoot = propRoot;
@@ -383,6 +383,11 @@ namespace MicroUniverse {
                 badBallController.currRoadProp = pillar;
             }
             badBallRoot.gameObject.SetActive(false);
+
+            // Step.8: apply theme:
+            foreach (CityProp prop in props) {
+                prop.SetTheme(theme);
+            }
         }
 
         public RegionPortal FindPortalFromHereTo(int regionId) {

@@ -48,6 +48,8 @@ namespace MicroUniverse {
             EmptyMat.SetColor("_Diffuse", empty);
 
             PlantMat.SetColor("_Diffuse", plant);
+
+            InstanceCreated = true;
         }
     }
 
