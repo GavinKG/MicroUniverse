@@ -33,6 +33,7 @@ namespace MicroUniverse {
         public GameObject indicator;
 
         public Text debugSpeedText;
+        public Text debugStateText;
 
         public Vector3 GravityDirection { get; private set; }
         public Vector3 GravityForce { get; private set; }
@@ -130,7 +131,6 @@ namespace MicroUniverse {
                 return false;
             }
             hookingSpeed = rb.velocity.magnitude;
-            toHookingPillarDir = (hookedPillarGO.transform.position - transform.position).normalized;
             rb.isKinematic = true;
             collider.enabled = false;
             print("Ball hooking -> " + hookedPillarGO.name);
@@ -147,7 +147,7 @@ namespace MicroUniverse {
             } else {
                 outVelocityDir = worldMovementDirection;
             }
-            Vector3 outVelocity = outVelocityDir * hookingSpeed;
+            Vector3 outVelocity = outVelocityDir * Mathf.Min(hookingSpeed, maxSpeed);
             rb.velocity = outVelocity;
 
             // Companion ball:
@@ -235,6 +235,8 @@ namespace MicroUniverse {
             }
 
             UpdateIndicator();
+
+            debugStateText.text = "Ball state: " + currState.ToString();
         }
 
         void FixedUpdate() {
@@ -288,10 +290,16 @@ namespace MicroUniverse {
         }
 
         void UpdateHooking() {
-            float d = Vector3.Distance(hookedPillarGO.transform.position, transform.position);
+
+            toHookingPillarDir = hookedPillarGO.transform.position - transform.position;
+            toHookingPillarDir.y = 0;
+            float distance = toHookingPillarDir.magnitude;
+            toHookingPillarDir /= distance;
+
+            
             transform.position += toHookingPillarDir * hookingSpeed * Time.deltaTime;
             hookingSpeed += hookingSpeedIncrease * Time.deltaTime;
-            if (d < hookDistance) {
+            if (distance < hookDistance) {
                 TransitionState(State.Hooked);
             }
         }
