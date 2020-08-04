@@ -18,19 +18,19 @@ namespace MicroUniverse {
 
         public ThemeRendererHolder themeRendererHolder;
 
-        public void SetTheme(Theme theme) {
+        public void SetThemeMaterial(ThemeMaterialHolder holder) {
 
             foreach (MeshRenderer r in themeRendererHolder.buildings) {
-                r.material = theme.BuildingMat;
+                r.material = holder.BuildingMat;
             }
             foreach (MeshRenderer r in themeRendererHolder.bases) {
-                r.material = theme.BaseMat;
+                r.material = holder.BaseMat;
             }
             foreach (MeshRenderer r in themeRendererHolder.empties) {
-                r.material = theme.EmptyMat;
+                r.material = holder.EmptyMat;
             }
             foreach (MeshRenderer r in themeRendererHolder.plants) {
-                r.material = theme.PlantMat;
+                r.material = holder.PlantMat;
             }
         }
     }

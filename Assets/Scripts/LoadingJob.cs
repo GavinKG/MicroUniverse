@@ -228,8 +228,11 @@ namespace MicroUniverse {
             print("Step.7: Construct regions." + Timestamp);
 
             // warm themes
+            List<ThemeMaterialHolder> themeMatHolders = new List<ThemeMaterialHolder>(themes.Count);
             foreach(Theme theme in themes) {
-                theme.CreateMaterialInstance(buildingMat, baseMat, emptyMat, plantMat);
+                ThemeMaterialHolder holder = new ThemeMaterialHolder(theme);
+                holder.CreateMaterialInstance(buildingMat, baseMat, emptyMat, plantMat);
+                themeMatHolders.Add(holder);
             }
 
             float scaleFactor = (float)cityWH / (float)currResolution;
@@ -241,9 +244,9 @@ namespace MicroUniverse {
                 propRootGO.name = "Props";
                 GameObject badBallRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, subRootGO.transform);
                 badBallRootGO.name = "Bad balls";
-                Theme theme = themes[UnityEngine.Random.Range(0, themes.Count)]; // TODO: shuffle instead of pure random.
-                print("Region #" + i.ToString() + " uses theme: " + theme.gameObject.name);
-                regionInfos[i].ConstructRegion(scaleFactor, propCollection, propRootGO.transform, badBallRootGO.transform, perlinFreq, companionSpawnRatio, badPillarRatio, theme);
+                ThemeMaterialHolder themeMaterialHolder = themeMatHolders[UnityEngine.Random.Range(0, themeMatHolders.Count)]; // TODO: shuffle instead of pure random.
+                print("Region #" + i.ToString() + " uses theme: " + themeMaterialHolder.theme.gameObject.name);
+                regionInfos[i].ConstructRegion(scaleFactor, propCollection, propRootGO.transform, badBallRootGO.transform, perlinFreq, companionSpawnRatio, badPillarRatio, themeMaterialHolder);
             }
 
             // DebugTex(regionInfos[0].DebugTransformBackToTex(), 3);

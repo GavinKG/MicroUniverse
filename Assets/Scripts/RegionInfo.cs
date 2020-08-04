@@ -199,7 +199,7 @@ namespace MicroUniverse {
             // debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
         }
 
-        public void ConstructRegion(float scaleFactor, PropCollection collection, Transform propRoot, Transform badBallRoot, float perlinFreq, float companionSpawnRatio, float badPillarRatio, Theme theme) {
+        public void ConstructRegion(float scaleFactor, PropCollection collection, Transform propRoot, Transform badBallRoot, float perlinFreq, float companionSpawnRatio, float badPillarRatio, ThemeMaterialHolder themeMaterialHolder) {
 
             this.collection = collection;
             this.propRoot = propRoot;
@@ -386,7 +386,7 @@ namespace MicroUniverse {
 
             // Step.8: apply theme:
             foreach (CityProp prop in props) {
-                prop.SetTheme(theme);
+                prop.SetThemeMaterial(themeMaterialHolder);
             }
         }
 

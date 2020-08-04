@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace MicroUniverse {
 
+    /// <summary>
+    /// Used for nesting varaibles in CityProp
+    /// </summary>
     [System.Serializable]
     public class ThemeRendererHolder {
         public List<MeshRenderer> buildings;
