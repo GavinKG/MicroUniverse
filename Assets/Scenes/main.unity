@@ -2219,8 +2219,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preferSensorControl: 0
   exampleKaleido: 0
-  bossMinAreaBuildingCount: 50
-  bossAfterArea: 0
+  bossMinAreaBuildingCount: 200
+  bossAfterArea: 1
 --- !u!4 &1109387768
 Transform:
   m_ObjectHideFlags: 0
@@ -3474,6 +3474,8 @@ MonoBehaviour:
   companionDelay: 0.2
   companionGenInterval: 0.1
   damageSpeed: 7.5
+  damageMaxSpeed: 15
+  damageMaxSpeedHPLoss: 10
   indicator: {fileID: 630522145}
   debugSpeedText: {fileID: 270982184}
 --- !u!135 &8996153153341454440

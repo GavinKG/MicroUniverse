@@ -72,7 +72,6 @@ namespace MicroUniverse {
         /// Core FSM.
         /// </summary>
         void TransitionState(GameplayState newState) {
-            print("Core FSM: trying to transition from " + currState.ToString() + " to " + newState.ToString());
             if (smTransitioning) {
                 throw new System.Exception("transition recursion detected.");
             }
@@ -126,7 +125,7 @@ namespace MicroUniverse {
         #region Region StateMachine
 
         void TransitionRegionState(RegionInfo.RegionState newState) {
-            print("Region FSM: trying to transition from " + currRegion.currState.ToString() + " to " + newState.ToString());
+            //print("Region FSM: trying to transition from " + currRegion.currState.ToString() + " to " + newState.ToString());
             switch (currRegion.currState) {
                 case RegionInfo.RegionState.Uninitialized:
                     if (newState == RegionInfo.RegionState.Dark) {
@@ -158,6 +157,8 @@ namespace MicroUniverse {
 
             // boss fight logic.
             if (currRegion.BuildingCount > GameManager.Instance.bossMinAreaBuildingCount) {
+                print("Entering region #" + currRegion.RegionID.ToString() + " with building count " + currRegion.BuildingCount);
+                print("Boss will appear after " + regionLeftoverForBossFight.ToString() + " big regions...");
                 if (regionLeftoverForBossFight == 0) {
                     InitBoss();
                 } else {
@@ -168,12 +169,12 @@ namespace MicroUniverse {
 
 
         void OnRegionUnlocking() {
-            print("Region unlocking: " + currRegion.RegionID.ToString());
+            print("Region unlocking: #" + currRegion.RegionID.ToString());
             // play some timeline here...
         }
 
         void OnRegionUnlocked() {
-            print("Region unlocked: " + currRegion.RegionID.ToString());
+            print("Region unlocked: #" + currRegion.RegionID.ToString());
             foreach (RegionPortal regionPortal in currRegion.portals) {
                 regionPortal.SetPortalActive();
             }
@@ -218,6 +219,7 @@ namespace MicroUniverse {
         #endregion
 
         void InitBoss() {
+            print("..And it's now for the boss fight!!!!!");
             bossfight = true;
             GameObject bossGO = Instantiate(bossBallPrefab);
             BossBallController bossBallController = bossGO.GetComponent<BossBallController>();

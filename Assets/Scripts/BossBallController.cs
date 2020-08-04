@@ -202,6 +202,7 @@ namespace MicroUniverse {
         public void Damage(float value) {
             print(value.ToString() + " HP! It hurts!");
             HP -= value;
+            print("Now I only have " + HP.ToString() + " HP...");
             if (HP < 0) {
                 TransitionState(State.Die);
             }
