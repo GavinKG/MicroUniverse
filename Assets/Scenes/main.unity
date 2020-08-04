@@ -1277,7 +1277,7 @@ MonoBehaviour:
   bossBallPrefab: {fileID: 1080163922653158711, guid: 4099844aedfd9954d8455ca2f57b46b4,
     type: 3}
   groundGO: {fileID: 2120364405}
-  pillarUnlockToSuccessRate: 0.6
+  pillarUnlockToSuccessRate: 0.7
   skipIntro: 1
   skipUnlocking: 1
   skipRegionSwitching: 1
@@ -2671,7 +2671,7 @@ MonoBehaviour:
     buildingLMSep: 0.4
     buildingMHSep: 0.8
   propRoot: {fileID: 1002798681}
-  companionSpawnRatio: 0.2
+  companionSpawnRatio: 0.1
   badPillarRatio: 0.1
   themes:
   - {fileID: 4967564177144375026, guid: 544ec22e4095bb64485c434c53344065, type: 3}
