@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4211358105298707291
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5932078577704598136}
+  - component: {fileID: 4967564177144375026}
+  m_Layer: 0
+  m_Name: Theme #5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5932078577704598136
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4211358105298707291}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4967564177144375026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4211358105298707291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7373c7669e49fb84282ad9f7e95213d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  main: {r: 1, g: 0.517647, b: 0.9647059, a: 1}
+  floor: {r: 1, g: 0.517647, b: 0.9647059, a: 1}
+  buildingRoof: {r: 0.9686275, g: 0.12941173, b: 0.3607843, a: 1}
+  buildingBody: {r: 0, g: 0.60784316, b: 0.5411765, a: 1}
+  buildingFrame: {r: 0.99607843, g: 0.5215686, b: 0.95294124, a: 1}
+  buildingWindows: {r: 0.101960756, g: 0.03529412, b: 0.1333333, a: 1}
+  propBase: {r: 0.145098, g: 0.007843138, b: 0.10980389, a: 1}
+  empty: {r: 0.2117647, g: 0.23137254, b: 0.26274508, a: 1}
+  plant: {r: 0, g: 0.5960784, b: 0.5490196, a: 1}

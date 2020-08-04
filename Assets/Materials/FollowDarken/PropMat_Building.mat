@@ -22,7 +22,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: PropMat_Building
   m_Shader: {fileID: 4800000, guid: 9196e996c691c71408c187724b2d3ec3, type: 3}
-  m_ShaderKeywords: _DARKMASK_ON _DIFFUSEUSEFOURGRID_ON _EMISSION_ON _VERTICALAO_ON
+  m_ShaderKeywords: _DARKMASK_ON _DIFFUSEUSEFOURGRID_ON _VERTICALAO_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -86,7 +86,7 @@ Material:
     - _DiffuseUseFourGrid: 1
     - _DiffuseUseTex: 0
     - _DstBlend: 0
-    - _Emission: 1
+    - _Emission: 0
     - _Emission2: 0
     - _EnvironmentReflections: 1
     - _FlattenHalfLambert: 0
@@ -132,10 +132,10 @@ Material:
     - _Diffuse: {r: 1, g: 1, b: 1, a: 0}
     - _DiffuseColor: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _NE: {r: 0, g: 1, b: 0.23655128, a: 0}
-    - _NW: {r: 1, g: 0, b: 0, a: 0}
+    - _NE: {r: 1, g: 1, b: 1, a: 1}
+    - _NW: {r: 1, g: 1, b: 1, a: 1}
     - _ObjectCenterWS: {r: 0, g: 0, b: 0, a: 0}
-    - _SE: {r: 0.9047637, g: 1, b: 0, a: 0}
-    - _SW: {r: 1, g: 1, b: 1, a: 0}
+    - _SE: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 1}
+    - _SW: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Tint: {r: 1, g: 1, b: 1, a: 0}

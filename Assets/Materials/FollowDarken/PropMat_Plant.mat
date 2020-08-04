@@ -128,7 +128,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Diffuse: {r: 1, g: 0, b: 0.9645834, a: 0}
+    - _Diffuse: {r: 1, g: 1, b: 1, a: 1}
     - _DiffuseColor: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0.31764707, g: 0.6311188, b: 0.67058825, a: 1}
     - _NE: {r: 0, g: 0, b: 0, a: 0}
