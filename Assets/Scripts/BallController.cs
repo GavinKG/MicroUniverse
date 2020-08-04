@@ -17,7 +17,7 @@ namespace MicroUniverse {
         public float hookingSpeedIncrease = 5f;
         public float hookDistance = 0.5f;
         public float hookedSpeedBoost = 1f;
-        public float maxReleaseSpeed = 15f;
+        public float maxSpeed = 15f;
         public Sensor sensor;
         public GameObject companionPrefab;
         public Transform companionRoot;
@@ -147,7 +147,7 @@ namespace MicroUniverse {
             } else {
                 outVelocityDir = worldMovementDirection;
             }
-            Vector3 outVelocity = outVelocityDir * Mathf.Min(hookingSpeed, maxReleaseSpeed);
+            Vector3 outVelocity = outVelocityDir * hookingSpeed;
             rb.velocity = outVelocity;
 
             // Companion ball:
@@ -235,17 +235,24 @@ namespace MicroUniverse {
             }
 
             UpdateIndicator();
-
-            currSpeed = rb.velocity.magnitude;
-            debugSpeedText.text = "Speed: " + currSpeed.ToString();
-
         }
 
         void FixedUpdate() {
             if (currState == State.Normal) {
                 UpdateGravity();
             }
-            
+
+            if (currState != State.Freeze) {
+                currSpeed = rb.velocity.magnitude;
+                debugSpeedText.text = "Speed: " + currSpeed.ToString();
+            } else {
+                currSpeed = 0;
+            }
+
+            if (currSpeed > maxSpeed) {
+                Vector3 velocityDir = rb.velocity.normalized;
+                rb.velocity = velocityDir * maxSpeed;
+            }
         }
 
         void OnTriggerEnter(Collider other) {
