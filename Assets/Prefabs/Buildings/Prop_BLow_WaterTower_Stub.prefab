@@ -46,10 +46,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propWeight: 2
-  debug: 0
   compensateScale: 1
   meshesToTransform:
   - {fileID: 2163918101802320537}
+  themeRendererHolder:
+    buildings:
+    - {fileID: 5386264221691501024}
+    bases:
+    - {fileID: 5889648886266344823}
+    empties: []
+    plants: []
   heightType: 0
   buildingType: 3
   baseGO: {fileID: 6673291193781857575}
@@ -141,6 +147,12 @@ MeshFilter:
     type: 3}
   m_PrefabInstance: {fileID: 2699980783964289103}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &5889648886266344823 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8413988829479587128, guid: 9f144f22be7db5b48a408605c02a9b89,
+    type: 3}
+  m_PrefabInstance: {fileID: 2699980783964289103}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6736909385436743012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -228,6 +240,12 @@ PrefabInstance:
 --- !u!4 &6554133945172009615 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5cbde4b5519aaec40b76943e1fa9539f,
+    type: 3}
+  m_PrefabInstance: {fileID: 6736909385436743012}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5386264221691501024 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 5cbde4b5519aaec40b76943e1fa9539f,
     type: 3}
   m_PrefabInstance: {fileID: 6736909385436743012}
   m_PrefabAsset: {fileID: 0}

@@ -45,10 +45,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propWeight: 1
-  debug: 0
   compensateScale: 1
   meshesToTransform:
   - {fileID: 5405142519074120283}
+  themeRendererHolder:
+    buildings: []
+    bases: []
+    empties:
+    - {fileID: 5405142519074120281}
+    plants: []
 --- !u!1 &5405142519074120284
 GameObject:
   m_ObjectHideFlags: 0

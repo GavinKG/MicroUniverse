@@ -126,10 +126,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propWeight: 3
-  debug: 0
   compensateScale: 1
   meshesToTransform:
   - {fileID: 7963456748334816803}
+  themeRendererHolder:
+    buildings:
+    - {fileID: 1697704234927991934}
+    - {fileID: 7672380909929471247}
+    bases:
+    - {fileID: 4036415389708363316}
+    empties: []
+    plants: []
   heightType: 1
   buildingType: 5
   baseGO: {fileID: 7795454723597539647}
@@ -297,6 +304,12 @@ Transform:
 --- !u!33 &7963456748334816803 stripped
 MeshFilter:
   m_CorrespondingSourceObject: {fileID: 6796900327681432942, guid: 8dff172824ed08744b769c966f0cbd52,
+    type: 3}
+  m_PrefabInstance: {fileID: 3517471211843945293}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &4036415389708363316 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 636321495880279417, guid: 8dff172824ed08744b769c966f0cbd52,
     type: 3}
   m_PrefabInstance: {fileID: 3517471211843945293}
   m_PrefabAsset: {fileID: 0}

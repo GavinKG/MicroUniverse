@@ -16,6 +16,39 @@ namespace MicroUniverse {
         public Color propBase;
         public Color empty;
         public Color plant;
+
+        // Material instances used for this theme.
+        public Material BuildingMat { get; private set; }
+        public Material BaseMat { get; private set; }
+        public Material EmptyMat { get; private set; }
+        public Material PlantMat { get; private set; }
+
+        public bool InstanceCreated { get; private set; } = false;
+
+        public void CreateMaterialInstance(Material buildingT, Material baseT, Material emptyT, Material plantT) {
+            
+            // T stands for template.
+
+            if (InstanceCreated) {
+                throw new System.Exception("Material instance already created.");
+            }
+
+            BuildingMat = new Material(buildingT);
+            BaseMat = new Material(baseT);
+            EmptyMat = new Material(emptyT);
+            PlantMat = new Material(plantT);
+
+            BuildingMat.SetColor("_NW", buildingRoof);
+            BuildingMat.SetColor("_NE", buildingBody);
+            BuildingMat.SetColor("_SE", buildingFrame);
+            BuildingMat.SetColor("_SW", buildingWindows);
+
+            BaseMat.SetColor("_Diffuse", propBase);
+
+            EmptyMat.SetColor("_Diffuse", empty);
+
+            PlantMat.SetColor("_Diffuse", plant);
+        }
     }
 
 }
