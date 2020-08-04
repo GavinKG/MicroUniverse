@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -222,7 +223,7 @@ namespace MicroUniverse {
 
     }
 
-    public static class Vector2Extension {
+    public static class ClassExtension {
 
         public static Vector2 Rotate(this Vector2 v, float degrees) {
             float sin = Mathf.Sin(degrees * Mathf.Deg2Rad);
@@ -245,6 +246,34 @@ namespace MicroUniverse {
             Vector2 selfToMidpoint = midPoint - p;
             return midPoint + selfToMidpoint; // mirroring
         }
+
+        /// <summary>
+        /// Shuffle the element in a list.
+        /// </summary>
+        public static List<T> Shuffle<T>(this IEnumerable<T> iter) {
+            return iter.OrderBy(arg => Guid.NewGuid()).ToList();
+        }
+
+        /// <summary>
+        /// Expand (posibilly shrink) a list.
+        /// </summary>
+        public static List<T> Expand<T>(this IEnumerable<T> iter, int count, bool randomize = false) { // TODO: impl!
+            if (count <= 0) {
+                return new List<T>();
+            }
+            List<T> list = iter.ToList();
+            if (count < list.Count) {
+                list = list.Take(count).ToList();
+            } else if (count > list.Count) {
+                int ogCount = list.Count;
+                int left = count - ogCount;
+                for (int i = 0; i < left; i++) {
+                    list.Add(list[UnityEngine.Random.Range(0, ogCount)]);
+                }
+            }
+            return list;
+        }
+
     }
 
 

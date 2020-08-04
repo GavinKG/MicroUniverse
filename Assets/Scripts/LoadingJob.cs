@@ -241,6 +241,9 @@ namespace MicroUniverse {
                 themeMatHolders.Add(holder);
             }
 
+            // random theme:
+            List<ThemeMaterialHolder> themeAssigned = themeMatHolders.Shuffle().Expand(regionInfos.Count).ToList();
+
             float scaleFactor = (float)cityWH / (float)currResolution;
             for (int i = 0; i < regionInfos.Count; ++i) {
                 regionInfos[i].RegionID = i;
@@ -250,7 +253,7 @@ namespace MicroUniverse {
                 propRootGO.name = "Props";
                 GameObject badBallRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, subRootGO.transform);
                 badBallRootGO.name = "Bad balls";
-                ThemeMaterialHolder themeMaterialHolder = themeMatHolders[UnityEngine.Random.Range(0, themeMatHolders.Count)]; // TODO: shuffle instead of pure random.
+                ThemeMaterialHolder themeMaterialHolder = themeAssigned[i];
                 print("Region #" + i.ToString() + " uses theme: " + themeMaterialHolder.theme.gameObject.name);
                 regionInfos[i].ConstructRegion(scaleFactor, propCollection, propRootGO.transform, badBallRootGO.transform, perlinFreq, companionSpawnRatio, badPillarRatio, themeMaterialHolder);
             }
