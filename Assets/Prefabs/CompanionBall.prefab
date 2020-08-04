@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9146328909615682931}
   - component: {fileID: 9146328909615682930}
   - component: {fileID: 9146328909615682934}
-  - component: {fileID: 339841854156634817}
+  - component: {fileID: 2890819332823500476}
   m_Layer: 18
   m_Name: CompanionBall
   m_TagString: Untagged
@@ -104,15 +104,15 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9146328909615682929}
   serializedVersion: 2
-  m_Mass: 0.08
-  m_Drag: 0.02
-  m_AngularDrag: 0.02
+  m_Mass: 0.1
+  m_Drag: 0
+  m_AngularDrag: 0
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 3
---- !u!114 &339841854156634817
+  m_CollisionDetection: 0
+--- !u!114 &2890819332823500476
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,9 +121,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 9146328909615682929}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9135fb3bf6de0941b9643addcb8c2cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 7969e83e2f01ad741a39c1099268ab3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speedRange: {x: 2, y: 4}
+  currRoadProp: {fileID: 0}
+  targetRoadProp: {fileID: 0}
+  targetReachDistance: 0.1
+  setPillarActive: 1
 --- !u!1001 &159464431331519532
 PrefabInstance:
   m_ObjectHideFlags: 0

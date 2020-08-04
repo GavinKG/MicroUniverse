@@ -180,10 +180,10 @@ namespace MicroUniverse {
                 return;
             }
 
-            BadBallController badBallController = other.transform.GetComponent<BadBallController>();
-            if (badBallController != null) {
+            AutoBallController autoBallController = other.transform.GetComponent<AutoBallController>();
+            if (autoBallController != null) {
                 print("Fuck off, little scum!");
-                badBallController.Die();
+                autoBallController.Die();
                 return;
             }
 

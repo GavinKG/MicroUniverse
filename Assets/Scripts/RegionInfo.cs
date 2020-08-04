@@ -96,8 +96,8 @@ namespace MicroUniverse {
         public List<PillarProp> badPillars;
         public List<CityProp> props;
 
-        Transform propRoot;
-        Transform badBallRoot;
+        public Transform PropRoot { get; private set; }
+        public Transform AutoBallRoot { get; private set; }
 
         // debug:
         // public Texture2D debugTex1;
@@ -204,11 +204,11 @@ namespace MicroUniverse {
             // debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
         }
 
-        public void ConstructRegion(float scaleFactor, PropCollection collection, Transform propRoot, Transform badBallRoot, float perlinFreq, float companionSpawnRatio, float badPillarRatio, ThemeMaterialHolder themeMaterialHolder) {
+        public void ConstructRegion(float scaleFactor, PropCollection collection, Transform propRoot, Transform autoBallRoot, float perlinFreq, float companionSpawnRatio, float badPillarRatio, ThemeMaterialHolder themeMaterialHolder) {
 
             this.collection = collection;
-            this.propRoot = propRoot;
-            this.badBallRoot = badBallRoot;
+            this.PropRoot = propRoot;
+            this.AutoBallRoot = autoBallRoot;
 
             // Step.1: Generate city heat map using Perlin Noise: 0(black) -> less urbanized, 1(white) -> urbanized
             float xOffset = Random.Range(0, 100);
@@ -383,11 +383,11 @@ namespace MicroUniverse {
 
             // Step.7: Generate bad balls
             foreach (PillarProp pillar in badPillars) {
-                GameObject go = GameObject.Instantiate(collection.badBallPrefab, pillar.transform.position, Quaternion.identity, badBallRoot);
-                BadBallController badBallController = go.GetComponent<BadBallController>();
-                badBallController.currRoadProp = pillar;
+                GameObject go = GameObject.Instantiate(collection.badBallPrefab, pillar.transform.position, Quaternion.identity, autoBallRoot);
+                AutoBallController autoBallController = go.GetComponent<AutoBallController>();
+                autoBallController.currRoadProp = pillar;
             }
-            badBallRoot.gameObject.SetActive(false);
+            autoBallRoot.gameObject.SetActive(false);
 
             // Step.8: apply theme:
             foreach (CityProp prop in props) {
@@ -412,8 +412,15 @@ namespace MicroUniverse {
             return null;
         }
 
-        public void SetBadBallsActive(bool active) {
-            badBallRoot.gameObject.SetActive(active);
+        public void SetAutoBallRootActive(bool active) {
+            AutoBallRoot.gameObject.SetActive(active);
+        }
+
+        public void DestroyAutoBalls() {
+            foreach (Transform t in AutoBallRoot) {
+                GameObject.Destroy(t.gameObject);
+            }
+            SetAutoBallRootActive(false);
         }
 
         public Texture2D DebugTransformBackToTex() {

@@ -10,17 +10,14 @@ namespace MicroUniverse {
     /// Logic:
     /// Find nearest activated pillar -> deactivate it -> find next
     /// </summary>
-    public class BadBallController : MonoBehaviour {
-
-
+    public class AutoBallController : MonoBehaviour {
 
         public Vector2 speedRange = new Vector2(1f, 3f);
 
         public RoadProp currRoadProp;
         public RoadProp targetRoadProp;
         public float targetReachDistance = 0.05f;
-
-        CinemachineImpulseSource impulseSource;
+        public bool setPillarActive = false; // true: good ball, false: bad ball
 
         public enum Direction { Up, Left, Down, Right, Invalid }
 
@@ -30,8 +27,6 @@ namespace MicroUniverse {
         private float speed;
 
         public void Die() {
-            // TODO: explode!
-            impulseSource.GenerateImpulse();
             Destroy(gameObject);
         }
 
@@ -39,7 +34,6 @@ namespace MicroUniverse {
             currDirection = RandomDirection();
             ballRadius = transform.localScale.x / 2f;
             speed = Random.Range(speedRange.x, speedRange.y);
-            impulseSource = GetComponent<CinemachineImpulseSource>();
         }
 
         private Direction RandomDirection() {
@@ -132,6 +126,7 @@ namespace MicroUniverse {
         private void Update() {
 
             if (currRoadProp == null) {
+                print("AutoBall trapped!");
                 gameObject.SetActive(false);
                 return;
             }
@@ -166,7 +161,12 @@ namespace MicroUniverse {
 
                     PillarProp pillarProp = currRoadProp.GetComponent<PillarProp>();
                     if (pillarProp != null) {
-                        pillarProp.Deactivate();
+                        if (setPillarActive) {
+                            pillarProp.Activate();
+                        } else {
+                            pillarProp.Deactivate();
+                        }
+                        
                     }
 
                 } else {

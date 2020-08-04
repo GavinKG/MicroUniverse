@@ -251,11 +251,11 @@ namespace MicroUniverse {
                 subRootGO.name = "Region #" + i.ToString();
                 GameObject propRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, subRootGO.transform);
                 propRootGO.name = "Props";
-                GameObject badBallRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, subRootGO.transform);
-                badBallRootGO.name = "Bad balls";
+                GameObject autoBallRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, subRootGO.transform);
+                autoBallRootGO.name = "Auto Balls";
                 ThemeMaterialHolder themeMaterialHolder = themeAssigned[i];
                 print("Region #" + i.ToString() + " uses theme: " + themeMaterialHolder.theme.gameObject.name);
-                regionInfos[i].ConstructRegion(scaleFactor, propCollection, propRootGO.transform, badBallRootGO.transform, perlinFreq, companionSpawnRatio, badPillarRatio, themeMaterialHolder);
+                regionInfos[i].ConstructRegion(scaleFactor, propCollection, propRootGO.transform, autoBallRootGO.transform, perlinFreq, companionSpawnRatio, badPillarRatio, themeMaterialHolder);
             }
 
             // DebugTex(regionInfos[0].DebugTransformBackToTex(), 3);

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Cinemachine;
 
 namespace MicroUniverse {
     [RequireComponent(typeof(Rigidbody))]
@@ -20,7 +21,6 @@ namespace MicroUniverse {
         public float maxSpeed = 15f;
         public Sensor sensor;
         public GameObject companionPrefab;
-        public Transform companionRoot;
         public float companionDelay = 0.1f;
         public float companionGenInterval = 0.1f;
         public float damageSpeed = 10f;
@@ -53,6 +53,8 @@ namespace MicroUniverse {
         float hookingSpeed;
         Vector3 toHookingPillarDir;
         float currSpeed;
+
+        CinemachineImpulseSource shaker;
 
 
         public void OnPlayerMovementInput(InputAction.CallbackContext context) {
@@ -155,7 +157,7 @@ namespace MicroUniverse {
             if (!masterPillar.CompanionSpawned) {
                 int companionCount = hookedPillarGO.GetComponent<MasterPillarProp>().companionBallCount;
                 if (companionCount != 0) {
-                    StartCoroutine(WaitAndGenCompanion(companionCount, hookedPillarGO.transform.position, outVelocity));
+                    StartCoroutine(WaitAndGenCompanion(companionCount, hookedPillarGO.transform.position, outVelocity, masterPillar));
                 }
                 masterPillar.SetCompanionBallSpawned();
             }
@@ -187,12 +189,12 @@ namespace MicroUniverse {
 
         }
 
-        private IEnumerator WaitAndGenCompanion(int count, Vector3 pos, Vector3 velocity) {
+        private IEnumerator WaitAndGenCompanion(int count, Vector3 pos, Vector3 velocity, RoadProp roadProp) {
             yield return new WaitForSeconds(companionDelay);
             for (int i = 0; i < count; ++i) {
-                GameObject companion = Instantiate(companionPrefab, pos, Quaternion.identity, companionRoot);
-                Rigidbody rb = companion.GetComponent<Rigidbody>();
-                rb.velocity = velocity;
+                GameObject companion = Instantiate(companionPrefab, pos, Quaternion.identity, (GameManager.Instance.CurrController as MainGameplayController).CurrRegion.AutoBallRoot);
+                AutoBallController autoBallController = companion.GetComponent<AutoBallController>();
+                autoBallController.currRoadProp = roadProp;
                 yield return new WaitForSeconds(companionGenInterval);
             }
             yield return null;
@@ -222,7 +224,7 @@ namespace MicroUniverse {
             if (GameManager.Instance.preferSensorControl && GravitySensor.current != null) {
                 InputSystem.EnableDevice(GravitySensor.current);
             }
-
+            shaker = GetComponent<CinemachineImpulseSource>();
         }
 
         void Update() {
@@ -267,10 +269,11 @@ namespace MicroUniverse {
         private void OnCollisionEnter(Collision collision) {
             GameObject otherGO = collision.transform.gameObject;
 
-            BadBallController badBallController = otherGO.GetComponent<BadBallController>();
-            if (badBallController != null) {
+            AutoBallController autoBallController = otherGO.GetComponent<AutoBallController>();
+            if (autoBallController != null && !autoBallController.setPillarActive) { // bad ball
                 if (currSpeed > damageSpeed) {
-                    badBallController.Die();
+                    shaker.GenerateImpulse();
+                    autoBallController.Die();
                 }
                 return;
             }

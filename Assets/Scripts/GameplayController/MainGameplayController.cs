@@ -28,7 +28,7 @@ namespace MicroUniverse {
         public int RegionCount { get { return RegionInfos.Count; } }
         public int UnlockedRegionCount { get; private set; } = 0;
 
-        RegionInfo currRegion = null;
+        public RegionInfo CurrRegion { get; private set; } = null;
         Vector3 regionEnterPosition;
         int regionLeftoverForBossFight;
         bool bossfight = false;
@@ -107,7 +107,7 @@ namespace MicroUniverse {
 
         void OnFirstEnterPlayingState() {
             // player first enters the whole new world...
-            currRegion = StartRegion;
+            CurrRegion = StartRegion;
             regionEnterPosition = StartRegion.portals[0].PortalSpawnPosition;
             regionLeftoverForBossFight = GameManager.Instance.bossAfterArea;
             OnEnterPlayingState();
@@ -126,21 +126,21 @@ namespace MicroUniverse {
 
         void TransitionRegionState(RegionInfo.RegionState newState) {
             //print("Region FSM: trying to transition from " + currRegion.currState.ToString() + " to " + newState.ToString());
-            switch (currRegion.currState) {
+            switch (CurrRegion.currState) {
                 case RegionInfo.RegionState.Uninitialized:
                     if (newState == RegionInfo.RegionState.Dark) {
                         OnInitRegion();
-                        currRegion.currState = newState;
+                        CurrRegion.currState = newState;
                     }
                     break;
                 case RegionInfo.RegionState.Dark:
                     if (newState == RegionInfo.RegionState.Unlocking) {
                         OnRegionUnlocking();
-                        currRegion.currState = newState;
+                        CurrRegion.currState = newState;
                     } else if (newState == RegionInfo.RegionState.Unlocked) {
                         // debugging...
                         OnRegionUnlocked();
-                        currRegion.currState = newState;
+                        CurrRegion.currState = newState;
                     }
                     break;
                 case RegionInfo.RegionState.Unlocking:
@@ -153,11 +153,11 @@ namespace MicroUniverse {
         }
 
         void OnInitRegion() {
-            currRegion.SetBadBallsActive(true);
+            CurrRegion.SetAutoBallRootActive(true);
 
             // boss fight logic.
-            if (currRegion.BuildingCount > GameManager.Instance.bossMinAreaBuildingCount) {
-                print("Entering region #" + currRegion.RegionID.ToString() + " with building count " + currRegion.BuildingCount);
+            if (CurrRegion.BuildingCount > GameManager.Instance.bossMinAreaBuildingCount) {
+                print("Entering region #" + CurrRegion.RegionID.ToString() + " with building count " + CurrRegion.BuildingCount);
                 print("Boss will appear after " + regionLeftoverForBossFight.ToString() + " big regions...");
                 if (regionLeftoverForBossFight == 0) {
                     InitBoss();
@@ -169,16 +169,16 @@ namespace MicroUniverse {
 
 
         void OnRegionUnlocking() {
-            print("Region unlocking: #" + currRegion.RegionID.ToString());
+            print("Region unlocking: #" + CurrRegion.RegionID.ToString());
             // play some timeline here...
         }
 
         void OnRegionUnlocked() {
-            print("Region unlocked: #" + currRegion.RegionID.ToString());
-            foreach (RegionPortal regionPortal in currRegion.portals) {
+            print("Region unlocked: #" + CurrRegion.RegionID.ToString());
+            foreach (RegionPortal regionPortal in CurrRegion.portals) {
                 regionPortal.SetPortalActive();
             }
-            currRegion.SetBadBallsActive(false);
+            CurrRegion.DestroyAutoBalls();
             ++UnlockedRegionCount;
 
             if (UnlockedRegionCount == RegionCount || bossfight) {
@@ -192,25 +192,25 @@ namespace MicroUniverse {
         #region Logic Callback
 
         public void PillarEnabled(PillarProp pillarProp) {
-            if (currRegion.currState != RegionInfo.RegionState.Dark) {
+            if (CurrRegion.currState != RegionInfo.RegionState.Dark) {
                 return;
             }
-            ++currRegion.unlockedPillar;
+            ++CurrRegion.unlockedPillar;
             CheckPillarStatus();
         }
 
         public void PillarDisabled(PillarProp pillarProp) {
-            if (currRegion.currState != RegionInfo.RegionState.Dark) {
+            if (CurrRegion.currState != RegionInfo.RegionState.Dark) {
                 return;
             }
-            --currRegion.unlockedPillar;
+            --CurrRegion.unlockedPillar;
         }
 
         public void GotoRegion(int regionId) {
-            print("Region switch " + currRegion.RegionID.ToString() + "->" + regionId.ToString());
-            RegionInfo lastRegion = currRegion;
-            currRegion = RegionInfos[regionId];
-            RegionPortal backPortal = currRegion.FindPortalFromHereTo(lastRegion.RegionID);
+            print("Region switch " + CurrRegion.RegionID.ToString() + "->" + regionId.ToString());
+            RegionInfo lastRegion = CurrRegion;
+            CurrRegion = RegionInfos[regionId];
+            RegionPortal backPortal = CurrRegion.FindPortalFromHereTo(lastRegion.RegionID);
             regionEnterPosition = backPortal.PortalSpawnPosition;
 
             TransitionState(GameplayState.Playing);
@@ -223,13 +223,13 @@ namespace MicroUniverse {
             bossfight = true;
             GameObject bossGO = Instantiate(bossBallPrefab);
             BossBallController bossBallController = bossGO.GetComponent<BossBallController>();
-            bossBallController.buildings = currRegion.buildingProps;
+            bossBallController.buildings = CurrRegion.buildingProps;
             bossBallController.InitState();
         }
 
 
         void CheckPillarStatus() {
-            if (currRegion.PillarCount * pillarUnlockToSuccessRate <= currRegion.unlockedPillar) {
+            if (CurrRegion.PillarCount * pillarUnlockToSuccessRate <= CurrRegion.unlockedPillar) {
 
                 UnlockCurrRegion();
             }
