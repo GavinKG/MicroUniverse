@@ -646,7 +646,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 8372023
+    m_Bits: 16760631
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1274,11 +1274,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadingJob: {fileID: 1422580536}
   ballGO: {fileID: 8996153153341454443}
-  pillarUnlockToSuccessRate: 0.8
+  bossBallPrefab: {fileID: 1080163922653158711, guid: 4099844aedfd9954d8455ca2f57b46b4,
+    type: 3}
+  groundGO: {fileID: 2120364405}
+  pillarUnlockToSuccessRate: 0.7
   skipIntro: 1
   skipUnlocking: 1
   skipRegionSwitching: 1
-  useAlreadyAssignedSource: 0
+  useAlreadyAssignedSourceTex: 0
 --- !u!1 &587798394
 GameObject:
   m_ObjectHideFlags: 0
@@ -2216,6 +2219,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preferSensorControl: 0
   exampleKaleido: 0
+  bossMinAreaBuildingCount: 50
+  bossAfterArea: 0
 --- !u!4 &1109387768
 Transform:
   m_ObjectHideFlags: 0

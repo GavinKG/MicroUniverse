@@ -30,6 +30,8 @@ namespace MicroUniverse {
 
         public bool preferSensorControl = false;
         public bool exampleKaleido = false;
+        public int bossMinAreaBuildingCount = 50;
+        public int bossAfterArea = 1;
 
         // ------- GLOBAL SETTINGS END
 

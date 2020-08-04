@@ -82,7 +82,6 @@ namespace MicroUniverse {
 
         public int PillarCount { get; private set; } = 0;
         public int MasterPillarCount { get; private set; } = 0;
-        public List<BuildingProp> buildings;
         public int BuildingCount { get { return buildingProps?.Count ?? -1; } }
         public int RoadCount { get; private set; } = 0;
         public int AllPillarCount { get { return PillarCount + MasterPillarCount; } }
@@ -104,13 +103,16 @@ namespace MicroUniverse {
 
         // ------- Gameplay:
 
+        // Actual FSM is in MainGameplayController
         public enum RegionState {
-            Uninitialized, Dark, Unlocking, Unlocked
+            Uninitialized,
+            Dark,
+            Unlocking, // playing animations.
+            Unlocked
         }
         public RegionState currState = RegionState.Uninitialized;
 
         public int unlockedPillar = 0;
-
 
         // ------------ PUBLIC PROPERTIES END
 
@@ -229,7 +231,7 @@ namespace MicroUniverse {
                 for (int y = 0; y < flattenedMapHeight; ++y) {
                     if (FlattenedMapId[x, y] == id_pillarRoad) {
                         int counter = CountSurroundingRoad(FlattenedMapId, x, y);
-                        if (counter  == 4) {
+                        if (counter == 4) {
                             FlattenedMapId[x, y] = id_masterPillarRoad;
                         } else if (counter == 3) {
                             FlattenedMapId[x, y] = Random.Range(0f, 1f) > 0.5f ? id_masterPillarRoad : id_pillarRoad; // half-half

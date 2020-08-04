@@ -7,8 +7,11 @@ namespace MicroUniverse {
     public class MainGameplayController : GameplayControllerBase {
 
         // Inspector:
+        [Header("Ref")]
         public LoadingJob loadingJob;
         public GameObject ballGO;
+        public GameObject bossBallPrefab;
+        public GameObject groundGO;
         [Header("Gameplay")]
         [Range(0.1f, 1f)] public float pillarUnlockToSuccessRate = 0.8f;
         [Header("Debugging")]
@@ -16,18 +19,23 @@ namespace MicroUniverse {
         public bool skipUnlocking = false;
         public bool skipRegionSwitching = false;
         [Header("Debug")]
-        public bool useAlreadyAssignedSource = false;
+        public bool useAlreadyAssignedSourceTex = false;
         // Inspector END
 
         public List<RegionInfo> RegionInfos { get; set; }
         public RegionInfo StartRegion { get; set; }
 
+        public int RegionCount { get { return RegionInfos.Count; } }
+        public int UnlockedRegionCount { get; private set; } = 0;
+
         RegionInfo currRegion = null;
         Vector3 regionEnterPosition;
+        int regionLeftoverForBossFight;
+        bool bossfight = false;
 
         public override void Begin() {
 
-            if (!useAlreadyAssignedSource && GameManager.Instance.KaleidoTex != null) {
+            if (!useAlreadyAssignedSourceTex && GameManager.Instance.KaleidoTex != null) {
                 loadingJob.source = GameManager.Instance.KaleidoTex;
             }
             loadingJob.Load();
@@ -102,6 +110,7 @@ namespace MicroUniverse {
             // player first enters the whole new world...
             currRegion = StartRegion;
             regionEnterPosition = StartRegion.portals[0].PortalSpawnPosition;
+            regionLeftoverForBossFight = GameManager.Instance.bossAfterArea;
             OnEnterPlayingState();
         }
 
@@ -138,7 +147,7 @@ namespace MicroUniverse {
                 case RegionInfo.RegionState.Unlocking:
                     break;
                 case RegionInfo.RegionState.Unlocked:
-
+                    // no state to switch to...
                     break;
             }
 
@@ -146,7 +155,17 @@ namespace MicroUniverse {
 
         void OnInitRegion() {
             currRegion.SetBadBallsActive(true);
+
+            // boss fight logic.
+            if (currRegion.BuildingCount > GameManager.Instance.bossMinAreaBuildingCount) {
+                if (regionLeftoverForBossFight == 0) {
+                    InitBoss();
+                } else {
+                    --regionLeftoverForBossFight;
+                }
+            }
         }
+
 
         void OnRegionUnlocking() {
             print("Region unlocking: " + currRegion.RegionID.ToString());
@@ -159,6 +178,11 @@ namespace MicroUniverse {
                 regionPortal.SetPortalActive();
             }
             currRegion.SetBadBallsActive(false);
+            ++UnlockedRegionCount;
+
+            if (UnlockedRegionCount == RegionCount || bossfight) {
+                TransitionState(GameplayState.Outro);
+            }
         }
 
         #endregion
@@ -192,6 +216,15 @@ namespace MicroUniverse {
         }
 
         #endregion
+
+        void InitBoss() {
+            bossfight = true;
+            GameObject bossGO = Instantiate(bossBallPrefab);
+            BossBallController bossBallController = bossGO.GetComponent<BossBallController>();
+            bossBallController.buildings = currRegion.buildingProps;
+            bossBallController.InitState();
+        }
+
 
         void CheckPillarStatus() {
             if (currRegion.PillarCount * pillarUnlockToSuccessRate <= currRegion.unlockedPillar) {

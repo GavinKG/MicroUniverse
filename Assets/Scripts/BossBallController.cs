@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Cinemachine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,20 +18,21 @@ namespace MicroUniverse {
         public float moveForce = 1f;
         public float jumpForce = 10f;
         public float jumpYMul = 1f;
-        public GameObject groundGO;
 
-
+        [Header("Debug")]
         public BuildingProp target = null;
+        public State currState;
 
+        GameObject groundGO;
+        CinemachineImpulseSource impulseSource;
         Rigidbody rb;
         float hp = 100;
+        Vector3 toTargetDir;
 
         public enum State {
             Idle, Move, InAir
         }
 
-        State currState;
-        Vector3 toTargetDir;
 
         /// <summary>
         /// AI Enabler.
@@ -39,6 +41,9 @@ namespace MicroUniverse {
             if (buildings == null || buildings.Count == 0) {
                 throw new System.Exception("Boss: nothing to do!!");
             }
+
+            groundGO = (GameManager.Instance.CurrController as MainGameplayController).groundGO;
+            impulseSource = GetComponent<CinemachineImpulseSource>();
 
             // random position:
             BuildingProp landingProp = buildings[Random.Range(0, buildings.Count)];
@@ -81,18 +86,23 @@ namespace MicroUniverse {
             target = buildings[Random.Range(0, buildings.Count)];
             float distance = Vector3.Distance(target.transform.position, transform.position);
             if (distance > jumpMinDis) {
-                WaitAndSwitchState(Random.Range(jumpLatency.x, jumpLatency.y), State.InAir);
+                print("Ready...");
+                StartCoroutine(WaitAndSwitchState(Random.Range(jumpLatency.x, jumpLatency.y), State.InAir));
+            } else {
+                print("Out of my way!!");
             }
         }
 
         void OnJump() {
             Vector3 jumpDir = new Vector3(toTargetDir.x, jumpYMul, toTargetDir.z); // hack
             rb.AddForce(jumpDir * jumpForce);
+            print("Juuuuuuuuuummmmmmmmmp!");
         }
 
         void OnRest() {
+            print("Tired, I'm gonna rest...");
             target = null;
-            WaitAndSwitchState(Random.Range(restTime.x, restTime.y), State.Move);
+            StartCoroutine(WaitAndSwitchState(Random.Range(restTime.x, restTime.y), State.Move));
         }
 
         void Start() {
@@ -123,27 +133,41 @@ namespace MicroUniverse {
             yield return null;
         }
 
+        private void OnTriggerEnter(Collider other) {
+            PillarProp pillarProp = other.GetComponent<PillarProp>();
+            if (pillarProp != null) {
+                print("Pillar Boom!");
+                pillarProp.Deactivate();
+                return;
+            }
+        }
+
         private void OnCollisionEnter(Collision collision) {
 
             GameObject other = collision.transform.gameObject;
 
-            BuildingProp buildingProp = other.GetComponent<BuildingProp>();
-            if (buildingProp != null) {
-                buildingProp.Destroy();
-                // shake
-                return;
-            }
-
-            PillarProp pillarProp = other.GetComponent<PillarProp>();
-            if (pillarProp != null) {
-                pillarProp.Deactivate();
-                return;
-            }
-
             if (currState == State.InAir && other == groundGO) {
+                impulseSource.GenerateImpulse();
                 TransitionState(State.Move);
+                return;
             }
 
+            BadBallController badBallController = other.transform.GetComponent<BadBallController>();
+            if (badBallController != null) {
+                print("Fuck off, little scum!");
+                badBallController.Die();
+            }
+
+            BuildingProp buildingProp = other.transform.GetComponent<BuildingProp>();
+            if (buildingProp == null) {
+                buildingProp = other.transform.GetComponentInParent<BuildingProp>();
+            }
+            if (buildingProp != null) {
+                print("Building Boom!");
+                buildingProp.Destroy();
+                impulseSource.GenerateImpulse();
+                return;
+            }
         }
 
     }
