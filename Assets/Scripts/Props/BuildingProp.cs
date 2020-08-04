@@ -29,6 +29,11 @@ namespace MicroUniverse {
         public GameObject baseGO;
         public GameObject destroyedPrefab;
 
+        public void Destroy() {
+            //TODO:
+            gameObject.SetActive(false);
+        }
+
         /// <summary>
         /// Replace existing props (not base) to the new props from given prop prefab.
         /// Old props will be destroyed; new props will be instantiated.

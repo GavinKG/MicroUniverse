@@ -45,6 +45,7 @@ namespace MicroUniverse {
         GameObject hookedPillarGO;
         float hookingSpeed;
         Vector3 toHookingPillarDir;
+        float currSpeed;
 
 
         public void OnPlayerMovementInput(InputAction.CallbackContext context) {
@@ -229,7 +230,8 @@ namespace MicroUniverse {
 
             UpdateIndicator();
 
-            debugSpeedText.text = "Speed: " + rb.velocity.magnitude.ToString();
+            currSpeed = rb.velocity.magnitude;
+            debugSpeedText.text = "Speed: " + currSpeed.ToString();
 
         }
 
@@ -252,7 +254,7 @@ namespace MicroUniverse {
 
             BadBallController badBallController = otherGO.GetComponent<BadBallController>();
             if (badBallController != null) {
-                if (rb.velocity.magnitude > damageSpeed) {
+                if (currSpeed > damageSpeed) {
                     badBallController.Die();
                 }
             }

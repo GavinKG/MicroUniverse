@@ -133,6 +133,7 @@ namespace MicroUniverse {
 
             if (currRoadProp == null) {
                 gameObject.SetActive(false);
+                return;
             }
             if (targetRoadProp == null) {
                 // select a new road prop to march.
