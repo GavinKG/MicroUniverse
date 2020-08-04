@@ -23,13 +23,13 @@ namespace MicroUniverse {
         public Material EmptyMat { get; private set; }
         public Material PlantMat { get; private set; }
 
-        public bool InstanceCreated { get; private set; } = false;
+        bool instanceCreated = false;
 
         public void CreateMaterialInstance(Material buildingT, Material baseT, Material emptyT, Material plantT) {
             
             // T stands for template.
 
-            if (InstanceCreated) {
+            if (instanceCreated) {
                 return;
             }
 
@@ -49,7 +49,7 @@ namespace MicroUniverse {
 
             PlantMat.SetColor("_Diffuse", plant);
 
-            InstanceCreated = true;
+            instanceCreated = true;
         }
     }
 

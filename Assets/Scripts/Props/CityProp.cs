@@ -20,10 +20,6 @@ namespace MicroUniverse {
 
         public void SetTheme(Theme theme) {
 
-            if (!theme.InstanceCreated) {
-                throw new System.Exception("Theme material not instanced.");
-            }
-
             foreach (MeshRenderer r in themeRendererHolder.buildings) {
                 r.material = theme.BuildingMat;
             }
