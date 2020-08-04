@@ -3473,7 +3473,7 @@ MonoBehaviour:
   companionRoot: {fileID: 931227873}
   companionDelay: 0.2
   companionGenInterval: 0.1
-  damageSpeed: 6.5
+  damageSpeed: 7.5
   indicator: {fileID: 630522145}
   debugSpeedText: {fileID: 270982184}
 --- !u!135 &8996153153341454440

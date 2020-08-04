@@ -18,6 +18,7 @@ namespace MicroUniverse {
         public float moveForce = 1f;
         public float jumpForce = 10f;
         public float jumpYMul = 1f;
+        public float readyJumpFreezeRatio = 0.95f;
 
         [Header("Debug")]
         public BuildingProp target = null;
@@ -30,7 +31,7 @@ namespace MicroUniverse {
         Vector3 toTargetDir;
 
         public enum State {
-            Idle, Move, InAir
+            Idle, Move, ReadyJump, InAir
         }
 
 
@@ -51,6 +52,8 @@ namespace MicroUniverse {
             Vector3 spawnPosition = new Vector3(propPos.x, spawnHeight, propPos.z);
             transform.position = spawnPosition;
 
+            target = buildings[Random.Range(0, buildings.Count)];
+
             TransitionState(State.Move);
         }
 
@@ -61,6 +64,15 @@ namespace MicroUniverse {
                     if (newState == State.Move) {
                         OnMove();
                         currState = newState;
+                    } else if (newState == State.ReadyJump) {
+                        OnReadyJump();
+                        currState = newState;
+                    }
+                    break;
+                case State.ReadyJump:
+                    if (newState  == State.InAir) {
+                        OnJump();
+                        currState = newState;
                     }
                     break;
                 case State.InAir:
@@ -70,10 +82,7 @@ namespace MicroUniverse {
                     }
                     break;
                 case State.Move:
-                    if (newState == State.InAir) {
-                        OnJump();
-                        currState = newState;
-                    } else if (newState == State.Idle) {
+                    if (newState == State.Idle) {
                         OnRest();
                         currState = newState;
                     }
@@ -83,14 +92,13 @@ namespace MicroUniverse {
         }
 
         void OnMove() {
-            target = buildings[Random.Range(0, buildings.Count)];
-            float distance = Vector3.Distance(target.transform.position, transform.position);
-            if (distance > jumpMinDis) {
-                print("Ready...");
-                StartCoroutine(WaitAndSwitchState(Random.Range(jumpLatency.x, jumpLatency.y), State.InAir));
-            } else {
-                print("Out of my way!!");
-            }
+            print("Out of my way!!");
+        }
+
+        void OnReadyJump() {
+            print("Ready...");
+            StartCoroutine(WaitAndSwitchState(Random.Range(jumpLatency.x, jumpLatency.y), State.InAir));
+
         }
 
         void OnJump() {
@@ -101,8 +109,13 @@ namespace MicroUniverse {
 
         void OnRest() {
             print("Tired, I'm gonna rest...");
-            target = null;
-            StartCoroutine(WaitAndSwitchState(Random.Range(restTime.x, restTime.y), State.Move));
+            target = buildings[Random.Range(0, buildings.Count)];
+            float distance = Vector3.Distance(target.transform.position, transform.position);
+            if (distance > jumpMinDis) {
+                StartCoroutine(WaitAndSwitchState(Random.Range(restTime.x, restTime.y), State.ReadyJump));
+            } else {
+                StartCoroutine(WaitAndSwitchState(Random.Range(restTime.x, restTime.y), State.Move));
+            }
         }
 
         void Start() {
@@ -124,6 +137,8 @@ namespace MicroUniverse {
                 toTargetDir.y = 0;
                 toTargetDir.Normalize();
                 rb.AddForce(toTargetDir * moveForce);
+            } else if (currState == State.ReadyJump) {
+                rb.velocity *= readyJumpFreezeRatio;
             }
         }
 

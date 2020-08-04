@@ -13,8 +13,8 @@ namespace MicroUniverse {
             DrawDefaultInspector();
             BossBallController controller = target as BossBallController;
 
-            if (GUILayout.Button("TriggerJump")) {
-                controller.TransitionState(BossBallController.State.InAir);
+            if (GUILayout.Button("Rest")) {
+                controller.TransitionState(BossBallController.State.Idle);
             }
 
         }
