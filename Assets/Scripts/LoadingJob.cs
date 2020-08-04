@@ -65,6 +65,9 @@ namespace MicroUniverse {
         [Header("Step.9 Raycast portal")]
         public GameObject portalPrefab;
 
+        [Header("Step.10: coloring")]
+        public MeshRenderer groundMeshRenderer; // for changing its world-UV sampled diffuse tex.
+
         [Header("Debug")]
         public GameObject debugBall;
         public List<RawImage> debugImages;
@@ -90,6 +93,9 @@ namespace MicroUniverse {
 
         // Step.8:
         private Texture aoTex;
+
+        // Step.10:
+        private Texture2D coloredTex;
 
         private bool loaded = false;
 
@@ -285,6 +291,28 @@ namespace MicroUniverse {
                 }
             }
 
+
+            // ---------
+            // Step.10 Combine ColoredTex -> floor
+            RenderTexture rt0 = RenderTexture.GetTemporary(fillMapWidth, fillMapHeight);
+            RenderTexture rt1 = RenderTexture.GetTemporary(fillMapWidth, fillMapHeight);
+            RenderTexture prevRT = RenderTexture.active;
+            Material texAddMat = new Material(Shader.Find("MicroUniverse/TexAdd"));
+            int ppIndex = 0;
+            RenderTexture[] pp = new RenderTexture[2] { rt0, rt1 };
+            Graphics.Blit(regionInfos[0].ColoredMapTex, rt0);
+
+            for (int i = 1; i < regionInfos.Count; ++i) {
+                texAddMat.SetTexture("_AddTex", regionInfos[i].ColoredMapTex);
+                Graphics.Blit(pp[ppIndex], pp[1 - ppIndex], texAddMat);
+                ppIndex = 1 - ppIndex;
+            }
+
+            coloredTex = Util.RT2Tex(pp[ppIndex]);
+            RenderTexture.active = prevRT;
+            RenderTexture.ReleaseTemporary(rt0);
+            RenderTexture.ReleaseTemporary(rt1);
+            groundMeshRenderer.material.SetTexture("_DiffuseTex", coloredTex);
 
             // ---------
             // Last: pass on all useful data to game controller...

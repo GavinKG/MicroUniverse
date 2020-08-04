@@ -78,6 +78,11 @@ namespace MicroUniverse {
             }
         }
 
+        /// <summary>
+        /// Color added on a pure transparent tex.
+        /// </summary>
+        public Texture2D ColoredMapTex { get; private set; }
+
         public List<RegionInfo> ConnectedRegion { get; private set; } = new List<RegionInfo>();
 
         public int PillarCount { get; private set; } = 0;
@@ -388,6 +393,14 @@ namespace MicroUniverse {
             foreach (CityProp prop in props) {
                 prop.SetThemeMaterial(themeMaterialHolder);
             }
+
+            // Step.9: Color Map tex:
+            Material colorMat = new Material(Shader.Find("MicroUniverse/ColorRegion"));
+            colorMat.SetColor("_Color", themeMaterialHolder.theme.main);
+            RenderTexture rt = RenderTexture.GetTemporary(Map.GetLength(0), Map.GetLength(1), 0);
+            Graphics.Blit(MapTex, rt, colorMat);
+            ColoredMapTex = Util.RT2Tex(rt);
+            RenderTexture.ReleaseTemporary(rt);
         }
 
         public RegionPortal FindPortalFromHereTo(int regionId) {
