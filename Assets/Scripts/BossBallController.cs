@@ -54,7 +54,8 @@ namespace MicroUniverse {
             TransitionState(State.Move);
         }
 
-        void TransitionState(State newState) {
+        // make it public to debug.
+        public void TransitionState(State newState) {
             switch (currState) {
                 case State.Idle:
                     if (newState == State.Move) {
@@ -64,8 +65,7 @@ namespace MicroUniverse {
                     break;
                 case State.InAir:
                     if (newState == State.Move) {
-                        // TODO
-
+                        // nothing to do, keeps moving
                         currState = newState;
                     }
                     break;

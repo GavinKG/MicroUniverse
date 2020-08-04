@@ -169,11 +169,11 @@ MonoBehaviour:
   buildings: []
   spawnHeight: 10
   jumpMinDis: 10
-  jumpLatency: {x: 1, y: 2}
-  restTime: {x: 1, y: 2}
+  jumpLatency: {x: 3, y: 5}
+  restTime: {x: 2, y: 5}
   targetArriveDis: 2
   moveForce: 2
-  jumpForce: 20
-  jumpYMul: 1
+  jumpForce: 2000
+  jumpYMul: 1.5
   target: {fileID: 0}
   currState: 0
