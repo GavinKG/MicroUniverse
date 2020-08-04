@@ -23,15 +23,15 @@ namespace MicroUniverse {
         [Header("Debug")]
         public BuildingProp target = null;
         public State currState;
+        public float HP { get; private set; }
 
         GameObject groundGO;
         CinemachineImpulseSource impulseSource;
         Rigidbody rb;
-        float hp = 100;
         Vector3 toTargetDir;
 
         public enum State {
-            Idle, Move, ReadyJump, InAir
+            Idle, Move, ReadyJump, InAir, Die
         }
 
 
@@ -53,12 +53,19 @@ namespace MicroUniverse {
             transform.position = spawnPosition;
 
             target = buildings[Random.Range(0, buildings.Count)];
+            HP = 100;
 
             TransitionState(State.Move);
         }
 
         // make it public to debug.
         public void TransitionState(State newState) {
+
+            // any state ->
+            if (newState == State.Die) {
+                OnDie();
+            }
+
             switch (currState) {
                 case State.Idle:
                     if (newState == State.Move) {
@@ -89,6 +96,12 @@ namespace MicroUniverse {
                     break;
             }
 
+        }
+
+        void OnDie() {
+            // play some animation...
+            print("Aaaaaaaaa, dead.");
+            gameObject.SetActive(false);
         }
 
         void OnMove() {
@@ -171,6 +184,7 @@ namespace MicroUniverse {
             if (badBallController != null) {
                 print("Fuck off, little scum!");
                 badBallController.Die();
+                return;
             }
 
             BuildingProp buildingProp = other.transform.GetComponent<BuildingProp>();
@@ -182,6 +196,14 @@ namespace MicroUniverse {
                 buildingProp.Destroy();
                 impulseSource.GenerateImpulse();
                 return;
+            }
+        }
+
+        public void Damage(float value) {
+            print(value.ToString() + " HP! It hurts!");
+            HP -= value;
+            if (HP < 0) {
+                TransitionState(State.Die);
             }
         }
 

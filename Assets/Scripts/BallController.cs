@@ -24,6 +24,12 @@ namespace MicroUniverse {
         public float companionDelay = 0.1f;
         public float companionGenInterval = 0.1f;
         public float damageSpeed = 10f;
+
+        // for boss:
+        public float damageMaxSpeed = 15f;
+        public float damageMaxSpeedHPLoss = 10f;
+
+
         public GameObject indicator;
 
         public Text debugSpeedText;
@@ -257,6 +263,19 @@ namespace MicroUniverse {
                 if (currSpeed > damageSpeed) {
                     badBallController.Die();
                 }
+                return;
+            }
+
+            BossBallController bossBallController = otherGO.GetComponent<BossBallController>();
+            if (bossBallController != null) {
+                float speedRange = (currSpeed - damageSpeed) / (damageMaxSpeed - damageSpeed);
+                if (speedRange > 1) {
+                    speedRange = 1;
+                }
+                if (speedRange > 0) {
+                    bossBallController.Damage(damageMaxSpeedHPLoss * speedRange);
+                }
+                return;
             }
 
         }

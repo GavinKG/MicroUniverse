@@ -14,7 +14,7 @@ namespace MicroUniverse {
             ballController = (GameManager.Instance.CurrController as MainGameplayController).ballGO.GetComponent<BallController>();
         }
 
-        private void Update() {
+        private void FixedUpdate() {
             rb.AddForce(ballController.GravityForce);
         }
 
