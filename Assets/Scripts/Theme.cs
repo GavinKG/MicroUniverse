@@ -30,7 +30,7 @@ namespace MicroUniverse {
             // T stands for template.
 
             if (InstanceCreated) {
-                throw new System.Exception("Material instance already created.");
+                return;
             }
 
             BuildingMat = new Material(buildingT);
