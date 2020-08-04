@@ -81,6 +81,7 @@ Material:
     - _Cutoff: 0.5
     - _DarkMask: 1
     - _DarkenDiffuseGrayscale: 0.05
+    - _DiffuseTexUseWorldUV: 0
     - _DiffuseUseFourGrid: 0
     - _DiffuseUseTex: 0
     - _DstBlend: 0

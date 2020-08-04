@@ -83,6 +83,7 @@ Material:
     - _DarkMaskMinValue: 0
     - _DarkenDiffuseGraylevel: 0.2
     - _DarkenDiffuseGrayscale: 0.05
+    - _DiffuseTexUseWorldUV: 0
     - _DiffuseUseFourGrid: 1
     - _DiffuseUseTex: 0
     - _DstBlend: 0
