@@ -120,7 +120,7 @@ namespace MicroUniverse {
             Vector3 newPos = new Vector3(pillarPos.x, ballY + 0.1f, pillarPos.z);
             transform.position = newPos;
             hookingSpeed += hookedSpeedBoost;
-            print("Ball hooked.");
+            // print("Ball hooked.");
         }
 
         private void OnFreeze() {
@@ -135,7 +135,7 @@ namespace MicroUniverse {
             hookingSpeed = rb.velocity.magnitude;
             rb.isKinematic = true;
             collider.enabled = false;
-            print("Ball hooking -> " + hookedPillarGO.name);
+            // print("Ball hooking -> " + hookedPillarGO.name);
             return true;
         }
 
@@ -170,7 +170,7 @@ namespace MicroUniverse {
 
 
             
-            print("Ball released");
+            // print("Ball released");
         }
 
         private void OnAbandonHook() {
