@@ -187,9 +187,9 @@ namespace MicroUniverse {
                 if (regionLeftoverForBossFight == 0) {
                     InitBoss();
                 } else {
-                    --regionLeftoverForBossFight;
                     bossFightUIRoot.SetActive(false);
                 }
+                --regionLeftoverForBossFight;
             }
         }
 
