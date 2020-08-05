@@ -28,10 +28,12 @@ namespace MicroUniverse {
 
         public GameObject baseGO;
         public GameObject destroyedPrefab;
+        public bool Destroyed { get; private set; } = false;
 
         public void Destroy() {
             //TODO:
             gameObject.SetActive(false);
+            Destroyed = true;
         }
 
         /// <summary>

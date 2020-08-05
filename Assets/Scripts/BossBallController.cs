@@ -1,7 +1,9 @@
 ﻿using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace MicroUniverse {
 
@@ -25,6 +27,14 @@ namespace MicroUniverse {
         public State currState;
         public float HP { get; private set; }
 
+        public delegate void HPLossDelegate();
+        public delegate void DieDelegate();
+        public delegate void DestroyBuildingDelegate();
+
+        public event HPLossDelegate OnHPLossEvent;
+        public event DieDelegate OnDieEvent;
+        public event DestroyBuildingDelegate OnDestroyBuildingEvent;
+
         GameObject groundGO;
         CinemachineImpulseSource impulseSource;
         Rigidbody rb;
@@ -42,6 +52,8 @@ namespace MicroUniverse {
             if (buildings == null || buildings.Count == 0) {
                 throw new System.Exception("Boss: nothing to do!!");
             }
+
+            buildings.Shuffle();
 
             groundGO = (GameManager.Instance.CurrController as MainGameplayController).groundGO;
             impulseSource = GetComponent<CinemachineImpulseSource>();
@@ -101,7 +113,9 @@ namespace MicroUniverse {
         void OnDie() {
             // play some animation...
             print("Aaaaaaaaa, dead.");
-            gameObject.SetActive(false);
+            OnDieEvent?.Invoke();
+            // gameObject.SetActive(false);
+            Destroy(gameObject);
         }
 
         void OnMove() {
@@ -122,7 +136,19 @@ namespace MicroUniverse {
 
         void OnRest() {
             print("Tired, I'm gonna rest...");
-            target = buildings[Random.Range(0, buildings.Count)];
+
+            target = null;
+            foreach (BuildingProp prop in buildings) { // not so fast...
+                if (!prop.Destroyed) {
+                    target = prop;
+                    break;
+                }
+            }
+            if (target == null) {
+                target = buildings[Random.Range(0, buildings.Count)];
+            }
+
+
             float distance = Vector3.Distance(target.transform.position, transform.position);
             if (distance > jumpMinDis) {
                 StartCoroutine(WaitAndSwitchState(Random.Range(restTime.x, restTime.y), State.ReadyJump));
@@ -194,6 +220,7 @@ namespace MicroUniverse {
             if (buildingProp != null) {
                 print("Building Boom!");
                 buildingProp.Destroy();
+                OnDestroyBuildingEvent?.Invoke();
                 impulseSource.GenerateImpulse();
                 return;
             }
@@ -203,6 +230,7 @@ namespace MicroUniverse {
             print(value.ToString() + " HP! It hurts!");
             HP -= value;
             print("Now I only have " + HP.ToString() + " HP...");
+            OnHPLossEvent?.Invoke();
             if (HP < 0) {
                 TransitionState(State.Die);
             }

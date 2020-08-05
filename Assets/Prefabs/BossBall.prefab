@@ -61,6 +61,15 @@ MonoBehaviour:
   readyJumpFreezeRatio: 0.95
   target: {fileID: 0}
   currState: 1
+  OnHPLossEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDieEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDestroyCityEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!33 &1080163922653158716
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MicroUniverse {
 
@@ -15,6 +16,12 @@ namespace MicroUniverse {
         public Light mainLight;
         [Header("Gameplay")]
         [Range(0.1f, 1f)] public float pillarUnlockToSuccessRate = 0.8f;
+        public Image unlockRateIndicator;
+        [Header("Boss Fight")]
+        public GameObject bossFightUIRoot;
+        public Image bossHP;
+        public Image cityHP;
+        public float hpInitialWidth = 500;
         [Header("Debugging")]
         public bool skipIntro = false;
         public bool skipUnlocking = false;
@@ -31,8 +38,12 @@ namespace MicroUniverse {
 
         public RegionInfo CurrRegion { get; private set; } = null;
         Vector3 regionEnterPosition;
+
+        // boss fight:
         int regionLeftoverForBossFight;
         bool bossfight = false;
+        BossBallController bossBallController;
+        int buildingsLeft;
 
         public override void Begin() {
 
@@ -169,6 +180,7 @@ namespace MicroUniverse {
                     InitBoss();
                 } else {
                     --regionLeftoverForBossFight;
+                    bossFightUIRoot.SetActive(false);
                 }
             }
         }
@@ -186,9 +198,8 @@ namespace MicroUniverse {
             }
             CurrRegion.DestroyAutoBalls();
             ++UnlockedRegionCount;
-
-            if (UnlockedRegionCount == RegionCount || bossfight) {
-                TransitionState(GameplayState.Outro);
+            if (UnlockedRegionCount == RegionCount || (bossfight && GameManager.Instance.gameOverAfterBossFight)) {
+                TransitionState(GameplayState.Outro); // game over.
             }
         }
 
@@ -212,6 +223,24 @@ namespace MicroUniverse {
             --CurrRegion.unlockedPillar;
         }
 
+        public void BossHPLoss() {
+            float width = hpInitialWidth * bossBallController.HP / 100f;
+            bossHP.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+        }
+
+        public void BossDestroyBuilding() {
+            --buildingsLeft;
+            float width = hpInitialWidth * buildingsLeft / CurrRegion.BuildingCount;
+            cityHP.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+            // if (buildingsLeft == 0)
+        }
+
+        public void BossDie() {
+            // TODO: switch state.
+            bossBallController = null;
+            bossFightUIRoot.SetActive(false);
+        }
+
         public void GotoRegion(int regionId) {
             print("Region switch " + CurrRegion.RegionID.ToString() + "->" + regionId.ToString());
             RegionInfo lastRegion = CurrRegion;
@@ -227,9 +256,15 @@ namespace MicroUniverse {
         void InitBoss() {
             print("..And it's now for the boss fight!!!!!");
             bossfight = true;
+            bossFightUIRoot.SetActive(true);
+            buildingsLeft = CurrRegion.BuildingCount;
             GameObject bossGO = Instantiate(bossBallPrefab);
-            BossBallController bossBallController = bossGO.GetComponent<BossBallController>();
-            bossBallController.buildings = CurrRegion.buildingProps;
+            bossBallController = bossGO.GetComponent<BossBallController>();
+            bossBallController.buildings = new List<BuildingProp>(CurrRegion.buildingProps); // shallow copy.
+            bossBallController.OnDestroyBuildingEvent += BossDestroyBuilding;
+            bossBallController.OnDieEvent += BossDie;
+            bossBallController.OnHPLossEvent += BossHPLoss;
+
             bossBallController.InitState();
         }
 
