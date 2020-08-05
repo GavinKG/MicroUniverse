@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
+using UnityEngine.Timeline;
 using UnityEngine.UI;
 
 namespace MicroUniverse {
@@ -20,6 +22,11 @@ namespace MicroUniverse {
         public Text debugStateText;
         public Text debugPainterStateText;
 
+        [Header("Animation")]
+        public TimelineAsset kaleidoFinishedTimeline;
+        public TimelineAsset kaleidoClearTimeline;
+        public TimelineAsset kaleidoStutterTimeline;
+
         public enum State {
             Start, FinishedDrawing, Stutter 
         }
@@ -28,9 +35,14 @@ namespace MicroUniverse {
 
         public List<SpriteRenderer> spriteRenders;
 
+        PlayableDirector director;
+
+
         public override void Begin() {
             colorButtonGO.SetActive(false);
+            clearButtonGO.SetActive(false);
             debugRoot.SetActive(GameManager.Instance.showDebugInfo);
+            director = GetComponent<PlayableDirector>();
         }
 
         public override void Finish() {
@@ -69,12 +81,16 @@ namespace MicroUniverse {
         void OnFinishDrawing() {
             painter.enabled = false;
             colorButtonGO.SetActive(true);
+            clearButtonGO.SetActive(true);
+            director.Play(kaleidoFinishedTimeline);
         }
 
         void OnClearDrawing() {
             painter.enabled = true;
             painter.ResetCanvas();
             colorButtonGO.SetActive(false);
+            clearButtonGO.SetActive(false);
+            director.Play(kaleidoClearTimeline);
         }
 
         void OnStutter() {

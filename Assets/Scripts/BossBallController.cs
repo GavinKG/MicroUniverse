@@ -253,8 +253,7 @@ namespace MicroUniverse {
         public void Damage(float value) {
             print(value.ToString() + " HP! It hurts!");
             HP -= value;
-            director.playableAsset = hurtTimeline;
-            director.Play();
+            director.Play(hurtTimeline);
             print("Now I only have " + HP.ToString() + " HP...");
             OnHPLossEvent?.Invoke();
             if (HP <= 0) {
