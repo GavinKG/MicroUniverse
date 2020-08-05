@@ -81,7 +81,7 @@ namespace MicroUniverse {
         /// <summary>
         /// Color added on a pure transparent tex.
         /// </summary>
-        public Texture2D ColoredMapTex { get; private set; }
+        public Texture2D ColoredTransparentMapTex { get; private set; }
 
         public List<RegionInfo> ConnectedRegion { get; private set; } = new List<RegionInfo>();
 
@@ -399,7 +399,7 @@ namespace MicroUniverse {
             colorMat.SetColor("_Color", themeMaterialHolder.theme.main);
             RenderTexture rt = RenderTexture.GetTemporary(Map.GetLength(0), Map.GetLength(1), 0);
             Graphics.Blit(MapTex, rt, colorMat);
-            ColoredMapTex = Util.RT2Tex(rt);
+            ColoredTransparentMapTex = Util.RT2Tex(rt);
             RenderTexture.ReleaseTemporary(rt);
         }
 
