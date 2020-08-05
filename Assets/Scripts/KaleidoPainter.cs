@@ -69,7 +69,7 @@ namespace MicroUniverse {
         // New input system handler END:
 
         public enum State {
-            Idle, OuterMask, Drawing, InnerMask
+            Idle, InnerMask, Drawing, OuterMask
         }
 
         State currState = State.Idle;
@@ -198,17 +198,17 @@ namespace MicroUniverse {
                 Ray ray = Camera.main.ScreenPointToRay(pointerPosPS);
                 RaycastHit2D hit = Physics2D.GetRayIntersection(ray, useLayer);
                 if (hit.transform != null) {
-                    if (hit.transform.gameObject == outerMask) {
-                        if (currState == State.Idle || currState == State.OuterMask) {
-                            currState = State.OuterMask;
+                    if (hit.transform.gameObject == innerMask) {
+                        if (currState == State.Idle || currState == State.InnerMask) {
+                            currState = State.InnerMask;
                         } else {
                             DrawingFailed();
                         }
                     } else if (hit.transform.gameObject == canvas) {
-                        if (currState == State.OuterMask && resetCanvasOnDraw) {
+                        if (currState == State.InnerMask && resetCanvasOnDraw) {
                                 ResetCanvas();
                         }
-                        if (currState == State.OuterMask || currState == State.Drawing) {
+                        if (currState == State.InnerMask || currState == State.Drawing) {
                             currState = State.Drawing;
                             Vector2 mousePosWS = Camera.main.ScreenToWorldPoint(pointerPosPS);
                             CurrentBrush(mousePosWS);
@@ -216,9 +216,9 @@ namespace MicroUniverse {
                             shouldTriggerFailed = true;
                         }
 
-                    } else if (hit.transform.gameObject == innerMask) {
-                        if (currState == State.Drawing || currState == State.InnerMask) {
-                            currState = State.InnerMask;
+                    } else if (hit.transform.gameObject == outerMask) {
+                        if (currState == State.Drawing || currState == State.OuterMask) {
+                            currState = State.OuterMask;
                         } else {
                             shouldTriggerFailed = true;
                         }
@@ -231,7 +231,7 @@ namespace MicroUniverse {
             } else {
 
                 if (currState != State.Idle) {
-                    if (currState == State.InnerMask) {
+                    if (currState == State.OuterMask) {
                         DrawingSuccess();
                     } else {
                         shouldTriggerFailed = true;
