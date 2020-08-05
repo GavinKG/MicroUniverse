@@ -32,9 +32,6 @@ namespace MicroUniverse {
 
         public GameObject indicator;
 
-        public Text debugSpeedText;
-        public Text debugStateText;
-
         public Vector3 GravityDirection { get; private set; }
         public Vector3 GravityForce { get; private set; }
 
@@ -47,12 +44,12 @@ namespace MicroUniverse {
 
         Rigidbody rb;
         Collider collider;
-        State currState = State.Normal;
+        [HideInInspector] public State currState = State.Normal; // public for debug
 
         GameObject hookedPillarGO;
         float hookingSpeed;
         Vector3 toHookingPillarDir;
-        float currSpeed;
+        [HideInInspector] public float currSpeed; // public for debug
 
         CinemachineImpulseSource shaker;
 
@@ -237,8 +234,6 @@ namespace MicroUniverse {
             }
 
             UpdateIndicator();
-
-            debugStateText.text = "Ball state: " + currState.ToString();
         }
 
         void FixedUpdate() {
@@ -248,7 +243,6 @@ namespace MicroUniverse {
 
             if (currState != State.Freeze) {
                 currSpeed = rb.velocity.magnitude;
-                debugSpeedText.text = "Speed: " + currSpeed.ToString();
             } else {
                 currSpeed = 0;
             }

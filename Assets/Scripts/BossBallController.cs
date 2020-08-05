@@ -10,16 +10,18 @@ namespace MicroUniverse {
     [RequireComponent(typeof(Rigidbody))]
     public class BossBallController : MonoBehaviour {
 
-        [HideInInspector] public List<BuildingProp> buildings;
+         
 
         public float spawnHeight = 5f;
         public float jumpMinDis = 20f; // > mindis: jump, otherwise: walk!
         public Vector2 jumpLatency = new Vector2(1f, 5f);
         public Vector2 restTime = new Vector2(1f, 5f);
+        public Vector2 moveTiredTime = new Vector2(10f, 15f);
         public float targetArriveDis = 1f;
         public float moveForce = 1f;
         public float jumpForce = 10f;
         public float jumpYMul = 1f;
+        public float restFreezeRatio = 0.99f;
         public float readyJumpFreezeRatio = 0.95f;
 
         [Header("Debug")]
@@ -39,6 +41,11 @@ namespace MicroUniverse {
         CinemachineImpulseSource impulseSource;
         Rigidbody rb;
         Vector3 toTargetDir;
+        public List<BuildingProp> Buildings { private get; set; }
+        List<BuildingProp> ogBuildings;
+
+        public int TotalBuildings { get; private set; }
+        public int LeftBuildings { get { return Buildings.Count; } }
 
         public enum State {
             Idle, Move, ReadyJump, InAir, Die
@@ -49,22 +56,24 @@ namespace MicroUniverse {
         /// AI Enabler.
         /// </summary>
         public void InitState() {
-            if (buildings == null || buildings.Count == 0) {
+            if (Buildings == null || Buildings.Count == 0) {
                 throw new System.Exception("Boss: nothing to do!!");
             }
 
-            buildings.Shuffle();
+            ogBuildings = Buildings;
+            Buildings = Buildings.Where(a => !a.tree).Shuffle();
+            TotalBuildings = Buildings.Count;
 
             groundGO = (GameManager.Instance.CurrController as MainGameplayController).groundGO;
             impulseSource = GetComponent<CinemachineImpulseSource>();
 
             // random position:
-            BuildingProp landingProp = buildings[Random.Range(0, buildings.Count)];
+            BuildingProp landingProp = Buildings[Random.Range(0, Buildings.Count)];
             Vector3 propPos = landingProp.transform.position;
             Vector3 spawnPosition = new Vector3(propPos.x, spawnHeight, propPos.z);
             transform.position = spawnPosition;
 
-            target = buildings[Random.Range(0, buildings.Count)];
+            FindNextTarget();
             HP = 100;
 
             TransitionState(State.Move);
@@ -120,6 +129,7 @@ namespace MicroUniverse {
 
         void OnMove() {
             print("Out of my way!!");
+            StartCoroutine(WaitAndSwitchState(Random.Range(moveTiredTime.x, moveTiredTime.y), State.Idle));
         }
 
         void OnReadyJump() {
@@ -129,25 +139,28 @@ namespace MicroUniverse {
         }
 
         void OnJump() {
+            toTargetDir = target.transform.position - transform.position;
+            toTargetDir.y = 0;
+            toTargetDir.Normalize();
             Vector3 jumpDir = new Vector3(toTargetDir.x, jumpYMul, toTargetDir.z); // hack
             rb.AddForce(jumpDir * jumpForce);
             print("Juuuuuuuuuummmmmmmmmp!");
         }
 
+        void FindNextTarget() {
+            if (Buildings.Count > 0) {
+                target = Buildings[Random.Range(0, Buildings.Count)];
+            } else {
+                target = ogBuildings[Random.Range(0, ogBuildings.Count)];
+            }
+            
+
+        }
+
         void OnRest() {
             print("Tired, I'm gonna rest...");
 
-            target = null;
-            foreach (BuildingProp prop in buildings) { // not so fast...
-                if (!prop.Destroyed) {
-                    target = prop;
-                    break;
-                }
-            }
-            if (target == null) {
-                target = buildings[Random.Range(0, buildings.Count)];
-            }
-
+            FindNextTarget();
 
             float distance = Vector3.Distance(target.transform.position, transform.position);
             if (distance > jumpMinDis) {
@@ -165,6 +178,7 @@ namespace MicroUniverse {
             if (currState == State.Move) {
                 float disToTarget = Vector3.Distance(transform.position, target.transform.position);
                 if (disToTarget < targetArriveDis) {
+                    print("ON TARGET!");
                     TransitionState(State.Idle);
                 }
             }
@@ -178,6 +192,8 @@ namespace MicroUniverse {
                 rb.AddForce(toTargetDir * moveForce);
             } else if (currState == State.ReadyJump) {
                 rb.velocity *= readyJumpFreezeRatio;
+            } else if (currState == State.Idle) {
+                rb.velocity *= restFreezeRatio;
             }
         }
 
@@ -190,7 +206,7 @@ namespace MicroUniverse {
         private void OnTriggerEnter(Collider other) {
             PillarProp pillarProp = other.GetComponent<PillarProp>();
             if (pillarProp != null) {
-                print("Pillar Boom!");
+                // print("Pillar Boom!");
                 pillarProp.Deactivate();
                 return;
             }
@@ -218,8 +234,9 @@ namespace MicroUniverse {
                 buildingProp = other.transform.GetComponentInParent<BuildingProp>();
             }
             if (buildingProp != null) {
-                print("Building Boom!");
+                // print("Building Boom!");
                 buildingProp.Destroy();
+                Buildings.Remove(buildingProp);
                 OnDestroyBuildingEvent?.Invoke();
                 impulseSource.GenerateImpulse();
                 return;
@@ -233,6 +250,12 @@ namespace MicroUniverse {
             OnHPLossEvent?.Invoke();
             if (HP < 0) {
                 TransitionState(State.Die);
+            }
+        }
+
+        void OnDrawGizmos() {
+            if (target != null) {
+                Gizmos.DrawWireSphere(target.transform.position, targetArriveDis);
             }
         }
 

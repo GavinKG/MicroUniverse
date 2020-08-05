@@ -71,6 +71,7 @@ MonoBehaviour:
   buildingType: 3
   baseGO: {fileID: 0}
   destroyedPrefab: {fileID: 0}
+  tree: 1
 --- !u!1 &4420522339134357850
 GameObject:
   m_ObjectHideFlags: 0

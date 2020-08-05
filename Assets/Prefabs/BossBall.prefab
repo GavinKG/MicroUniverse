@@ -52,24 +52,17 @@ MonoBehaviour:
   buildings: []
   spawnHeight: 10
   jumpMinDis: 10
-  jumpLatency: {x: 1, y: 5}
-  restTime: {x: 1, y: 3}
-  targetArriveDis: 2
+  jumpLatency: {x: 2, y: 3}
+  restTime: {x: 1.5, y: 3}
+  moveTiredTime: {x: 10, y: 15}
+  targetArriveDis: 1.5
   moveForce: 4
   jumpForce: 1500
   jumpYMul: 1
+  restFreezeRatio: 0.99
   readyJumpFreezeRatio: 0.95
   target: {fileID: 0}
   currState: 1
-  OnHPLossEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDieEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDestroyCityEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!33 &1080163922653158716
 MeshFilter:
   m_ObjectHideFlags: 0

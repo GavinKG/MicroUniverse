@@ -28,6 +28,13 @@ namespace MicroUniverse {
         public bool skipRegionSwitching = false;
         [Header("Debug")]
         public bool useAlreadyAssignedSourceTex = false;
+        public GameObject debugTextRoot;
+        public Text debugCoreSMStateText;
+        public Text debugRegionSMStateText;
+        public Text debugBallStateText;
+        public Text debugBallSpeedText;
+        public Text debugBossBallStateText;
+
         // Inspector END
 
         public List<RegionInfo> RegionInfos { get; set; }
@@ -43,7 +50,6 @@ namespace MicroUniverse {
         int regionLeftoverForBossFight;
         bool bossfight = false;
         BossBallController bossBallController;
-        int buildingsLeft;
 
         public override void Begin() {
 
@@ -54,6 +60,8 @@ namespace MicroUniverse {
             if (GameManager.Instance.realtimeShadow) {
                 mainLight.shadows = LightShadows.Soft;
             }
+
+            debugTextRoot.SetActive(GameManager.Instance.showDebugInfo);
 
             loadingJob.Load();
 
@@ -205,6 +213,35 @@ namespace MicroUniverse {
 
         #endregion
 
+        void Update() {
+
+            // debug:
+            if (GameManager.Instance.showDebugInfo) {
+                if (debugCoreSMStateText != null) {
+                    debugCoreSMStateText.text = "Core FSM State: " + currState.ToString();
+                }
+                if (debugRegionSMStateText != null) {
+                    debugRegionSMStateText.text = "Region FSM State: " + CurrRegion.currState.ToString();
+
+                }
+                if (debugBallStateText != null) {
+                    debugBallStateText.text = "Player ball State: " + ballGO.GetComponent<BallController>().currState.ToString();
+                }
+                if (debugBallSpeedText != null) {
+                    debugBallSpeedText.text = "Player ball speed: " + ballGO.GetComponent<BallController>().currSpeed.ToString();
+                }
+                if (debugBossBallStateText != null) {
+                    if (bossBallController != null) {
+                        debugBossBallStateText.text = "Boss ball State: " + bossBallController.currState.ToString();
+                    } else {
+                        debugBossBallStateText.text = "Boss ball State: No boss present.";
+                    }
+                }
+            }
+
+
+        }
+
 
         #region Logic Callback
 
@@ -229,8 +266,7 @@ namespace MicroUniverse {
         }
 
         public void BossDestroyBuilding() {
-            --buildingsLeft;
-            float width = hpInitialWidth * buildingsLeft / CurrRegion.BuildingCount;
+            float width = hpInitialWidth * bossBallController.LeftBuildings / bossBallController.TotalBuildings;
             cityHP.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
             // if (buildingsLeft == 0)
         }
@@ -257,10 +293,10 @@ namespace MicroUniverse {
             print("..And it's now for the boss fight!!!!!");
             bossfight = true;
             bossFightUIRoot.SetActive(true);
-            buildingsLeft = CurrRegion.BuildingCount;
+            
             GameObject bossGO = Instantiate(bossBallPrefab);
             bossBallController = bossGO.GetComponent<BossBallController>();
-            bossBallController.buildings = new List<BuildingProp>(CurrRegion.buildingProps); // shallow copy.
+            bossBallController.Buildings = new List<BuildingProp>(CurrRegion.buildingProps); // shallow copy.
             bossBallController.OnDestroyBuildingEvent += BossDestroyBuilding;
             bossBallController.OnDieEvent += BossDie;
             bossBallController.OnHPLossEvent += BossHPLoss;
