@@ -51,6 +51,18 @@ namespace MicroUniverse {
         public void OnExampleKaleidoPatternClick(bool value) {
             GameManager.Instance.exampleKaleido = value;
         }
+
+        public void OnRealtimeShadowClick(bool value) {
+            GameManager.Instance.realtimeShadow = value;
+        }
+
+        public void OnGameOverAfterBossFightClick(bool value) {
+            GameManager.Instance.gameOverAfterBossFight = value;
+        }
+
+        public void OnShowDebugInfoClick(bool value) {
+            GameManager.Instance.showDebugInfo = value;
+        }
     }
 
 }

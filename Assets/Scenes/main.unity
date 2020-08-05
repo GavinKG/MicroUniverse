@@ -1358,6 +1358,7 @@ MonoBehaviour:
   bossBallPrefab: {fileID: 1080163922653158711, guid: 4099844aedfd9954d8455ca2f57b46b4,
     type: 3}
   groundGO: {fileID: 2120364405}
+  mainLight: {fileID: 2056831753}
   pillarUnlockToSuccessRate: 0.7
   skipIntro: 1
   skipUnlocking: 1
@@ -2271,6 +2272,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preferSensorControl: 0
   exampleKaleido: 0
+  realtimeShadow: 1
+  gameOverAfterBossFight: 1
+  showDebugInfo: 1
   bossMinAreaBuildingCount: 200
   bossAfterArea: 1
 --- !u!4 &1109387768

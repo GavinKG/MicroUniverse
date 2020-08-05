@@ -12,6 +12,7 @@ namespace MicroUniverse {
         public GameObject ballGO;
         public GameObject bossBallPrefab;
         public GameObject groundGO;
+        public Light mainLight;
         [Header("Gameplay")]
         [Range(0.1f, 1f)] public float pillarUnlockToSuccessRate = 0.8f;
         [Header("Debugging")]
@@ -38,6 +39,11 @@ namespace MicroUniverse {
             if (!useAlreadyAssignedSourceTex && GameManager.Instance.KaleidoTex != null) {
                 loadingJob.source = GameManager.Instance.KaleidoTex;
             }
+
+            if (GameManager.Instance.realtimeShadow) {
+                mainLight.shadows = LightShadows.Soft;
+            }
+
             loadingJob.Load();
 
             // loading job will fill these variables:

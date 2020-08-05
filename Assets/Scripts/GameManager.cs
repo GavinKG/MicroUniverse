@@ -30,6 +30,9 @@ namespace MicroUniverse {
 
         public bool preferSensorControl = false;
         public bool exampleKaleido = false;
+        public bool realtimeShadow = true;
+        public bool gameOverAfterBossFight = true;
+        public bool showDebugInfo = true;
         public int bossMinAreaBuildingCount = 50;
         public int bossAfterArea = 1;
 
