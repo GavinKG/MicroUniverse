@@ -6,9 +6,7 @@ namespace MicroUniverse {
 
     public class Theme : MonoBehaviour {
 
-        public Color main;
-
-        public Color floor;
+        public Color main; // main + floor color
         public Color buildingRoof;
         public Color buildingBody;
         public Color buildingFrame;

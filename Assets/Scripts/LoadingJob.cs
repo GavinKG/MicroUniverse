@@ -48,6 +48,7 @@ namespace MicroUniverse {
         [Range(0f, 1f)] public float companionSpawnRatio = 0.4f;
         [Range(0f, 1f)] public float badPillarRatio = 0.3f;
         public List<Theme> themes;
+        public GameObject regionMaskPrefab;
 
         // Material templates:
         public Material buildingMat;
@@ -247,14 +248,24 @@ namespace MicroUniverse {
             float scaleFactor = (float)cityWH / (float)currResolution;
             for (int i = 0; i < regionInfos.Count; ++i) {
                 regionInfos[i].RegionID = i;
+
                 GameObject subRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, propRoot);
                 subRootGO.name = "Region #" + i.ToString();
+
                 GameObject propRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, subRootGO.transform);
                 propRootGO.name = "Props";
+
                 GameObject autoBallRootGO = Instantiate(emptyGOPrefab, Vector3.zero, Quaternion.identity, subRootGO.transform);
                 autoBallRootGO.name = "Auto Balls";
+
                 ThemeMaterialHolder themeMaterialHolder = themeAssigned[i];
                 print("Region #" + i.ToString() + " uses theme: " + themeMaterialHolder.theme.gameObject.name);
+
+                //TODO: region mask.
+                GameObject regionMask = Instantiate(regionMaskPrefab, regionInfos[i].CenterWS, regionMaskPrefab.transform.rotation, subRootGO.transform);
+                MeshRenderer meshRenderer = regionMask.GetComponent<MeshRenderer>();
+                meshRenderer.material.SetTexture("_MainTex", regionInfos[i].SubMapTex);
+
                 regionInfos[i].ConstructRegion(scaleFactor, propCollection, propRootGO.transform, autoBallRootGO.transform, perlinFreq, companionSpawnRatio, badPillarRatio, themeMaterialHolder);
             }
 
