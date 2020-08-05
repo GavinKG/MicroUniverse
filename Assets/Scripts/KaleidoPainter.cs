@@ -7,31 +7,36 @@ using UnityEngine.InputSystem;
 namespace MicroUniverse {
     public class KaleidoPainter : MonoBehaviour {
 
+        // Inspector:
+
+        [Header("Ref")]
+        public GameObject outerMask;
+        public SpriteRenderer canvas;
+        public GameObject innerMask;
+
         [Header("Painter Settings")]
-        public Color penColor = Color.red;     // Change these to change the default drawing settings
-        // PEN WIDTH (actually, it's a radius, in pixels)
+        public Color penColor = Color.red;
         public int penWidth = 3;
         public LayerMask drawingLayers;
-
-        public delegate void BrushFunc(Vector2 world_position);
-        // This is the function called when a left click happens
-        // Pass in your own custom one to change the brush type
-        // Set the default function in the Awake method
-        public BrushFunc CurrentBrush;
-
-
-
+        
         public bool resetCanvasOnPlay = true;
         public bool resetCanvasOnDraw = true;
-        // The colour the canvas is reset to each time
-        public Color canvasColor = new Color(0, 0, 0, 0);  // By default, reset the canvas to be transparent
+        public Color canvasClearColor = new Color(0, 0, 0, 0);  // By default, reset the canvas to be transparent
         public bool onInterruptStop = true;
 
         [Header("Kaleido Specifics")]
         public int kaleidoParts = 5;
         public bool mirror = true;
 
+        // Inspector END
+
         public UnityEvent OnDrawFinished;
+
+        public delegate void BrushFunc(Vector2 world_position);
+        // This is the function called when a left click happens
+        // Pass in your own custom one to change the brush type
+        // Set the default function in the Awake method
+        public BrushFunc CurrentBrush;
 
         // MUST HAVE READ/WRITE enabled set in the file editor of Unity
         Sprite drawableSprite;
@@ -305,7 +310,7 @@ namespace MicroUniverse {
             // Initialize clean pixels to use
             initColors = new Color[(int)drawableSprite.rect.width * (int)drawableSprite.rect.height];
             for (int x = 0; x < initColors.Length; x++) {
-                initColors[x] = canvasColor;
+                initColors[x] = canvasClearColor;
             }
 
             drawableTex.SetPixels(initColors);
