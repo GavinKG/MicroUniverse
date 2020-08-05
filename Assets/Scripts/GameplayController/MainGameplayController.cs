@@ -120,8 +120,11 @@ namespace MicroUniverse {
                     break;
                 case GameplayState.Playing:
                     if (newState == GameplayState.Playing) {
-                        OnEnterPlayingState();
+                        OnEnterPlayingState(); // playing -> playing = every time player enters a region.
                         // currState = newState;
+                    } else if (newState == GameplayState.Outro) {
+                        OnEnterOutroState();
+                        // timeline stuff
                     }
                     break;
                 case GameplayState.Outro:
@@ -147,6 +150,11 @@ namespace MicroUniverse {
             ballGO.GetComponent<BallController>().KillVelocity();
             ballGO.transform.position = regionEnterPosition; // a new regionEnterPosition is already being updated by GotoRegion()
             TransitionRegionState(RegionInfo.RegionState.Dark); // try triggering uninit -> dark to init.
+        }
+
+
+        void OnEnterOutroState() {
+
         }
 
         #endregion
@@ -205,12 +213,13 @@ namespace MicroUniverse {
 
         void OnRegionUnlocked() {
             print("Region unlocked: #" + CurrRegion.RegionID.ToString());
-            CurrRegion.RegionMaskGO.SetActive(true); // set active again 
+            // CurrRegion.RegionMaskGO.SetActive(true); // set active again (not used anymore due to ddl being so close)
             foreach (RegionPortal regionPortal in CurrRegion.portals) {
                 regionPortal.SetPortalActive();
             }
             CurrRegion.DestroyAutoBalls();
-            CurrRegion.SetAllPillarsActive(false); // if region mask cannot be done on time, switch this to true.
+            // CurrRegion.SetAllPillarsActive(false); // if region mask cannot be done on time, switch this to true.
+            CurrRegion.SetAllPillarsActiveWithoutNotifyingController(true); // make sure.
             ++UnlockedRegionCount;
             if (UnlockedRegionCount == RegionCount || (bossfight && GameManager.Instance.gameOverAfterBossFight)) {
                 TransitionState(GameplayState.Outro); // game over.
@@ -318,7 +327,6 @@ namespace MicroUniverse {
 
         void CheckPillarStatus() {
             if (CurrRegion.AllPillarCount * pillarUnlockToSuccessRate <= CurrRegion.unlockedPillarCount) {
-
                 UnlockCurrRegion();
             }
         }

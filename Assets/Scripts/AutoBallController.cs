@@ -162,9 +162,9 @@ namespace MicroUniverse {
                     PillarProp pillarProp = currRoadProp.GetComponent<PillarProp>();
                     if (pillarProp != null) {
                         if (setPillarActive) {
-                            pillarProp.Activate();
+                            pillarProp.Activate(notifyController: true);
                         } else {
-                            pillarProp.Deactivate();
+                            pillarProp.Deactivate(notifyController: true);
                         }
                         
                     }

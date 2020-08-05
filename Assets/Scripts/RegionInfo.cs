@@ -106,7 +106,7 @@ namespace MicroUniverse {
         public Transform PropRoot { get; private set; }
         public Transform AutoBallRoot { get; private set; }
 
-        public GameObject RegionMaskGO { get; set; }
+        // public GameObject RegionMaskGO { get; set; }
 
         // debug:
         // public Texture2D debugTex1;
@@ -445,12 +445,12 @@ namespace MicroUniverse {
             SetAutoBallRootActive(false);
         }
 
-        public void SetAllPillarsActive(bool active) {
+        public void SetAllPillarsActiveWithoutNotifyingController(bool active) {
             foreach (PillarProp prop in pillarProps) {
                 if (active) {
-                    prop.Activate();
+                    prop.Activate(notifyController: false);
                 } else {
-                    prop.Deactivate();
+                    prop.Deactivate(notifyController: false);
                 }
             }
         }

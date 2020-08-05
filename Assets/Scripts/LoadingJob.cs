@@ -265,7 +265,8 @@ namespace MicroUniverse {
                 regionInfos[i].ConstructRegion(scaleFactor, propCollection, propRootGO.transform, autoBallRootGO.transform, perlinFreq, companionSpawnRatio, badPillarRatio, themeMaterialHolder);
 
                 // AFTER CONSTRUCT:
-                // region mask (move from regioninfo to here to save some params)
+                // region mask (move from regioninfo to here to save some params) (DISABLED)
+                /*
                 GameObject regionMask = Instantiate(regionMaskPrefab, regionInfos[i].CenterWS * scaleFactor, regionMaskPrefab.transform.rotation, subRootGO.transform);
                 regionMask.SetActive(false);
                 regionMask.transform.localScale = new Vector3(regionInfos[i].SubMap.GetLength(0) * scaleFactor, regionInfos[i].SubMap.GetLength(1) * scaleFactor, 1) * regionMaskExtraScale;
@@ -273,6 +274,7 @@ namespace MicroUniverse {
                 Texture2D maskTex = regionInfos[i].TransparentSubMapTex;
                 meshRenderer.material.SetTexture("_BaseMap", maskTex); // using URP's Unlit Shader
                 regionInfos[i].RegionMaskGO = regionMask;
+                */
 
             }
 

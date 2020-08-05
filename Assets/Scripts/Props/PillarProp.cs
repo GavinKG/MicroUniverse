@@ -11,22 +11,28 @@ namespace MicroUniverse {
 
         public bool Activated { get; private set; } = false;
 
-        public void Activate() {
+        public void Activate(bool notifyController) {
             if (Activated) return;
             maskParticle.SetActive(true);
             ParticleSystem ps = maskParticle.GetComponent<ParticleSystem>();
             ParticleSystem.Burst burst = new ParticleSystem.Burst(0, 2);
             ps.emission.SetBursts(new ParticleSystem.Burst[] { burst });
-            MainGameplayController controller = GameManager.Instance.CurrController as MainGameplayController;
-            controller.PillarEnabled(this);
+            if (notifyController) {
+                MainGameplayController controller = GameManager.Instance.CurrController as MainGameplayController;
+                controller.PillarEnabled(this);
+            }
+
             Activated = true;
         }
 
-        public void Deactivate() {
+        public void Deactivate(bool notifyController) {
             if (!Activated) return;
             maskParticle.SetActive(false);
-            MainGameplayController controller = GameManager.Instance.CurrController as MainGameplayController;
-            controller.PillarDisabled(this);
+            if (notifyController) {
+                MainGameplayController controller = GameManager.Instance.CurrController as MainGameplayController;
+                controller.PillarDisabled(this);
+            }
+
             Activated = false;
         }
 

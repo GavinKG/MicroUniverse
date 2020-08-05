@@ -247,7 +247,7 @@ namespace MicroUniverse {
         void OnTriggerEnter(Collider other) {
             PillarProp pillarProp = other.gameObject.GetComponent<PillarProp>();
             if (pillarProp != null) {
-                pillarProp.Activate();
+                pillarProp.Activate(notifyController: true);
             }
         }
 

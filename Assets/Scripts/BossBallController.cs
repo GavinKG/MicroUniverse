@@ -214,7 +214,7 @@ namespace MicroUniverse {
             PillarProp pillarProp = other.GetComponent<PillarProp>();
             if (pillarProp != null) {
                 // print("Pillar Boom!");
-                pillarProp.Deactivate();
+                pillarProp.Deactivate(notifyController: true);
                 return;
             }
         }
