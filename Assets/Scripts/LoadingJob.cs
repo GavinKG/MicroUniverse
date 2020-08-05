@@ -260,17 +260,22 @@ namespace MicroUniverse {
 
                 ThemeMaterialHolder themeMaterialHolder = themeAssigned[i];
                 print("Region #" + i.ToString() + " uses theme: " + themeMaterialHolder.theme.gameObject.name);
+                
+                // CONSTRUCT:
+                regionInfos[i].ConstructRegion(scaleFactor, propCollection, propRootGO.transform, autoBallRootGO.transform, perlinFreq, companionSpawnRatio, badPillarRatio, themeMaterialHolder);
 
-                //TODO: region mask.
+                // AFTER CONSTRUCT:
                 GameObject regionMask = Instantiate(regionMaskPrefab, regionInfos[i].CenterWS, regionMaskPrefab.transform.rotation, subRootGO.transform);
                 MeshRenderer meshRenderer = regionMask.GetComponent<MeshRenderer>();
-                meshRenderer.material.SetTexture("_MainTex", regionInfos[i].SubMapTex);
+                meshRenderer.material.SetTexture("_MainTex", regionInfos[i].TransparentSubMapTex);
 
-                regionInfos[i].ConstructRegion(scaleFactor, propCollection, propRootGO.transform, autoBallRootGO.transform, perlinFreq, companionSpawnRatio, badPillarRatio, themeMaterialHolder);
             }
 
             // DebugTex(regionInfos[0].DebugTransformBackToTex(), 3);
-
+            DebugTex(regionInfos[0].TransparentSubMapTex, 0);
+            DebugTex(regionInfos[1].TransparentSubMapTex, 1);
+            DebugTex(regionInfos[2].TransparentSubMapTex, 2);
+            DebugTex(regionInfos[3].TransparentSubMapTex, 3);
 
             // ----------
             // Step.8 AO

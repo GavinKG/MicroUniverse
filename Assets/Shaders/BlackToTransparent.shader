@@ -1,9 +1,8 @@
-﻿Shader "MicroUniverse/TexMulNoAlpha"
+﻿Shader "MicroUniverse/BlackToTransparent"
 {
     Properties
     {
-        [NoScaleOffset] _MainTex ("Texture", 2D) = "white" {}
-        [NoScaleOffset] _MaskTex ("Texture", 2D) = "white" {}
+        _MainTex ("Texture", 2D) = "white" {}
     }
     SubShader
     {
@@ -39,16 +38,12 @@
             }
 
             sampler2D _MainTex;
-            sampler2D _MaskTex;
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // double clip.
                 fixed4 col = tex2D(_MainTex, i.uv);
-                if (col.a < 0.5) col = 1;
-                fixed4 maskCol = tex2D(_MaskTex, i.uv);
-                if (maskCol.a < 0.5) maskCol = 1;
-                return fixed4(col.r * maskCol.r, col.g * maskCol.g, col.b * maskCol.b, 1);
+                if (col.r + col.g + col.b == 0) col.a = 0;
+                return col;
             }
             ENDCG
         }

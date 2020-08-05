@@ -79,9 +79,14 @@ namespace MicroUniverse {
         }
 
         /// <summary>
-        /// Color added on a pure transparent tex.
+        /// Color added on a pure transparent tex, for combining into a big colored kaleido tex.
         /// </summary>
         public Texture2D ColoredTransparentMapTex { get; private set; }
+
+        /// <summary>
+        /// Used for region mask.
+        /// </summary>
+        public Texture2D TransparentSubMapTex { get; private set; }
 
         public List<RegionInfo> ConnectedRegion { get; private set; } = new List<RegionInfo>();
 
@@ -400,6 +405,12 @@ namespace MicroUniverse {
             RenderTexture rt = RenderTexture.GetTemporary(Map.GetLength(0), Map.GetLength(1), 0);
             Graphics.Blit(MapTex, rt, colorMat);
             ColoredTransparentMapTex = Util.RT2Tex(rt);
+            RenderTexture.ReleaseTemporary(rt);
+
+            Material b2tMat = new Material(Shader.Find("MicroUniverse/BlackToTransparent"));
+            rt = RenderTexture.GetTemporary(SubMap.GetLength(0), SubMap.GetLength(1));
+            Graphics.Blit(SubMapTex, rt, b2tMat);
+            TransparentSubMapTex = Util.RT2Tex(rt);
             RenderTexture.ReleaseTemporary(rt);
         }
 
