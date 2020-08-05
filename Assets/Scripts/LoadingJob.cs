@@ -71,7 +71,6 @@ namespace MicroUniverse {
         public MeshRenderer groundMeshRenderer; // for changing its world-UV sampled diffuse tex.
 
         [Header("Debug")]
-        public GameObject debugBall;
         public List<RawImage> debugImages;
         public Text cityGenTimeText;
 

@@ -34,6 +34,10 @@ namespace MicroUniverse {
         public Text debugBallStateText;
         public Text debugBallSpeedText;
         public Text debugBossBallStateText;
+        public Text debugRegionUnlockRateText;
+        public Text debugUnlockedPillarCountText;
+        public Text debugBadBallCountText;
+        public Text debugCompanionBallCountText;
 
         // Inspector END
 
@@ -206,6 +210,7 @@ namespace MicroUniverse {
                 regionPortal.SetPortalActive();
             }
             CurrRegion.DestroyAutoBalls();
+            CurrRegion.SetAllPillarsActive(false); // if region mask cannot be done on time, switch this to true.
             ++UnlockedRegionCount;
             if (UnlockedRegionCount == RegionCount || (bossfight && GameManager.Instance.gameOverAfterBossFight)) {
                 TransitionState(GameplayState.Outro); // game over.
@@ -218,26 +223,19 @@ namespace MicroUniverse {
 
             // debug:
             if (GameManager.Instance.showDebugInfo) {
-                if (debugCoreSMStateText != null) {
-                    debugCoreSMStateText.text = "Core FSM State: " + currState.ToString();
+                debugCoreSMStateText.text = "Core FSM State: " + currState.ToString();
+                debugRegionSMStateText.text = "Region FSM State: " + CurrRegion.currState.ToString();
+                debugBallStateText.text = "Player ball State: " + ballGO.GetComponent<BallController>().currState.ToString();
+                debugBallSpeedText.text = "Player ball speed: " + ballGO.GetComponent<BallController>().currSpeed.ToString();
+                if (bossBallController != null) {
+                    debugBossBallStateText.text = "Boss ball State: " + bossBallController.currState.ToString();
+                } else {
+                    debugBossBallStateText.text = "Boss ball State: No boss present.";
                 }
-                if (debugRegionSMStateText != null) {
-                    debugRegionSMStateText.text = "Region FSM State: " + CurrRegion.currState.ToString();
-
-                }
-                if (debugBallStateText != null) {
-                    debugBallStateText.text = "Player ball State: " + ballGO.GetComponent<BallController>().currState.ToString();
-                }
-                if (debugBallSpeedText != null) {
-                    debugBallSpeedText.text = "Player ball speed: " + ballGO.GetComponent<BallController>().currSpeed.ToString();
-                }
-                if (debugBossBallStateText != null) {
-                    if (bossBallController != null) {
-                        debugBossBallStateText.text = "Boss ball State: " + bossBallController.currState.ToString();
-                    } else {
-                        debugBossBallStateText.text = "Boss ball State: No boss present.";
-                    }
-                }
+                debugRegionUnlockRateText.text = "Region Unlock Rate: " + (CurrRegion.unlockedPillarCount / (CurrRegion.AllPillarCount * pillarUnlockToSuccessRate)).ToString();
+                debugUnlockedPillarCountText.text = "Pillar unlocked: " + CurrRegion.unlockedPillarCount.ToString() + " (" + CurrRegion.NormalPillarCount.ToString() + " Normal + " + CurrRegion.MasterPillarCount.ToString() + " Master total)";
+                debugBadBallCountText.text = "Bad pillar (ball) count: " + CurrRegion.badPillars.Count.ToString(); // left? dont care.
+                debugCompanionBallCountText.text = "Companion pillar (ball) count: " + CurrRegion.CompanionBallCount.ToString();
             }
 
 
@@ -250,7 +248,7 @@ namespace MicroUniverse {
             if (CurrRegion.currState != RegionInfo.RegionState.Dark) {
                 return;
             }
-            ++CurrRegion.unlockedPillar;
+            ++CurrRegion.unlockedPillarCount;
             CheckPillarStatus();
         }
 
@@ -258,7 +256,7 @@ namespace MicroUniverse {
             if (CurrRegion.currState != RegionInfo.RegionState.Dark) {
                 return;
             }
-            --CurrRegion.unlockedPillar;
+            --CurrRegion.unlockedPillarCount;
         }
 
         public void BossHPLoss() {
@@ -319,7 +317,7 @@ namespace MicroUniverse {
 
 
         void CheckPillarStatus() {
-            if (CurrRegion.PillarCount * pillarUnlockToSuccessRate <= CurrRegion.unlockedPillar) {
+            if (CurrRegion.AllPillarCount * pillarUnlockToSuccessRate <= CurrRegion.unlockedPillarCount) {
 
                 UnlockCurrRegion();
             }

@@ -90,11 +90,12 @@ namespace MicroUniverse {
 
         public List<RegionInfo> ConnectedRegion { get; private set; } = new List<RegionInfo>();
 
-        public int PillarCount { get; private set; } = 0;
+        public int NormalPillarCount { get; private set; } = 0;
         public int MasterPillarCount { get; private set; } = 0;
         public int BuildingCount { get { return buildingProps?.Count ?? -1; } }
         public int RoadCount { get; private set; } = 0;
-        public int AllPillarCount { get { return PillarCount + MasterPillarCount; } }
+        public int AllPillarCount { get { return pillarProps.Count; } }
+        public int CompanionBallCount { get; private set; } = 0;
 
         public List<BuildingProp> buildingProps;
         public List<PillarProp> pillarProps;
@@ -125,7 +126,7 @@ namespace MicroUniverse {
         }
         public RegionState currState = RegionState.Uninitialized;
 
-        public int unlockedPillar = 0;
+        public int unlockedPillarCount = 0;
 
         // ------------ PUBLIC PROPERTIES END
 
@@ -270,7 +271,11 @@ namespace MicroUniverse {
                             spawned = GameObject.Instantiate(collection.GetMasterPillarPrefab(), Vector3.zero, Quaternion.identity);
                             MasterPillarProp masterPillarProp = spawned.GetComponent<MasterPillarProp>();
                             pillarProps.Add(masterPillarProp);
-                            masterPillarProp.companionBallCount = Random.Range(0f, 1f) < companionSpawnRatio ? 1 : 0;
+                            masterPillarProp.withCompanionBall = Random.Range(0f, 1f) < companionSpawnRatio;
+                            if (masterPillarProp.withCompanionBall) {
+                                ++CompanionBallCount;
+                            }
+                            
                             if (Random.Range(0f, 1f) < badPillarRatio) {
                                 badPillars.Add(masterPillarProp);
                             }
@@ -289,7 +294,7 @@ namespace MicroUniverse {
                                 badPillars.Add(pillarProp);
                             }
                             roadPropMap[x, y] = pillarProp;
-                            ++PillarCount;
+                            ++NormalPillarCount;
                             break;
                         case id_road:
                             spawned = GameObject.Instantiate(collection.GetRoadPrefab(), Vector3.zero, Quaternion.identity);
@@ -440,9 +445,13 @@ namespace MicroUniverse {
             SetAutoBallRootActive(false);
         }
 
-        public void TurnOffPillarMask() {
+        public void SetAllPillarsActive(bool active) {
             foreach (PillarProp prop in pillarProps) {
-                prop.Deactivate();
+                if (active) {
+                    prop.Activate();
+                } else {
+                    prop.Deactivate();
+                }
             }
         }
 

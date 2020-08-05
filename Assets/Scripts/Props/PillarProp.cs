@@ -12,6 +12,7 @@ namespace MicroUniverse {
         public bool Activated { get; private set; } = false;
 
         public void Activate() {
+            if (Activated) return;
             maskParticle.SetActive(true);
             ParticleSystem ps = maskParticle.GetComponent<ParticleSystem>();
             ParticleSystem.Burst burst = new ParticleSystem.Burst(0, 2);
@@ -22,6 +23,7 @@ namespace MicroUniverse {
         }
 
         public void Deactivate() {
+            if (!Activated) return;
             maskParticle.SetActive(false);
             MainGameplayController controller = GameManager.Instance.CurrController as MainGameplayController;
             controller.PillarDisabled(this);

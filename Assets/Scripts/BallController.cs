@@ -152,11 +152,13 @@ namespace MicroUniverse {
             // Companion ball:
             MasterPillarProp masterPillar = hookedPillarGO.GetComponent<MasterPillarProp>();
             if (!masterPillar.CompanionSpawned) {
-                int companionCount = hookedPillarGO.GetComponent<MasterPillarProp>().companionBallCount;
-                if (companionCount != 0) {
-                    StartCoroutine(WaitAndGenCompanion(companionCount, hookedPillarGO.transform.position, outVelocity, masterPillar));
+                bool shouldGenCompanion = hookedPillarGO.GetComponent<MasterPillarProp>().withCompanionBall;
+                if (shouldGenCompanion) {
+                    GameObject companion = Instantiate(companionPrefab, hookedPillarGO.transform.position, Quaternion.identity, (GameManager.Instance.CurrController as MainGameplayController).CurrRegion.AutoBallRoot);
+                    AutoBallController autoBallController = companion.GetComponent<AutoBallController>();
+                    autoBallController.currRoadProp = masterPillar;
                 }
-                masterPillar.SetCompanionBallSpawned();
+                masterPillar.CompanionSpawned = true;
             }
 
             collider.enabled = true;
@@ -184,17 +186,6 @@ namespace MicroUniverse {
             hookingSpeed = 0;
             toHookingPillarDir = Vector3.zero;
 
-        }
-
-        private IEnumerator WaitAndGenCompanion(int count, Vector3 pos, Vector3 velocity, RoadProp roadProp) {
-            yield return new WaitForSeconds(companionDelay);
-            for (int i = 0; i < count; ++i) {
-                GameObject companion = Instantiate(companionPrefab, pos, Quaternion.identity, (GameManager.Instance.CurrController as MainGameplayController).CurrRegion.AutoBallRoot);
-                AutoBallController autoBallController = companion.GetComponent<AutoBallController>();
-                autoBallController.currRoadProp = roadProp;
-                yield return new WaitForSeconds(companionGenInterval);
-            }
-            yield return null;
         }
 
         void UpdateIndicator() {

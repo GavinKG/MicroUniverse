@@ -6,13 +6,10 @@ namespace MicroUniverse {
 
     public class MasterPillarProp : PillarProp {
         
-        public int companionBallCount = 0;
+        public bool withCompanionBall;
 
-        public bool CompanionSpawned { get; private set; } = false;
-
-        public void SetCompanionBallSpawned() {
-            CompanionSpawned = true;
-        }
+        // should only be set by ball controller...
+        public bool CompanionSpawned { get; set; } = false;
         
     }
 
