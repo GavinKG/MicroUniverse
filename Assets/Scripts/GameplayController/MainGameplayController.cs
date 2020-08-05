@@ -261,13 +261,11 @@ namespace MicroUniverse {
         }
 
         public void BossHPLoss() {
-            float width = hpInitialWidth * bossBallController.HP / 100f;
-            bossHP.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+            UpdateBossHPUI();
         }
 
         public void BossDestroyBuilding() {
-            float width = hpInitialWidth * bossBallController.LeftBuildings / bossBallController.TotalBuildings;
-            cityHP.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+            UpdateCityHPUI();
             // if (buildingsLeft == 0)
         }
 
@@ -289,6 +287,16 @@ namespace MicroUniverse {
 
         #endregion
 
+        void UpdateBossHPUI() {
+            float width = hpInitialWidth * bossBallController.HP / 100f;
+            bossHP.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+        }
+
+        void UpdateCityHPUI() {
+            float width = hpInitialWidth * bossBallController.LeftBuildings / bossBallController.TotalBuildings;
+            cityHP.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+        }
+
         void InitBoss() {
             print("..And it's now for the boss fight!!!!!");
             bossfight = true;
@@ -302,6 +310,10 @@ namespace MicroUniverse {
             bossBallController.OnHPLossEvent += BossHPLoss;
 
             bossBallController.InitState();
+
+            UpdateBossHPUI();
+            UpdateCityHPUI();
+
         }
 
 

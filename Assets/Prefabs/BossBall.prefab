@@ -49,7 +49,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f324ad1c9772a0c48942b92306962a4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildings: []
   spawnHeight: 10
   jumpMinDis: 10
   jumpLatency: {x: 2, y: 3}
@@ -154,8 +153,8 @@ MonoBehaviour:
   m_ImpulseDefinition:
     m_ImpulseChannel: 1
     m_RawSignal: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
-    m_AmplitudeGain: 1
-    m_FrequencyGain: 1
+    m_AmplitudeGain: 0.3
+    m_FrequencyGain: 3
     m_RepeatMode: 0
     m_Randomize: 1
     m_TimeEnvelope:
@@ -176,7 +175,7 @@ MonoBehaviour:
       m_DecayTime: 0.7
       m_ScaleWithImpact: 1
       m_HoldForever: 0
-    m_ImpactRadius: 100
+    m_ImpactRadius: 30
     m_DirectionMode: 0
     m_DissipationMode: 2
     m_DissipationDistance: 1000
