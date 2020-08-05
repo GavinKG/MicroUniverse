@@ -97,12 +97,15 @@ namespace MicroUniverse {
         public int AllPillarCount { get { return PillarCount + MasterPillarCount; } }
 
         public List<BuildingProp> buildingProps;
+        public List<PillarProp> pillarProps;
         public List<RegionPortal> portals;
         public List<PillarProp> badPillars;
         public List<CityProp> props;
 
         public Transform PropRoot { get; private set; }
         public Transform AutoBallRoot { get; private set; }
+
+        public GameObject RegionMaskGO { get; set; }
 
         // debug:
         // public Texture2D debugTex1;
@@ -255,6 +258,7 @@ namespace MicroUniverse {
 
             // PropMap = new CityProp[width, height];
             buildingProps = new List<BuildingProp>();
+            pillarProps = new List<PillarProp>();
             badPillars = new List<PillarProp>();
             props = new List<CityProp>();
             RoadProp[,] roadPropMap = new RoadProp[width, height];
@@ -265,6 +269,7 @@ namespace MicroUniverse {
                         case id_masterPillarRoad:
                             spawned = GameObject.Instantiate(collection.GetMasterPillarPrefab(), Vector3.zero, Quaternion.identity);
                             MasterPillarProp masterPillarProp = spawned.GetComponent<MasterPillarProp>();
+                            pillarProps.Add(masterPillarProp);
                             masterPillarProp.companionBallCount = Random.Range(0f, 1f) < companionSpawnRatio ? 1 : 0;
                             if (Random.Range(0f, 1f) < badPillarRatio) {
                                 badPillars.Add(masterPillarProp);
@@ -279,6 +284,7 @@ namespace MicroUniverse {
                         case id_pillarRoad:
                             spawned = GameObject.Instantiate(collection.GetPillarPrefab(), Vector3.zero, Quaternion.identity);
                             PillarProp pillarProp = spawned.GetComponent<PillarProp>();
+                            pillarProps.Add(pillarProp);
                             if (Random.Range(0f, 1f) < badPillarRatio) {
                                 badPillars.Add(pillarProp);
                             }
@@ -432,6 +438,12 @@ namespace MicroUniverse {
                 GameObject.Destroy(t.gameObject);
             }
             SetAutoBallRootActive(false);
+        }
+
+        public void TurnOffPillarMask() {
+            foreach (PillarProp prop in pillarProps) {
+                prop.Deactivate();
+            }
         }
 
         public Texture2D DebugTransformBackToTex() {

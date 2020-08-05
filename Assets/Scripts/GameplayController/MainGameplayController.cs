@@ -201,6 +201,7 @@ namespace MicroUniverse {
 
         void OnRegionUnlocked() {
             print("Region unlocked: #" + CurrRegion.RegionID.ToString());
+            CurrRegion.RegionMaskGO.SetActive(true); // set active again 
             foreach (RegionPortal regionPortal in CurrRegion.portals) {
                 regionPortal.SetPortalActive();
             }

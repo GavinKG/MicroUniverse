@@ -44,10 +44,7 @@
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
-                // only test r channel
-                float value = step(_Threshold, col.r);
-                col.rgb = float3(value, value, value);
-                return col;
+                return step(_Threshold, col);
             }
             ENDCG
         }

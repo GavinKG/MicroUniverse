@@ -1131,7 +1131,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &277959749
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3305,6 +3305,7 @@ MonoBehaviour:
   - {fileID: 4967564177144375026, guid: 88faf20e8968e0643a6be4e08d3b7ac8, type: 3}
   regionMaskPrefab: {fileID: 3407971468166204044, guid: 3e0cecc57db30f446b4fb4db77a464ab,
     type: 3}
+  regionMaskExtraScale: 1.25
   buildingMat: {fileID: 2100000, guid: 1f3836c732d661b4eb0ae36d6b812be9, type: 2}
   baseMat: {fileID: 2100000, guid: 6934611e274493b4e85d7d9ddbf38842, type: 2}
   emptyMat: {fileID: 2100000, guid: 586b9243737c5c84286beddd1a1febab, type: 2}

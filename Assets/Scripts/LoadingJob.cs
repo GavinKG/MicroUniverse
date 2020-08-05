@@ -49,6 +49,7 @@ namespace MicroUniverse {
         [Range(0f, 1f)] public float badPillarRatio = 0.3f;
         public List<Theme> themes;
         public GameObject regionMaskPrefab;
+        [Range(1f, 2f)] public float regionMaskExtraScale = 1.2f;
 
         // Material templates:
         public Material buildingMat;
@@ -265,17 +266,18 @@ namespace MicroUniverse {
                 regionInfos[i].ConstructRegion(scaleFactor, propCollection, propRootGO.transform, autoBallRootGO.transform, perlinFreq, companionSpawnRatio, badPillarRatio, themeMaterialHolder);
 
                 // AFTER CONSTRUCT:
-                GameObject regionMask = Instantiate(regionMaskPrefab, regionInfos[i].CenterWS, regionMaskPrefab.transform.rotation, subRootGO.transform);
+                // region mask (move from regioninfo to here to save some params)
+                GameObject regionMask = Instantiate(regionMaskPrefab, regionInfos[i].CenterWS * scaleFactor, regionMaskPrefab.transform.rotation, subRootGO.transform);
+                regionMask.SetActive(false);
+                regionMask.transform.localScale = new Vector3(regionInfos[i].SubMap.GetLength(0) * scaleFactor, regionInfos[i].SubMap.GetLength(1) * scaleFactor, 1) * regionMaskExtraScale;
                 MeshRenderer meshRenderer = regionMask.GetComponent<MeshRenderer>();
-                meshRenderer.material.SetTexture("_MainTex", regionInfos[i].TransparentSubMapTex);
+                Texture2D maskTex = regionInfos[i].TransparentSubMapTex;
+                meshRenderer.material.SetTexture("_BaseMap", maskTex); // using URP's Unlit Shader
+                regionInfos[i].RegionMaskGO = regionMask;
 
             }
 
             // DebugTex(regionInfos[0].DebugTransformBackToTex(), 3);
-            DebugTex(regionInfos[0].TransparentSubMapTex, 0);
-            DebugTex(regionInfos[1].TransparentSubMapTex, 1);
-            DebugTex(regionInfos[2].TransparentSubMapTex, 2);
-            DebugTex(regionInfos[3].TransparentSubMapTex, 3);
 
             // ----------
             // Step.8 AO

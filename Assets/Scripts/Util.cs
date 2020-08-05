@@ -185,6 +185,7 @@ namespace MicroUniverse {
             RenderTexture.ReleaseTemporary(rt);
             return ret;
         }
+        
 
         public static bool[,] Upscale(bool[,] src, int upsampleRatio, float threshold) {
             Texture2D srcTex = BoolMap2Tex(src, true); // bilinear
