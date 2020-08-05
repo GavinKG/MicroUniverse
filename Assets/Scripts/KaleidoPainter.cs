@@ -11,18 +11,21 @@ namespace MicroUniverse {
 
         [Header("Ref")]
         public GameObject outerMask;
-        public SpriteRenderer canvas;
+        public GameObject canvas;
         public GameObject innerMask;
+        // outerMask -> canvas -> innerMask can be considered as a successful draw.
+
+        [Header("Process")]
+        public LayerMask useLayer;
 
         [Header("Painter Settings")]
         public Color penColor = Color.red;
         public int penWidth = 3;
         public LayerMask drawingLayers;
-        
+
         public bool resetCanvasOnPlay = true;
         public bool resetCanvasOnDraw = true;
         public Color canvasClearColor = new Color(0, 0, 0, 0);  // By default, reset the canvas to be transparent
-        public bool onInterruptStop = true;
 
         [Header("Kaleido Specifics")]
         public int kaleidoParts = 5;
@@ -31,6 +34,7 @@ namespace MicroUniverse {
         // Inspector END
 
         public UnityEvent OnDrawFinished;
+        public UnityEvent OnDrawFailed;
 
         public delegate void BrushFunc(Vector2 world_position);
         // This is the function called when a left click happens
@@ -43,16 +47,15 @@ namespace MicroUniverse {
         Texture2D drawableTex;
 
         Vector2 firstDragPosition;
-        Vector2 prevDragPosition;
+        Vector2 prevMousePosPS;
         Color[] initColors;
-        Color transparent;
         Color32[] currColors;
-        bool mouseHeldDownOnLastFrame = false;
-        bool noDrawingOnCurrentDrag = false;
 
         // inputs:
         Vector2 pointerPosPS;
         bool pointerHeldDown = false;
+
+        bool failedTriggeredLastFrame = false;
 
         // New input system handler:
         public void OnPointerMove(InputAction.CallbackContext context) {
@@ -63,6 +66,14 @@ namespace MicroUniverse {
         public void OnPointerHeldDown(InputAction.CallbackContext context) {
             pointerHeldDown = context.performed;
         }
+        // New input system handler END:
+
+        public enum State {
+            Idle, OuterMask, Drawing, InnerMask
+        }
+
+        State currState = State.Idle;
+
 
         public Texture2D GetTexture() {
             return drawableTex;
@@ -110,9 +121,6 @@ namespace MicroUniverse {
             // 4. If dragging, update where we were previously
             previous_drag_position = pixelPosition;
         }
-        */
-
-
 
         // Default brush type. Has width and colour.
         // Pass in a point in WORLD coordinates
@@ -121,7 +129,7 @@ namespace MicroUniverse {
             Vector2 pointPS = WorldToPixelCoordinates(pointWS);
             currColors = drawableTex.GetPixels32();
 
-            if (prevDragPosition == Vector2.zero) {
+            if (prevMousePosPS == Vector2.zero) {
                 // If this is the first time we've ever dragged on this image, simply colour the pixels at our mouse position
                 if (resetCanvasOnDraw) {
                     ResetCanvas();
@@ -129,25 +137,24 @@ namespace MicroUniverse {
                 MarkPixelsToColour(pointPS, penWidth, penColor);
             } else {
                 // Colour in a line from where we were on the last update call
-                ColourBetween(prevDragPosition, pointPS, penWidth, penColor);
+                ColourBetween(prevMousePosPS, pointPS, penWidth, penColor);
             }
             ApplyMarkedPixelChanges();
 
             //Debug.Log("Dimensions: " + pixelWidth + "," + pixelHeight + ". Units to pixels: " + unitsToPixels + ". Pixel pos: " + pixel_pos);
-            prevDragPosition = pointPS;
+            prevMousePosPS = pointPS;
         }
+         */
 
         // Used in MicroUnivese to draw kaleido pattern
         public void KaleidoBrush(Vector2 pointWS) {
-            Vector2 pointPS = WorldToPixelCoordinates(pointWS);
-            Vector2 centerPS = WorldToPixelCoordinates(drawableSprite.bounds.center);
+            Vector2 pointPS = WorldToCanvasPixelCoordinates(pointWS);
+            Vector2 centerPS = WorldToCanvasPixelCoordinates(drawableSprite.bounds.center);
 
             currColors = drawableTex.GetPixels32();
 
-            if (prevDragPosition == Vector2.zero) {
-                if (resetCanvasOnDraw) {
-                    ResetCanvas();
-                }
+            if (prevMousePosPS == Vector2.zero) {
+
                 // If this is the first time we've ever dragged on this image, simply colour the pixels at our mouse position
                 for (int i = 0; i < kaleidoParts; ++i) {
                     Vector2 rotatedPixel = GetRotatedPixel(pointPS, centerPS, 360f / kaleidoParts * i);
@@ -157,7 +164,7 @@ namespace MicroUniverse {
             } else {
                 // Colour in a line from where we were on the last update call
                 for (int i = 0; i < kaleidoParts; ++i) {
-                    Vector2 lastRotatedPixel = GetRotatedPixel(prevDragPosition, centerPS, 360f / kaleidoParts * i);
+                    Vector2 lastRotatedPixel = GetRotatedPixel(prevMousePosPS, centerPS, 360f / kaleidoParts * i);
                     Vector2 rotatedPixel = GetRotatedPixel(pointPS, centerPS, 360f / kaleidoParts * i);
                     ColourBetween(lastRotatedPixel, rotatedPixel, penWidth, penColor);
                     if (mirror) {
@@ -169,7 +176,7 @@ namespace MicroUniverse {
             ApplyMarkedPixelChanges();
 
             //Debug.Log("Dimensions: " + pixelWidth + "," + pixelHeight + ". Units to pixels: " + unitsToPixels + ". Pixel pos: " + pixel_pos);
-            prevDragPosition = pointPS;
+            prevMousePosPS = pointPS;
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -185,53 +192,79 @@ namespace MicroUniverse {
         // Detects when user is left clicking, which then call the appropriate function
         void Update() {
 
-            // Is the user holding down the left mouse button?
-            if (pointerHeldDown && !noDrawingOnCurrentDrag) {
-                // Convert mouse coordinates to world coordinates
-                Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(pointerPosPS);
-                // Check if the current mouse position overlaps our image
-                Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos, drawingLayers.value);
-                if (hit != null && hit.gameObject == gameObject) {
-                    // We're over the texture we're drawing on!
-                    // Use whatever function the current brush is
-                    CurrentBrush(mouseWorldPos);
-                } else {
-                    // We're not over our destination texture
-                    if (onInterruptStop) {
-                        noDrawingOnCurrentDrag = true;
-                        if (prevDragPosition != Vector2.zero) {
-                            FinishDrawing();
+            bool shouldTriggerFailed = false;
+
+            if (pointerHeldDown) {
+                Ray ray = Camera.main.ScreenPointToRay(pointerPosPS);
+                RaycastHit2D hit = Physics2D.GetRayIntersection(ray, useLayer);
+                if (hit.transform != null) {
+                    if (hit.transform.gameObject == outerMask) {
+                        if (currState == State.Idle || currState == State.OuterMask) {
+                            currState = State.OuterMask;
+                        } else {
+                            DrawingFailed();
                         }
-                    } else {
-                        if (!mouseHeldDownOnLastFrame) {
-                            // This is a new drag where the user is left clicking off the canvas
-                            // Ensure no drawing happens until a new drag is started
-                            noDrawingOnCurrentDrag = true;
+                    } else if (hit.transform.gameObject == canvas) {
+                        if (currState == State.OuterMask && resetCanvasOnDraw) {
+                                ResetCanvas();
+                        }
+                        if (currState == State.OuterMask || currState == State.Drawing) {
+                            currState = State.Drawing;
+                            Vector2 mousePosWS = Camera.main.ScreenToWorldPoint(pointerPosPS);
+                            CurrentBrush(mousePosWS);
+                        } else {
+                            shouldTriggerFailed = true;
+                        }
+
+                    } else if (hit.transform.gameObject == innerMask) {
+                        if (currState == State.Drawing || currState == State.InnerMask) {
+                            currState = State.InnerMask;
+                        } else {
+                            shouldTriggerFailed = true;
                         }
                     }
-                    prevDragPosition = Vector2.zero;
+                } else {
+                    if (currState != State.Idle) {
+                        shouldTriggerFailed = true;
+                    }
+                }
+            } else {
+
+                if (currState != State.Idle) {
+                    if (currState == State.InnerMask) {
+                        DrawingSuccess();
+                    } else {
+                        shouldTriggerFailed = true;
+                    }  
                 }
             }
-            // Mouse is released
-            else if (!pointerHeldDown) {
-                if (prevDragPosition != Vector2.zero) {
-                    // When finished drawing:
-                    FinishDrawing();
+
+            if (shouldTriggerFailed) {
+                if (!failedTriggeredLastFrame) {
+                    DrawingFailed();
+                    failedTriggeredLastFrame = true;
                 }
-                prevDragPosition = Vector2.zero;
-                noDrawingOnCurrentDrag = false;
+            } else {
+                failedTriggeredLastFrame = false;
             }
-            mouseHeldDownOnLastFrame = pointerHeldDown;
         }
 
-        void FinishDrawing() {
+        void DrawingFailed() {
+            currState = State.Idle;
+            print("Failed.");
+            prevMousePosPS = Vector2.zero;
+        }
+
+        void DrawingSuccess() {
+            currState = State.Idle;
             print("Done.");
             OnDrawFinished.Invoke();
+            prevMousePosPS = Vector2.zero;
         }
 
 
         // Set the colour of pixels in a straight line from start_point all the way to end_point, to ensure everything inbetween is coloured
-        public void ColourBetween(Vector2 start_point, Vector2 end_point, int width, Color color) {
+        void ColourBetween(Vector2 start_point, Vector2 end_point, int width, Color color) {
             // Get the distance from start to finish
             float distance = Vector2.Distance(start_point, end_point);
             Vector2 direction = (start_point - end_point).normalized;
@@ -251,12 +284,12 @@ namespace MicroUniverse {
 
 
 
-        public void MarkPixelsToColour(Vector2 pixel, int penThickness, Color color) {
+        void MarkPixelsToColour(Vector2 pixel, int penThickness, Color color) {
             // Figure out how many pixels we need to colour in each direction (x and y)
             int center_x = (int)pixel.x;
             int center_y = (int)pixel.y;
             //int extra_radius = Mathf.Min(0, pen_thickness - 2);
-            
+
             // penThickness represents a SQUARE.
             for (int x = center_x - penThickness; x <= center_x + penThickness; x++) {
                 // Check if the X wraps around the image, so we don't draw pixels on the other side of the image
@@ -268,7 +301,7 @@ namespace MicroUniverse {
                 }
             }
         }
-        public void MarkPixelToChange(int x, int y, Color color) {
+        void MarkPixelToChange(int x, int y, Color color) {
             // Need to transform x and y coordinates to flat coordinates of array
             int array_pos = y * (int)drawableSprite.rect.width + x;
 
@@ -278,20 +311,20 @@ namespace MicroUniverse {
 
             currColors[array_pos] = color;
         }
-        public void ApplyMarkedPixelChanges() {
+        void ApplyMarkedPixelChanges() {
             drawableTex.SetPixels32(currColors);
             drawableTex.Apply();
         }
 
 
-        public Vector2 WorldToPixelCoordinates(Vector2 world_position) {
+        Vector2 WorldToCanvasPixelCoordinates(Vector2 world_position) {
             // Change coordinates to local coordinates of this image
-            Vector3 local_pos = transform.InverseTransformPoint(world_position);
+            Vector3 local_pos = canvas.transform.InverseTransformPoint(world_position);
 
             // Change these to coordinates of pixels
             float pixelWidth = drawableSprite.rect.width;
             float pixelHeight = drawableSprite.rect.height;
-            float unitsToPixels = pixelWidth / drawableSprite.bounds.size.x * transform.localScale.x;
+            float unitsToPixels = pixelWidth / drawableSprite.bounds.size.x * canvas.transform.localScale.x;
 
             // Need to center our coordinates
             float centered_x = local_pos.x * unitsToPixels + pixelWidth / 2;
@@ -327,12 +360,13 @@ namespace MicroUniverse {
             // DEFAULT BRUSH SET HERE
             CurrentBrush = KaleidoBrush;
 
-            drawableSprite = GetComponent<SpriteRenderer>().sprite;
+            drawableSprite = canvas.GetComponent<SpriteRenderer>().sprite;
             drawableTex = drawableSprite.texture;
 
             // Should we reset our canvas image when we hit play in the editor?
-            if (resetCanvasOnPlay)
+            if (resetCanvasOnPlay) {
                 ResetCanvas();
+            }
         }
     }
 

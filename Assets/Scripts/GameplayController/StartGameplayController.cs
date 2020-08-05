@@ -7,16 +7,19 @@ using UnityEngine.UI;
 namespace MicroUniverse {
     public class StartGameplayController : GameplayControllerBase {
 
+        [Header("Ref")]
         public KaleidoPainter painter;
+        public GameObject clearButtonGO;
+        public GameObject colorButtonGO;
+
+
         public Texture2D maskTex;
         public Shader blitMaskShader;
-        public Shader reverseShader;
-        public Shader thresholdShader;
 
         public RawImage debugImage;
 
         public enum State {
-            Start, Draw, Ready, Stutter 
+            Start, FinishedDrawing, Stutter 
         }
 
         public State currState = State.Start;
@@ -24,7 +27,7 @@ namespace MicroUniverse {
         public List<SpriteRenderer> spriteRenders;
 
         public override void Begin() {
-            
+            colorButtonGO.SetActive(false);
         }
 
         public override void Finish() {
@@ -34,37 +37,57 @@ namespace MicroUniverse {
         void TransitionState(State newState) {
             switch (currState) {
                 case State.Start:
-                    if (newState == State.Draw) {
-                        OnBeginDraw();
+                    if (newState == State.FinishedDrawing) {
+                        OnFinishDrawing();
                         currState = newState;
+                    } else if (newState == State.Start) {
+                        OnClearDrawing();
                     }
                     break;
-                case State.Draw:
-                    if (newState == State.Ready) {
-                        OnEndDraw();
+                case State.FinishedDrawing:
+                    if (newState == State.Stutter) {
+                        OnStutter();
+                        currState = newState;
+                    } else if (newState == State.Start) {
+                        OnClearDrawing();
                         currState = newState;
                     }
-                    break;
-                case State.Ready:
-
                     break;
             }
         }
 
-        void OnBeginDraw() {
-
+        void OnFinishDrawing() {
+            painter.enabled = false;
+            colorButtonGO.SetActive(true);
         }
 
-        void OnEndDraw() {
-
+        void OnClearDrawing() {
+            painter.enabled = true;
+            painter.ResetCanvas();
+            colorButtonGO.SetActive(false);
         }
-        
+
+        void OnStutter() {
+            // timeline stuff
+        }
+
+        // Callbacks:
+
         public void OnPaintClick() {
             print("Paint!");
             GenerateKaleidoTex();
             
             // debugImage.texture = GameManager.Instance.KaleidoTex;
             SceneManager.LoadScene("main");
+        }
+
+        public void OnClearClick() {
+            TransitionState(State.Start);
+        }
+
+        // called by painter
+        public void OnFinishedDrawing() {
+            TransitionState(State.FinishedDrawing);
         }
 
         public void GenerateKaleidoTex() {
