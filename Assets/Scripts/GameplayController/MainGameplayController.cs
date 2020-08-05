@@ -126,6 +126,7 @@ namespace MicroUniverse {
                     } else if (newState == GameplayState.Outro) {
                         OnEnterOutroState();
                         // timeline stuff
+                        currState = newState;
                     }
                     break;
                 case GameplayState.Outro:
@@ -217,9 +218,7 @@ namespace MicroUniverse {
         void OnRegionUnlocked() {
             print("Region unlocked: #" + CurrRegion.RegionID.ToString());
             // CurrRegion.RegionMaskGO.SetActive(true); // set active again (not used anymore due to ddl being so close)
-            foreach (RegionPortal regionPortal in CurrRegion.portals) {
-                regionPortal.SetPortalActive();
-            }
+            CurrRegion.SetPortalActive(true);
             CurrRegion.DestroyAutoBalls();
             // CurrRegion.SetAllPillarsActive(false); // if region mask cannot be done on time, switch this to true.
             CurrRegion.SetAllPillarsActiveWithoutNotifyingController(true); // make sure.
@@ -284,13 +283,17 @@ namespace MicroUniverse {
             bossBallController = null;
             bossFightUIRoot.SetActive(false);
             UnlockCurrRegion();
+            bossfight = false;
         }
 
         public void KillBossNow() {
-            bossBallController?.Damage(100f);
+            bossBallController?.Damage(1000f);
         }
 
         public void GotoRegion(int regionId) {
+            if (currState != GameplayState.Playing) {
+                return;
+            }
             print("Region switch " + CurrRegion.RegionID.ToString() + "->" + regionId.ToString());
             RegionInfo lastRegion = CurrRegion;
             CurrRegion = RegionInfos[regionId];

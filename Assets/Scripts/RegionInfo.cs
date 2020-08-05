@@ -438,6 +438,13 @@ namespace MicroUniverse {
             AutoBallRoot.gameObject.SetActive(active);
         }
 
+        public void SetPortalActive(bool active) {
+            foreach (RegionPortal regionPortal in portals) {
+                regionPortal.gameObject.SetActive(true);
+                // Play some timeline.
+            }
+        }
+
         public void DestroyAutoBalls() {
             foreach (Transform t in AutoBallRoot) {
                 GameObject.Destroy(t.gameObject);

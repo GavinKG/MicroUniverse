@@ -16,19 +16,9 @@ namespace MicroUniverse {
         }
 
 
-        public void SetPortalActive() {
-            gameObject.SetActive(true);
-            // play some active effect...
-        }
-
-        public void ToNewRegion() {
+        public void OnTriggerEnter(Collider other) {
             MainGameplayController controller = GameManager.Instance.CurrController as MainGameplayController;
             controller.GotoRegion(toRegionId);
-        }
-
-        // TODO: set collision layer!
-        public void OnTriggerEnter(Collider other) {
-            ToNewRegion();
         }
 
     }
