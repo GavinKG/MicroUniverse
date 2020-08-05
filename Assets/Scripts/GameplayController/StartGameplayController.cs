@@ -15,6 +15,12 @@ namespace MicroUniverse {
 
         public RawImage debugImage;
 
+        public enum State {
+            Start, Draw, Ready, Stutter 
+        }
+
+        public State currState = State.Start;
+
         public List<SpriteRenderer> spriteRenders;
 
         public override void Begin() {
@@ -23,6 +29,34 @@ namespace MicroUniverse {
 
         public override void Finish() {
             
+        }
+
+        void TransitionState(State newState) {
+            switch (currState) {
+                case State.Start:
+                    if (newState == State.Draw) {
+                        OnBeginDraw();
+                        currState = newState;
+                    }
+                    break;
+                case State.Draw:
+                    if (newState == State.Ready) {
+                        OnEndDraw();
+                        currState = newState;
+                    }
+                    break;
+                case State.Ready:
+
+                    break;
+            }
+        }
+
+        void OnBeginDraw() {
+
+        }
+
+        void OnEndDraw() {
+
         }
         
         public void OnPaintClick() {

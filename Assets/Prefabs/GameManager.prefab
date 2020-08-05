@@ -47,9 +47,9 @@ MonoBehaviour:
   outputLog: 1
   logDeleteInterval: 0.1
   logDeleteBeforeTime: 2
-  maxLogCount: 30
+  maxLogCount: 50
   errorQuit: 1
-  normalColor: {r: 0, g: 0.5188679, b: 0.121852875, a: 1}
+  normalColor: {r: 0, g: 1, b: 0.2348485, a: 1}
   errorColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &881268351037159790
 GameObject:

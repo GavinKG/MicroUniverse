@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 64510544}
   - component: {fileID: 64510543}
   - component: {fileID: 64510545}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: KaleidoBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -196,11 +196,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 64510542}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2.02}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 3}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 342204549}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &64510545
@@ -467,7 +467,7 @@ RectTransform:
   - {fileID: 1938070378}
   - {fileID: 1922571844}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -593,12 +593,13 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 687232056027158328}
   - {fileID: 2073429706}
+  - {fileID: 687232056027158328}
   - {fileID: 1115659210}
   - {fileID: 1237418558}
+  - {fileID: 64510544}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &420895619
 GameObject:
@@ -635,6 +636,7 @@ MonoBehaviour:
   reverseShader: {fileID: 4800000, guid: f8c661d513cf26645aec4a9d892fe615, type: 3}
   thresholdShader: {fileID: 0}
   debugImage: {fileID: 1922571845}
+  currState: 0
   spriteRenders:
   - {fileID: 687232056027158329}
   - {fileID: 2073429707}
@@ -851,7 +853,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &671932568
 PrefabInstance:
@@ -1013,7 +1015,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1237418558}
   - component: {fileID: 1237418559}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1028,7 +1030,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1237418557}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.5}
+  m_LocalPosition: {x: 0, y: 0, z: 2}
   m_LocalScale: {x: 2.2966, y: 2.2966, z: 2.2966}
   m_Children: []
   m_Father: {fileID: 342204549}
@@ -1113,7 +1115,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1581984446
 MonoBehaviour:
@@ -1431,7 +1433,7 @@ Transform:
   m_LocalScale: {x: 2.632959, y: 2.632959, z: 2.632959}
   m_Children: []
   m_Father: {fileID: 342204549}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2073429707
 SpriteRenderer:
@@ -1496,7 +1498,7 @@ GameObject:
   - component: {fileID: 687232056027158279}
   - component: {fileID: 6723297517071497540}
   m_Layer: 17
-  m_Name: KaleidoSprite
+  m_Name: KaleidoCanvasSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1540,7 +1542,7 @@ Transform:
   m_LocalScale: {x: 0.9748183, y: 0.9748183, z: 0.9748183}
   m_Children: []
   m_Father: {fileID: 342204549}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &687232056027158329
 SpriteRenderer:

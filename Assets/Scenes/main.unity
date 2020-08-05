@@ -2009,31 +2009,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 881268350722784232, guid: a4d1768ebc932cb49a30081727098871,
-        type: 3}
-      propertyPath: normalColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 881268350722784232, guid: a4d1768ebc932cb49a30081727098871,
-        type: 3}
-      propertyPath: normalColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 881268350722784232, guid: a4d1768ebc932cb49a30081727098871,
-        type: 3}
-      propertyPath: normalColor.b
-      value: 0.2348485
-      objectReference: {fileID: 0}
-    - target: {fileID: 881268350722784232, guid: a4d1768ebc932cb49a30081727098871,
-        type: 3}
-      propertyPath: maxLogCount
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 881268351037159788, guid: a4d1768ebc932cb49a30081727098871,
-        type: 3}
-      propertyPath: bossAfterArea
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 881268351037159790, guid: a4d1768ebc932cb49a30081727098871,
         type: 3}
       propertyPath: m_Name
