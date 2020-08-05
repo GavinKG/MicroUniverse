@@ -12,11 +12,13 @@ namespace MicroUniverse {
         public GameObject clearButtonGO;
         public GameObject colorButtonGO;
 
-
         public Texture2D maskTex;
         public Shader blitMaskShader;
 
-        public RawImage debugImage;
+        [Header("Debug")]
+        public GameObject debugRoot;
+        public Text debugStateText;
+        public Text debugPainterStateText;
 
         public enum State {
             Start, FinishedDrawing, Stutter 
@@ -28,10 +30,18 @@ namespace MicroUniverse {
 
         public override void Begin() {
             colorButtonGO.SetActive(false);
+            debugRoot.SetActive(GameManager.Instance.showDebugInfo);
         }
 
         public override void Finish() {
             
+        }
+
+        private void Update() {
+            if (GameManager.Instance.showDebugInfo) {
+                debugStateText.text = "State: " + currState.ToString();
+                debugPainterStateText.text = "Painter state: " + painter.currState.ToString();
+            }
         }
 
         void TransitionState(State newState) {

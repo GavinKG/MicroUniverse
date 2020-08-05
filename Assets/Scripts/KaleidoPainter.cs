@@ -72,7 +72,7 @@ namespace MicroUniverse {
             Idle, InnerMask, Drawing, OuterMask
         }
 
-        State currState = State.Idle;
+        public State currState = State.Idle; // public for debug.
 
 
         public Texture2D GetTexture() {
