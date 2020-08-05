@@ -258,6 +258,7 @@ namespace MicroUniverse {
             print("Now I only have " + HP.ToString() + " HP...");
             OnHPLossEvent?.Invoke();
             if (HP < 0) {
+                HP = 0;
                 TransitionState(State.Die);
             }
         }

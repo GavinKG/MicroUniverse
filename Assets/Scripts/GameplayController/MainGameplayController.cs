@@ -38,6 +38,7 @@ namespace MicroUniverse {
         public Text debugUnlockedPillarCountText;
         public Text debugBadBallCountText;
         public Text debugCompanionBallCountText;
+        public Text debugRegionText;
 
         // Inspector END
 
@@ -211,6 +212,8 @@ namespace MicroUniverse {
             // play some timeline here...
         }
 
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         void OnRegionUnlocked() {
             print("Region unlocked: #" + CurrRegion.RegionID.ToString());
             // CurrRegion.RegionMaskGO.SetActive(true); // set active again (not used anymore due to ddl being so close)
@@ -220,6 +223,7 @@ namespace MicroUniverse {
             CurrRegion.DestroyAutoBalls();
             // CurrRegion.SetAllPillarsActive(false); // if region mask cannot be done on time, switch this to true.
             CurrRegion.SetAllPillarsActiveWithoutNotifyingController(true); // make sure.
+            CurrRegion.unlockedPillarCount = CurrRegion.AllPillarCount; // all unlocked!
             ++UnlockedRegionCount;
             if (UnlockedRegionCount == RegionCount || (bossfight && GameManager.Instance.gameOverAfterBossFight)) {
                 TransitionState(GameplayState.Outro); // game over.
@@ -245,13 +249,12 @@ namespace MicroUniverse {
                 debugUnlockedPillarCountText.text = "Pillar unlocked: " + CurrRegion.unlockedPillarCount.ToString() + " (" + CurrRegion.NormalPillarCount.ToString() + " Normal + " + CurrRegion.MasterPillarCount.ToString() + " Master total)";
                 debugBadBallCountText.text = "Bad pillar (ball) count: " + CurrRegion.badPillars.Count.ToString(); // left? dont care.
                 debugCompanionBallCountText.text = "Companion pillar (ball) count: " + CurrRegion.CompanionBallCount.ToString();
+                debugRegionText.text = "Curr region: #" + CurrRegion.RegionID.ToString() + ". Overall stats: " + UnlockedRegionCount.ToString() + "/" + RegionCount.ToString() + " unlocked.";
             }
 
 
         }
-
-
-        #region Logic Callback
+        
 
         public void PillarEnabled(PillarProp pillarProp) {
             if (CurrRegion.currState != RegionInfo.RegionState.Dark) {
@@ -268,19 +271,23 @@ namespace MicroUniverse {
             --CurrRegion.unlockedPillarCount;
         }
 
-        public void BossHPLoss() {
+        public void OnBossHPLoss() {
             UpdateBossHPUI();
         }
 
-        public void BossDestroyBuilding() {
+        public void OnBossDestroyBuilding() {
             UpdateCityHPUI();
             // if (buildingsLeft == 0)
         }
 
-        public void BossDie() {
-            // TODO: switch state.
+        public void OnBossDie() {
             bossBallController = null;
             bossFightUIRoot.SetActive(false);
+            UnlockCurrRegion();
+        }
+
+        public void KillBossNow() {
+            bossBallController?.Damage(100f);
         }
 
         public void GotoRegion(int regionId) {
@@ -293,7 +300,9 @@ namespace MicroUniverse {
             TransitionState(GameplayState.Playing);
         }
 
-        #endregion
+
+
+
 
         void UpdateBossHPUI() {
             float width = hpInitialWidth * bossBallController.HP / 100f;
@@ -313,9 +322,9 @@ namespace MicroUniverse {
             GameObject bossGO = Instantiate(bossBallPrefab);
             bossBallController = bossGO.GetComponent<BossBallController>();
             bossBallController.Buildings = new List<BuildingProp>(CurrRegion.buildingProps); // shallow copy.
-            bossBallController.OnDestroyBuildingEvent += BossDestroyBuilding;
-            bossBallController.OnDieEvent += BossDie;
-            bossBallController.OnHPLossEvent += BossHPLoss;
+            bossBallController.OnDestroyBuildingEvent += OnBossDestroyBuilding;
+            bossBallController.OnDieEvent += OnBossDie;
+            bossBallController.OnHPLossEvent += OnBossHPLoss;
 
             bossBallController.InitState();
 
