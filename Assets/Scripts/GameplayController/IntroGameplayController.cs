@@ -62,7 +62,6 @@ namespace MicroUniverse {
 
         public void OnShowDebugInfoClick(bool value) {
             GameManager.Instance.showDebugInfo = value;
-            GameManager.Instance.ShowDebug(value);
         }
     }
 

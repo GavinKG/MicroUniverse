@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 namespace MicroUniverse {
 
@@ -24,6 +26,9 @@ namespace MicroUniverse {
         public float restFreezeRatio = 0.99f;
         public float readyJumpFreezeRatio = 0.95f;
 
+        [Header("Animations")]
+        public TimelineAsset hurtTimeline;
+
         [Header("Debug")]
         public BuildingProp target = null;
         public State currState;
@@ -43,6 +48,7 @@ namespace MicroUniverse {
         Vector3 toTargetDir;
         public List<BuildingProp> Buildings { private get; set; }
         List<BuildingProp> ogBuildings;
+        PlayableDirector director;
 
         public int TotalBuildings { get; private set; }
         public int LeftBuildings { get { return Buildings.Count; } }
@@ -172,6 +178,7 @@ namespace MicroUniverse {
 
         void Start() {
             rb = GetComponent<Rigidbody>();
+            director = GetComponent<PlayableDirector>();
         }
 
         private void Update() {
@@ -246,6 +253,8 @@ namespace MicroUniverse {
         public void Damage(float value) {
             print(value.ToString() + " HP! It hurts!");
             HP -= value;
+            director.playableAsset = hurtTimeline;
+            director.Play();
             print("Now I only have " + HP.ToString() + " HP...");
             OnHPLossEvent?.Invoke();
             if (HP < 0) {

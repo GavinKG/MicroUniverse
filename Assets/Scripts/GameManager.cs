@@ -20,8 +20,6 @@ namespace MicroUniverse {
         }
         GameplayControllerBase currController;
 
-        public GameObject debugGO;
-
         public static GameManager Instance { get; private set; }
 
 
@@ -48,14 +46,6 @@ namespace MicroUniverse {
             }
             DontDestroyOnLoad(gameObject);
             Application.targetFrameRate = 60;
-        }
-
-        void Start() {
-            ShowDebug(showDebugInfo);
-        }
-
-        public void ShowDebug(bool value) {
-            debugGO.SetActive(value);
         }
 
     }
