@@ -133,7 +133,7 @@ namespace MicroUniverse {
                     break;
                 case GameplayState.Intro:
                     if (newState == GameplayState.Playing) {
-                        SetInteractive(false);
+                        SetInteractive(true);
                         currState = newState;
                     }
                     break;
@@ -317,6 +317,10 @@ namespace MicroUniverse {
             bossFightUIRoot.SetActive(false);
             UnlockCurrRegion();
             bossfight = false;
+        }
+
+        public void OnIntroTimelineFinished() {
+            TransitionState(GameplayState.Playing);
         }
 
         public void KillBossNow() {

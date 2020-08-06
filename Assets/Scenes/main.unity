@@ -1321,6 +1321,7 @@ GameObject:
   - component: {fileID: 578662493}
   - component: {fileID: 578662494}
   - component: {fileID: 578662495}
+  - component: {fileID: 578662496}
   m_Layer: 0
   m_Name: GameplayController
   m_TagString: Untagged
@@ -1354,7 +1355,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b740858618a224d9d3c15af928e3ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamGO: {fileID: 0}
+  mainCamGO: {fileID: 150760874}
   loadingJob: {fileID: 1422580536}
   ballGO: {fileID: 8996153153341454443}
   bossBallPrefab: {fileID: 1080163922653158711, guid: 4099844aedfd9954d8455ca2f57b46b4,
@@ -1409,10 +1410,41 @@ PlayableDirector:
     value: {fileID: 0}
   - key: {fileID: -3288677895165622062, guid: a2083705eaaae9149b7661d4edae3daa, type: 2}
     value: {fileID: 0}
+  - key: {fileID: -1094733290700975302, guid: cf240fdd59ad681438d548856f440f7d, type: 2}
+    value: {fileID: 578662496}
   m_ExposedReferences:
     m_References:
     - d026e4712905cb14fa55ddb3cdba1414: {fileID: 1231890895}
     - c6e5b078a6ebeb2409ce546a53cebfaa: {fileID: 213770386}
+--- !u!114 &578662496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578662492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 6d9c39d6b9a9c604499abae729c364f8, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 578662494}
+          m_MethodName: OnIntroTimelineFinished
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &587798394
 GameObject:
   m_ObjectHideFlags: 0
@@ -2131,11 +2163,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 881268351037159788, guid: a4d1768ebc932cb49a30081727098871,
-        type: 3}
-      propertyPath: showDebugInfo
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 881268351037159790, guid: a4d1768ebc932cb49a30081727098871,
         type: 3}
       propertyPath: m_Name
