@@ -155,7 +155,7 @@ namespace MicroUniverse {
         }
 
         void SetInteractive(bool value) {
-            ballGO.GetComponent<BallController>().enabled = value;
+            // ballGO.GetComponent<BallController>().enabled = value;
             inGameUIRoot.SetActive(value);
 
             // enable menu
@@ -218,6 +218,10 @@ namespace MicroUniverse {
                     }
                     break;
                 case RegionInfo.RegionState.Unlocking:
+                    if (newState == RegionInfo.RegionState.Unlocked) {
+                        OnRegionUnlocked();
+                        CurrRegion.currState = newState;
+                    }
                     break;
                 case RegionInfo.RegionState.Unlocked:
                     // no state to switch to...
