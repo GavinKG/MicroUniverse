@@ -174,7 +174,7 @@ namespace MicroUniverse {
             // player first enters the whole new world...
             mainCamGO.SetActive(true);
             CurrRegion = StartRegion;
-            regionEnterPosition = StartRegion.portals[0].PortalSpawnPosition;
+            regionEnterPosition = StartRegion.portals[0].PortalSpawnPosition; // note that .y is set to 0. offset a little to prevent fall through floor.
             regionLeftoverForBossFight = GameManager.Instance.bossAfterArea;
             OnEnterRegion();
             firstEnter = false;
@@ -183,7 +183,8 @@ namespace MicroUniverse {
         void OnEnterRegion() {
             // player enters a region...
             ballGO.GetComponent<BallController>().KillVelocity();
-            ballGO.transform.position = regionEnterPosition; // a new regionEnterPosition is already being updated by GotoRegion()
+            Vector3 spawnPoint = new Vector3(regionEnterPosition.x, 1f, regionEnterPosition.z); // give it a little offset in +Y
+            ballGO.transform.position = spawnPoint; // a new regionEnterPosition is already being updated by GotoRegion()
             TransitionRegionState(RegionInfo.RegionState.Dark); // try triggering uninit -> dark to init.
         }
 
