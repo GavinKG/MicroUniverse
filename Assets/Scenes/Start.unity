@@ -1486,7 +1486,7 @@ PlayableDirector:
   m_GameObject: {fileID: 420895619}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 0}
+  m_PlayableAsset: {fileID: 11400000, guid: 677f5c040fd03e446befc91ac9c04876, type: 2}
   m_InitialState: 0
   m_WrapMode: 0
   m_DirectorUpdateMode: 1
@@ -1526,6 +1526,8 @@ PlayableDirector:
     value: {fileID: 0}
   - key: {fileID: 5341279097894371639, guid: 677f5c040fd03e446befc91ac9c04876, type: 2}
     value: {fileID: 420895623}
+  - key: {fileID: -8892175220013509021, guid: 677f5c040fd03e446befc91ac9c04876, type: 2}
+    value: {fileID: 687232056027158277}
   m_ExposedReferences:
     m_References:
     - c068fa9a9cb31194e9bfdb7fa313365b: {fileID: 73618904}
@@ -2576,7 +2578,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1115659208}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 5}
+  m_LocalPosition: {x: 0, y: 0, z: 0.01}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 342204549}
@@ -2608,7 +2610,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1237418557}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 0.02}
   m_LocalScale: {x: 2.2966, y: 2.2966, z: 2.2966}
   m_Children: []
   m_Father: {fileID: 342204549}
@@ -2679,7 +2681,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 4
+  m_Radius: 5
 --- !u!1 &1259196656
 GameObject:
   m_ObjectHideFlags: 0
@@ -3635,7 +3637,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.55
 --- !u!4 &2073429706
 Transform:
   m_ObjectHideFlags: 0
@@ -3644,7 +3646,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2073429704}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -5}
+  m_LocalPosition: {x: 0, y: 0, z: -0.01}
   m_LocalScale: {x: 2.174271, y: 2.174271, z: 2.174271}
   m_Children: []
   m_Father: {fileID: 342204549}
@@ -3919,6 +3921,7 @@ GameObject:
   - component: {fileID: 687232056027158328}
   - component: {fileID: 687232056027158329}
   - component: {fileID: 6723297517071497540}
+  - component: {fileID: 687232056027158277}
   m_Layer: 17
   m_Name: Canvas
   m_TagString: Untagged
@@ -3926,6 +3929,25 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &687232056027158277
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 687232056027158276}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!4 &687232056027158328
 Transform:
   m_ObjectHideFlags: 0
@@ -4005,4 +4027,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 4.51
+  m_Radius: 4.85
