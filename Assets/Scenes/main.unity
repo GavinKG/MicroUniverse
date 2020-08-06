@@ -1342,7 +1342,6 @@ GameObject:
   - component: {fileID: 578662494}
   - component: {fileID: 578662495}
   - component: {fileID: 578662496}
-  - component: {fileID: 578662497}
   m_Layer: 0
   m_Name: GameplayController
   m_TagString: Untagged
@@ -1391,9 +1390,10 @@ MonoBehaviour:
   cityHP: {fileID: 890955493}
   hpInitialWidth: 500
   introTimeline: {fileID: 11400000, guid: cf240fdd59ad681438d548856f440f7d, type: 2}
+  unlockingTimeline: {fileID: 11400000, guid: d1f004e6eb794714e9160a0393033fbc, type: 2}
+  outroTimeline: {fileID: 0}
   skipIntro: 0
-  skipUnlocking: 1
-  skipRegionSwitching: 1
+  skipUnlocking: 0
   useAlreadyAssignedSourceTex: 0
   debugTextRoot: {fileID: 783649524}
   debugCoreSMStateText: {fileID: 1213932786}
@@ -1435,10 +1435,41 @@ PlayableDirector:
     value: {fileID: 578662496}
   - key: {fileID: -2361566932252473651, guid: cf240fdd59ad681438d548856f440f7d, type: 2}
     value: {fileID: 1882294223}
+  - key: {fileID: 4249414753690154734, guid: d1f004e6eb794714e9160a0393033fbc, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 8134527256739654613, guid: d1f004e6eb794714e9160a0393033fbc, type: 2}
+    value: {fileID: 578662496}
+  - key: {fileID: 506796018910841840, guid: 677f5c040fd03e446befc91ac9c04876, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -2158265257543868405, guid: 677f5c040fd03e446befc91ac9c04876, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -3105831332200832735, guid: 677f5c040fd03e446befc91ac9c04876, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 430530307293620210, guid: 677f5c040fd03e446befc91ac9c04876, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -8892175220013509021, guid: 677f5c040fd03e446befc91ac9c04876, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -6597817290062664823, guid: 677f5c040fd03e446befc91ac9c04876, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -5466895657469816545, guid: 677f5c040fd03e446befc91ac9c04876, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 8384228607795186507, guid: 677f5c040fd03e446befc91ac9c04876, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 5341279097894371639, guid: 677f5c040fd03e446befc91ac9c04876, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -1534948293354888984, guid: 677f5c040fd03e446befc91ac9c04876, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -1792460594561621084, guid: 677f5c040fd03e446befc91ac9c04876, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 7499183504388285119, guid: 677f5c040fd03e446befc91ac9c04876, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References:
     - d026e4712905cb14fa55ddb3cdba1414: {fileID: 1231890895}
+    - 602a86ff3817e5946abe1f49d805ecc3: {fileID: 213770386}
+    - 1bf2007d8aa014c49b8dd51c4a6cb975: {fileID: 213770386}
     - c6e5b078a6ebeb2409ce546a53cebfaa: {fileID: 213770386}
+    - a6b328ec7d3f23e45897fd1bdffb8ebf: {fileID: 1231890895}
 --- !u!114 &578662496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1454,8 +1485,8 @@ MonoBehaviour:
   m_Events:
     m_Signals:
     - {fileID: 11400000, guid: 6d9c39d6b9a9c604499abae729c364f8, type: 2}
-    - {fileID: 11400000, guid: 1022573f46e851040b99a9b8d952d7f8, type: 2}
-    - {fileID: 11400000, guid: b9807fa44f0508f44b3b1c72ca061a89, type: 2}
+    - {fileID: 11400000, guid: 07d4602c3cb83874bb5136ecd70f700b, type: 2}
+    - {fileID: 11400000, guid: d8c7b8548fe4da44aa4a49cf857b6944, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls:
@@ -1472,8 +1503,8 @@ MonoBehaviour:
           m_CallState: 2
     - m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 578662497}
-          m_MethodName: On
+        - m_Target: {fileID: 578662494}
+          m_MethodName: OnUnlockingTimelineTriggers
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1485,8 +1516,8 @@ MonoBehaviour:
           m_CallState: 2
     - m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 578662497}
-          m_MethodName: Off
+        - m_Target: {fileID: 578662494}
+          m_MethodName: OnUnlockingTimelineEnds
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1496,20 +1527,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!114 &578662497
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 578662492}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74d1c6624a384c8489bc44db86081f1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mat: {fileID: 2100000, guid: 68f6f8939558d4b4ba702f3c7441793a, type: 2}
-  keyword: _DARKMASK_ON
 --- !u!1 &587798394
 GameObject:
   m_ObjectHideFlags: 0
@@ -3607,7 +3624,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1231890894}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 300, z: 0}
+  m_LocalPosition: {x: 0, y: 200, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2033666242}

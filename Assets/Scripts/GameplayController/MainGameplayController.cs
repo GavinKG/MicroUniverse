@@ -28,10 +28,11 @@ namespace MicroUniverse {
         public float hpInitialWidth = 500;
         [Header("Animations")]
         public TimelineAsset introTimeline;
+        public TimelineAsset unlockingTimeline;
+        public TimelineAsset outroTimeline;
         [Header("Sequence Debugging")]
         public bool skipIntro = false;
         public bool skipUnlocking = false;
-        public bool skipRegionSwitching = false;
         [Header("Debug")]
         public bool useAlreadyAssignedSourceTex = false;
         public GameObject debugTextRoot;
@@ -244,6 +245,8 @@ namespace MicroUniverse {
 
         void OnRegionUnlocking() {
             print("Region unlocking: #" + CurrRegion.RegionID.ToString());
+            SetInteractive(false);
+            director.Play(unlockingTimeline);
             // play some timeline here...
         }
 
@@ -318,6 +321,16 @@ namespace MicroUniverse {
             bossFightUIRoot.SetActive(false);
             UnlockCurrRegion();
             bossfight = false;
+        }
+
+        public void OnUnlockingTimelineTriggers() {
+            // timeline will trigger this when playing around the middle.
+            TransitionRegionState(RegionInfo.RegionState.Unlocked);
+        }
+
+        public void OnUnlockingTimelineEnds() {
+            // already transitioned to unlocked.
+            SetInteractive(true);
         }
 
         public void OnIntroTimelineFinished() {
