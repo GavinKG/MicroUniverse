@@ -1213,7 +1213,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &346444273
 Transform:
   m_ObjectHideFlags: 0
@@ -1457,8 +1457,9 @@ MonoBehaviour:
     type: 2}
   kaleidoStutterPhase1Timeline: {fileID: 11400000, guid: 360a9f6f45511854b86cea609cd2a335,
     type: 2}
-  phase1Time: 1.5
-  kaleidoStutterPhase2Timeline: {fileID: 0}
+  phase1Time: 1.1
+  kaleidoStutterPhase2Timeline: {fileID: 11400000, guid: 677f5c040fd03e446befc91ac9c04876,
+    type: 2}
   currState: 0
   spriteRenders:
   - {fileID: 687232056027158329}
@@ -1968,7 +1969,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &650853945
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3287,7 +3288,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1959933822
 MonoBehaviour:
   m_ObjectHideFlags: 0

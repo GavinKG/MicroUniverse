@@ -113,7 +113,7 @@ namespace MicroUniverse {
             painter.enabled = false;
             bgRotator.enabled = false;
             director.Play(kaleidoStutterPhase1Timeline, DirectorWrapMode.Loop);
-            WaitAndSwitchState(phase1Time, State.StutterPhase2);
+            StartCoroutine(WaitAndSwitchState(phase1Time, State.StutterPhase2));
         }
 
         void OnStutterPhase2() {
