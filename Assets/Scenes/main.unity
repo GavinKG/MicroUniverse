@@ -1354,6 +1354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b740858618a224d9d3c15af928e3ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainCamGO: {fileID: 0}
   loadingJob: {fileID: 1422580536}
   ballGO: {fileID: 8996153153341454443}
   bossBallPrefab: {fileID: 1080163922653158711, guid: 4099844aedfd9954d8455ca2f57b46b4,

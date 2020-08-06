@@ -11,6 +11,7 @@ namespace MicroUniverse {
 
         // Inspector:
         [Header("Ref")]
+        public GameObject mainCamGO;
         public LoadingJob loadingJob;
         public GameObject ballGO;
         public GameObject bossBallPrefab;
@@ -161,6 +162,7 @@ namespace MicroUniverse {
 
         void OnEnterIntroState() {
             SetInteractive(false);
+
             print("Play intro timeline...");
             OnFirstEnterWorld();
             director.Play(introTimeline);
@@ -170,6 +172,7 @@ namespace MicroUniverse {
         void OnFirstEnterWorld() {
             if (!firstEnter) return;
             // player first enters the whole new world...
+            mainCamGO.SetActive(true);
             CurrRegion = StartRegion;
             regionEnterPosition = StartRegion.portals[0].PortalSpawnPosition;
             regionLeftoverForBossFight = GameManager.Instance.bossAfterArea;
