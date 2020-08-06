@@ -259,7 +259,7 @@ GameObject:
   - component: {fileID: 64510543}
   - component: {fileID: 64510545}
   m_Layer: 17
-  m_Name: KaleidoBG
+  m_Name: RotatingBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2245,7 +2245,7 @@ GameObject:
   - component: {fileID: 1115659210}
   - component: {fileID: 1115659209}
   m_Layer: 17
-  m_Name: KaleidoSpriteBG
+  m_Name: CanvasBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2327,7 +2327,7 @@ GameObject:
   - component: {fileID: 1237418559}
   - component: {fileID: 1237418560}
   m_Layer: 17
-  m_Name: Border
+  m_Name: OuterDropShadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3295,7 +3295,7 @@ GameObject:
   - component: {fileID: 2073429705}
   - component: {fileID: 2073429707}
   m_Layer: 17
-  m_Name: KaleidoSpriteInnerMask
+  m_Name: Inner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3326,7 +3326,7 @@ Transform:
   m_GameObject: {fileID: 2073429704}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -5}
-  m_LocalScale: {x: 2.632959, y: 2.632959, z: 2.632959}
+  m_LocalScale: {x: 2.174271, y: 2.174271, z: 2.174271}
   m_Children: []
   m_Father: {fileID: 342204549}
   m_RootOrder: 0
@@ -3601,7 +3601,7 @@ GameObject:
   - component: {fileID: 687232056027158329}
   - component: {fileID: 6723297517071497540}
   m_Layer: 17
-  m_Name: KaleidoCanvasSprite
+  m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3616,7 +3616,7 @@ Transform:
   m_GameObject: {fileID: 687232056027158276}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.881783, y: 0.881783, z: 0.881783}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 342204549}
   m_RootOrder: 1
@@ -3686,4 +3686,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 5.12
+  m_Radius: 4.51

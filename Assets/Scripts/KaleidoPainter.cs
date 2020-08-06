@@ -210,7 +210,8 @@ namespace MicroUniverse {
                         }
                         if (currState == State.InnerMask || currState == State.Drawing) {
                             currState = State.Drawing;
-                            Vector2 mousePosWS = Camera.main.ScreenToWorldPoint(pointerPosPS);
+                            
+                            Vector2 mousePosWS = hit.point;
                             CurrentBrush(mousePosWS);
                         } else {
                             shouldTriggerFailed = true;
