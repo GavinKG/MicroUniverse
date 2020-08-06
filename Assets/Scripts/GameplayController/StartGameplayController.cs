@@ -108,8 +108,8 @@ namespace MicroUniverse {
 
         void OnStutterPhase1() {
             // timeline stuff
-            colorButtonGO.GetComponent<Button>().enabled = false;
-            clearButtonGO.GetComponent<Button>().enabled = false;
+            colorButtonGO.SetActive(false);
+            clearButtonGO.SetActive(false);
             painter.enabled = false;
             bgRotator.enabled = false;
             director.Play(kaleidoStutterPhase1Timeline, DirectorWrapMode.Loop);
