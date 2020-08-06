@@ -77,12 +77,16 @@ namespace MicroUniverse {
             }
         }
 
-
+        public void Freeze() {
+            TransitionState(State.Freeze);
+        }
 
         private void TransitionState(State newState) {
             switch (newState) {
                 case State.Freeze:
-
+                    KillVelocity();
+                    currState = newState;
+                    
                     break;
                 case State.Hooked:
                     if (currState == State.Hooking) {
@@ -104,6 +108,9 @@ namespace MicroUniverse {
                         currState = newState;
                     } else if (currState == State.Hooking) {
                         OnAbandonHook();
+                        currState = newState;
+                    } else if (currState == State.Freeze) {
+                        // TODO
                         currState = newState;
                     }
                     break;
@@ -217,6 +224,10 @@ namespace MicroUniverse {
 
         void Update() {
 
+            if (currState == State.Freeze) {
+                return;
+            }
+
             sensor.transform.position = transform.position; // drive sensor around..
 
             UpdateWorldInputDirection();
@@ -228,15 +239,16 @@ namespace MicroUniverse {
         }
 
         void FixedUpdate() {
+
+            if (currState == State.Freeze) {
+                return;
+            }
+
             if (currState == State.Normal) {
                 UpdateGravity();
             }
 
-            if (currState != State.Freeze) {
-                currSpeed = rb.velocity.magnitude;
-            } else {
-                currSpeed = 0;
-            }
+            currSpeed = rb.velocity.magnitude;
 
             if (currSpeed > maxSpeed) {
                 Vector3 velocityDir = rb.velocity.normalized;

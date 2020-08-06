@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
 using UnityEngine.UI;
 
 namespace MicroUniverse {
@@ -14,6 +16,7 @@ namespace MicroUniverse {
         public GameObject bossBallPrefab;
         public GameObject groundGO;
         public Light mainLight;
+        public GameObject inGameUIRoot;
         [Header("Gameplay")]
         [Range(0.1f, 1f)] public float pillarUnlockToSuccessRate = 0.8f;
         public Image unlockRateIndicator;
@@ -22,7 +25,9 @@ namespace MicroUniverse {
         public Image bossHP;
         public Image cityHP;
         public float hpInitialWidth = 500;
-        [Header("Debugging")]
+        [Header("Animations")]
+        public TimelineAsset introTimeline;
+        [Header("Sequence Debugging")]
         public bool skipIntro = false;
         public bool skipUnlocking = false;
         public bool skipRegionSwitching = false;
@@ -56,6 +61,9 @@ namespace MicroUniverse {
         bool bossfight = false;
         BossBallController bossBallController;
 
+        // anim:
+        PlayableDirector director;
+
         public override void Begin() {
 
             if (!useAlreadyAssignedSourceTex && GameManager.Instance.KaleidoTex != null) {
@@ -68,6 +76,8 @@ namespace MicroUniverse {
 
             debugTextRoot.SetActive(GameManager.Instance.showDebugInfo);
 
+            director = GetComponent<PlayableDirector>();
+
             loadingJob.Load();
 
             // loading job will fill these variables:
@@ -75,13 +85,15 @@ namespace MicroUniverse {
                 throw new System.Exception("Init incomplete. WTF are you doing LoadingJob?");
             }
 
+            Running = true;
+
             if (skipIntro) {
                 TransitionState(GameplayState.Playing);
             } else {
                 TransitionState(GameplayState.Intro);
             }
-
-            Running = true;
+            
+            
         }
 
         public override void Finish() {
@@ -113,15 +125,20 @@ namespace MicroUniverse {
                         currState = newState;
                     } else if (newState == GameplayState.Playing) {
                         // skip to play
-                        OnFirstEnterPlayingState();
+                        OnFirstEnterWorld();
+                        SetInteractive(true);
                         currState = newState;
                     }
                     break;
                 case GameplayState.Intro:
+                    if (newState == GameplayState.Playing) {
+                        SetInteractive(false);
+                        currState = newState;
+                    }
                     break;
                 case GameplayState.Playing:
                     if (newState == GameplayState.Playing) {
-                        OnEnterPlayingState(); // playing -> playing = every time player enters a region.
+                        OnEnterRegion(); // playing -> playing = every time player enters a region.
                         // currState = newState;
                     } else if (newState == GameplayState.Outro) {
                         OnEnterOutroState();
@@ -135,19 +152,32 @@ namespace MicroUniverse {
             smTransitioning = false;
         }
 
-        void OnEnterIntroState() {
+        void SetInteractive(bool value) {
+            ballGO.GetComponent<BallController>().enabled = value;
+            inGameUIRoot.SetActive(value);
 
+            // enable menu
         }
 
-        void OnFirstEnterPlayingState() {
+        void OnEnterIntroState() {
+            SetInteractive(false);
+            print("Play intro timeline...");
+            OnFirstEnterWorld();
+            director.Play(introTimeline);
+        }
+
+        bool firstEnter = true;
+        void OnFirstEnterWorld() {
+            if (!firstEnter) return;
             // player first enters the whole new world...
             CurrRegion = StartRegion;
             regionEnterPosition = StartRegion.portals[0].PortalSpawnPosition;
             regionLeftoverForBossFight = GameManager.Instance.bossAfterArea;
-            OnEnterPlayingState();
+            OnEnterRegion();
+            firstEnter = false;
         }
 
-        void OnEnterPlayingState() {
+        void OnEnterRegion() {
             // player enters a region...
             ballGO.GetComponent<BallController>().KillVelocity();
             ballGO.transform.position = regionEnterPosition; // a new regionEnterPosition is already being updated by GotoRegion()
