@@ -17,7 +17,7 @@ namespace MicroUniverse {
         public GameObject bossBallPrefab;
         public GameObject groundGO;
         public Light mainLight;
-        public GameObject inGameUIRoot;
+        public CanvasGroup onscreenControlCanvasGroup;
         [Header("Gameplay")]
         [Range(0.1f, 1f)] public float pillarUnlockToSuccessRate = 0.8f;
         public Image unlockRateIndicator;
@@ -156,8 +156,9 @@ namespace MicroUniverse {
 
         void SetInteractive(bool value) {
             // ballGO.GetComponent<BallController>().enabled = value;
-            inGameUIRoot.SetActive(value);
-
+            // inGameUIRoot.SetActive(value); // can't do that because it will cause the new input system to spit out tons of errors. Fuck it!
+            onscreenControlCanvasGroup.alpha = value ? 1 : 0;
+            onscreenControlCanvasGroup.blocksRaycasts = value;
             // enable menu
         }
 
