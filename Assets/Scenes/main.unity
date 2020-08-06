@@ -400,6 +400,7 @@ GameObject:
   - component: {fileID: 98930432}
   - component: {fileID: 98930431}
   - component: {fileID: 98930430}
+  - component: {fileID: 98930433}
   m_Layer: 10
   m_Name: Cover
   m_TagString: Untagged
@@ -468,6 +469,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &98930433
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98930429}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &113928715
 GameObject:
   m_ObjectHideFlags: 0
@@ -1322,6 +1342,7 @@ GameObject:
   - component: {fileID: 578662494}
   - component: {fileID: 578662495}
   - component: {fileID: 578662496}
+  - component: {fileID: 578662497}
   m_Layer: 0
   m_Name: GameplayController
   m_TagString: Untagged
@@ -1431,6 +1452,8 @@ MonoBehaviour:
   m_Events:
     m_Signals:
     - {fileID: 11400000, guid: 6d9c39d6b9a9c604499abae729c364f8, type: 2}
+    - {fileID: 11400000, guid: 1022573f46e851040b99a9b8d952d7f8, type: 2}
+    - {fileID: 11400000, guid: b9807fa44f0508f44b3b1c72ca061a89, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls:
@@ -1445,6 +1468,46 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 578662497}
+          m_MethodName: On
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 578662497}
+          m_MethodName: Off
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &578662497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578662492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74d1c6624a384c8489bc44db86081f1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mat: {fileID: 2100000, guid: 68f6f8939558d4b4ba702f3c7441793a, type: 2}
+  keyword: _DARKMASK_ON
 --- !u!1 &587798394
 GameObject:
   m_ObjectHideFlags: 0
@@ -4439,7 +4502,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 41, y: -24.999939}
+  m_AnchoredPosition: {x: 41, y: -24.999878}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1651060799
