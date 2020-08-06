@@ -26,16 +26,12 @@ namespace MicroUniverse {
         [Header("Animation")]
         public TimelineAsset kaleidoFinishedTimeline;
         public TimelineAsset kaleidoClearTimeline;
-        public TimelineAsset kaleidoStutterPhase1Timeline;
-        public float phase1Time = 1f;
-        public TimelineAsset kaleidoStutterPhase2Timeline;
+        public TimelineAsset kaleidoStutterTimeline;
 
         public enum State {
             Start,
             FinishedDrawing,
-            StutterPhase1,
-            // Loading scene "main" but disable its camera.
-            StutterPhase2
+            Stutter
         }
 
         public State currState = State.Start;
@@ -74,17 +70,11 @@ namespace MicroUniverse {
                     }
                     break;
                 case State.FinishedDrawing:
-                    if (newState == State.StutterPhase1) {
-                        OnStutterPhase1();
+                    if (newState == State.Stutter) {
+                        OnStutter();
                         currState = newState;
                     } else if (newState == State.Start) {
                         OnClearDrawing();
-                        currState = newState;
-                    }
-                    break;
-                case State.StutterPhase1:
-                    if (newState == State.StutterPhase2) {
-                        OnStutterPhase2();
                         currState = newState;
                     }
                     break;
@@ -106,20 +96,13 @@ namespace MicroUniverse {
             director.Play(kaleidoClearTimeline);
         }
 
-        void OnStutterPhase1() {
+        void OnStutter() {
             // timeline stuff
             colorButtonGO.SetActive(false);
             clearButtonGO.SetActive(false);
             painter.enabled = false;
             bgRotator.enabled = false;
-            director.Play(kaleidoStutterPhase1Timeline, DirectorWrapMode.Loop);
-            StartCoroutine(WaitAndSwitchState(phase1Time, State.StutterPhase2));
-        }
-
-        void OnStutterPhase2() {
-            // phase 1 timeline still playing...
-            // Load main scene
-            director.Play(kaleidoStutterPhase2Timeline);
+            director.Play(kaleidoStutterTimeline);
         }
 
         // Callbacks:
@@ -130,7 +113,7 @@ namespace MicroUniverse {
             // debugImage.texture = GameManager.Instance.KaleidoTex;
             // SceneManager.LoadScene("main");
 
-            TransitionState(State.StutterPhase1);
+            TransitionState(State.Stutter);
         }
 
         public void OnClearClick() {
@@ -141,6 +124,16 @@ namespace MicroUniverse {
         public void OnFinishedDrawing() {
             TransitionState(State.FinishedDrawing);
         }
+
+
+        public void OnTimelineFinished() {
+            SceneManager.LoadScene("main");
+        }
+
+
+
+
+
 
         public void GenerateKaleidoTex() {
             Material blitMat = new Material(blitMaskShader);
