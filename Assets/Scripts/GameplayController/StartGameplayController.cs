@@ -84,7 +84,8 @@ namespace MicroUniverse {
                     break;
                 case State.StutterPhase1:
                     if (newState == State.StutterPhase2) {
-
+                        OnStutterPhase2();
+                        currState = newState;
                     }
                     break;
             }
