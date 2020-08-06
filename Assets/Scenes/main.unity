@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -848,6 +848,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 183736407}
+  - component: {fileID: 183736408}
   m_Layer: 5
   m_Name: OnscreenControls
   m_TagString: Untagged
@@ -876,6 +877,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &183736408
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 183736406}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &213770385
 GameObject:
   m_ObjectHideFlags: 0
@@ -1382,7 +1395,7 @@ MonoBehaviour:
     type: 3}
   groundGO: {fileID: 2120364405}
   mainLight: {fileID: 2056831753}
-  inGameUIRoot: {fileID: 1066871262}
+  onscreenControlCanvasGroup: {fileID: 0}
   pillarUnlockToSuccessRate: 0.8
   unlockRateIndicator: {fileID: 0}
   bossFightUIRoot: {fileID: 1015277292}
