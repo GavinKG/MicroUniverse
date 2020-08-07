@@ -685,7 +685,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150760874}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.73632205}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 8.000001, z: 0.0000009536743}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2511,6 +2511,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 881268351037159788, guid: a4d1768ebc932cb49a30081727098871,
+        type: 3}
+      propertyPath: maxUnlockAreaBeforeEnd
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 881268351037159790, guid: a4d1768ebc932cb49a30081727098871,
         type: 3}
       propertyPath: m_Name
@@ -6209,7 +6214,7 @@ MonoBehaviour:
   damageMaxSpeedHPLoss: 6
   indicator: {fileID: 630522145}
   currState: 0
-  currSpeed: 1.96118
+  currSpeed: 0.08107291
 --- !u!135 &8996153153341454440
 SphereCollider:
   m_ObjectHideFlags: 0
