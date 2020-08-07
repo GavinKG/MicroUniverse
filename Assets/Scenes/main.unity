@@ -4881,7 +4881,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 41, y: -24.999878}
+  m_AnchoredPosition: {x: 41, y: -24.999908}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1651060799
@@ -6229,7 +6229,7 @@ MonoBehaviour:
   damageMaxSpeedHPLoss: 6
   indicator: {fileID: 630522145}
   currState: 0
-  currSpeed: 1.959216
+  currSpeed: 0.0007837259
 --- !u!135 &8996153153341454440
 SphereCollider:
   m_ObjectHideFlags: 0

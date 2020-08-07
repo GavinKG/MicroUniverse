@@ -22,8 +22,23 @@ namespace MicroUniverse {
             // prep ref:
             director = GetComponent<PlayableDirector>();
 
-            // blend kaleido:
-            Texture original = canvasSprite.texture; // RW enabled tex.
+
+            if (GameManager.Instance.ColoredTransparentTex != null) {
+                // blend kaleido:
+                Texture2D original = canvasSprite.texture; // RW enabled tex.
+                Texture2D colored = GameManager.Instance.ColoredTransparentTex;
+
+                // Color it on CPU:
+                Color32[] colors = original.GetPixels32();
+                int width = original.width, height = original.height;
+                
+
+
+
+            } else {
+                throw new System.Exception("?");
+            }
+
 
             director.Play(outroTimeline);
             
