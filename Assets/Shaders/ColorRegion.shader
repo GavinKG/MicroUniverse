@@ -49,8 +49,8 @@
                 // White pixel will be colored by given _Color.
 
                 fixed4 col = tex2D(_MainTex, i.uv);
-                col = (col.r + col.g + col.b) > 0 ? col : fixed4(0, 0, 0, 0);
-                return col * _Color;
+                col = (col.r + col.g + col.b) > 0 ? _Color : fixed4(0, 0, 0, 0);
+                return col;
             }
             ENDCG
         }
