@@ -35,6 +35,7 @@ namespace MicroUniverse {
         public bool showDebugInfo = true;
         public int bossMinAreaBuildingCount = 50;
         public int bossAfterArea = 1;
+        public int maxUnlockAreaBeforeEnd = 5;
 
         // ------- GLOBAL SETTINGS END
 

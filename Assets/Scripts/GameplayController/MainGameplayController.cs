@@ -18,6 +18,7 @@ namespace MicroUniverse {
         public GameObject groundGO;
         public Light mainLight;
         public CanvasGroup onscreenControlCanvasGroup;
+        public Camera maskCam;
         [Header("Gameplay")]
         [Range(0.1f, 1f)] public float pillarUnlockToSuccessRate = 0.8f;
         public Image unlockRateIndicator;
@@ -30,6 +31,7 @@ namespace MicroUniverse {
         public TimelineAsset introTimeline;
         public TimelineAsset unlockingTimeline;
         public TimelineAsset outroTimeline;
+        public float lightupSpeed = 0.4f;
         [Header("Sequence Debugging")]
         public bool skipIntro = false;
         public bool skipUnlocking = false;
@@ -65,6 +67,7 @@ namespace MicroUniverse {
 
         // anim:
         PlayableDirector director;
+        float lightupValue = 0f;
 
         public override void Begin() {
 
@@ -143,12 +146,11 @@ namespace MicroUniverse {
                         OnEnterRegion(); // playing -> playing = every time player enters a region.
                         // currState = newState;
                     } else if (newState == GameplayState.Outro) {
-                        OnEnterOutroState();
-                        // timeline stuff
+                        OnEnterOutroState(); // timeline stuff
                         currState = newState;
                     }
                     break;
-                case GameplayState.Outro:
+                default:
                     break;
             }
             smTransitioning = false;
@@ -157,6 +159,9 @@ namespace MicroUniverse {
         void SetInteractive(bool value) {
             // ballGO.GetComponent<BallController>().enabled = value;
             // inGameUIRoot.SetActive(value); // can't do that because it will cause the new input system to spit out tons of errors. Fuck it!
+
+            // TODO: ball freeze
+
             onscreenControlCanvasGroup.alpha = value ? 1 : 0;
             onscreenControlCanvasGroup.blocksRaycasts = value;
             // enable menu
@@ -192,6 +197,8 @@ namespace MicroUniverse {
 
 
         void OnEnterOutroState() {
+            SetInteractive(false);
+            director.Play(outroTimeline);
 
         }
 
@@ -266,9 +273,13 @@ namespace MicroUniverse {
             CurrRegion.SetAllPillarsActiveWithoutNotifyingController(true); // make sure.
             CurrRegion.unlockedPillarCount = CurrRegion.AllPillarCount; // all unlocked!
             ++UnlockedRegionCount;
-            if (UnlockedRegionCount == RegionCount || (bossfight && GameManager.Instance.gameOverAfterBossFight)) {
+
+            // When to do outro
+            if (UnlockedRegionCount == Mathf.Min(RegionCount, GameManager.Instance.maxUnlockAreaBeforeEnd) || (bossfight && GameManager.Instance.gameOverAfterBossFight)) {
                 TransitionState(GameplayState.Outro); // game over.
             }
+
+            bossfight = false; // of course.
         }
 
         #endregion
@@ -325,7 +336,7 @@ namespace MicroUniverse {
             bossBallController = null;
             bossFightUIRoot.SetActive(false);
             UnlockCurrRegion();
-            bossfight = false;
+            // bossfight = false;
         }
 
         public void OnUnlockingTimelineTriggers() {
@@ -338,8 +349,28 @@ namespace MicroUniverse {
             SetInteractive(true);
         }
 
+        // Triggered by OutroUnlockingWorldSignal in outro timeline.
+        public void LightUpCity() {
+            lightupValue = 0f;
+            StartCoroutine(LightUpCityUpdate());
+        }
+        IEnumerator LightUpCityUpdate() {
+            // linear light up
+            // TODO: consider ease in out.
+            while (lightupValue <= 1f) {
+                lightupValue += lightupSpeed * Time.deltaTime;
+                float smoothed = Mathf.SmoothStep(0, 1, lightupValue);
+                maskCam.backgroundColor = new Color(smoothed, smoothed, smoothed);
+                yield return null; // jump a frame
+            }
+        }
+
         public void OnIntroTimelineFinished() {
             TransitionState(GameplayState.Playing);
+        }
+
+        public void OnOutroTimelineFinished() {
+            // switch scene
         }
 
         public void KillBossNow() {

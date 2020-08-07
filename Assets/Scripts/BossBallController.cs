@@ -207,7 +207,6 @@ namespace MicroUniverse {
         private IEnumerator WaitAndSwitchState(float time, State newState) {
             yield return new WaitForSeconds(time);
             TransitionState(newState);
-            yield return null;
         }
 
         private void OnTriggerEnter(Collider other) {

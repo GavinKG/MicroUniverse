@@ -147,7 +147,6 @@ namespace MicroUniverse {
         public IEnumerator WaitAndSwitchState(float time, State newState) {
             yield return new WaitForSeconds(time);
             TransitionState(newState);
-            yield return null;
         }
     }
 
