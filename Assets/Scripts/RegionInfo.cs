@@ -90,6 +90,8 @@ namespace MicroUniverse {
 
         public List<RegionInfo> ConnectedRegion { get; private set; } = new List<RegionInfo>();
 
+        public Color MainColor { get { return themeMaterialHolder.theme.main; } } // TODO: check null
+
         public int NormalPillarCount { get; private set; } = 0;
         public int MasterPillarCount { get; private set; } = 0;
         public int BuildingCount { get { return buildingProps?.Count ?? -1; } }
@@ -133,6 +135,8 @@ namespace MicroUniverse {
         int flattenedMapHeight, flattenedMapWidth; // float -> int
 
         FloodFill.FillResult fillResult;
+
+        ThemeMaterialHolder themeMaterialHolder;
 
         // transform record:
         float angleFromFilledCenterToRight; // in degrees
@@ -218,6 +222,7 @@ namespace MicroUniverse {
             this.collection = collection;
             this.PropRoot = propRoot;
             this.AutoBallRoot = autoBallRoot;
+            this.themeMaterialHolder = themeMaterialHolder;
 
             // Step.1: Generate city heat map using Perlin Noise: 0(black) -> less urbanized, 1(white) -> urbanized
             float xOffset = Random.Range(0, 100);

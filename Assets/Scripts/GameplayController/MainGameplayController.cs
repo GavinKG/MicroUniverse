@@ -22,7 +22,9 @@ namespace MicroUniverse {
         public Camera maskCam;
         [Header("Gameplay")]
         [Range(0.1f, 1f)] public float pillarUnlockToSuccessRate = 0.8f;
+        public GameObject unlockRateIndicatorUIRoot;
         public Image unlockRateIndicator;
+        public float unlockRateInitialWidth;
         [Header("Boss Fight")]
         public GameObject bossFightUIRoot;
         public Image bossHP;
@@ -162,10 +164,10 @@ namespace MicroUniverse {
             // inGameUIRoot.SetActive(value); // can't do that because it will cause the new input system to spit out tons of errors. Fuck it!
 
             // TODO: ball freeze
-
             onscreenControlCanvasGroup.alpha = value ? 1 : 0;
             onscreenControlCanvasGroup.blocksRaycasts = value;
-            // enable menu
+
+            unlockRateIndicatorUIRoot.SetActive(value);
         }
 
         void OnEnterIntroState() {
@@ -241,6 +243,8 @@ namespace MicroUniverse {
 
         void OnInitRegion() {
             CurrRegion.SetAutoBallRootActive(true);
+            UpdateUnlockRateUI();
+            unlockRateIndicator.color = CurrRegion.MainColor;
 
             // boss fight logic.
             if (CurrRegion.BuildingCount > GameManager.Instance.bossMinAreaBuildingCount) {
@@ -252,6 +256,7 @@ namespace MicroUniverse {
                     bossFightUIRoot.SetActive(false);
                 }
                 --regionLeftoverForBossFight;
+                unlockRateIndicatorUIRoot.SetActive(false); // manually override.
             }
         }
 
@@ -314,6 +319,7 @@ namespace MicroUniverse {
                 return;
             }
             ++CurrRegion.unlockedPillarCount;
+            UpdateUnlockRateUI();
             CheckPillarStatus();
         }
 
@@ -322,6 +328,7 @@ namespace MicroUniverse {
                 return;
             }
             --CurrRegion.unlockedPillarCount;
+            UpdateUnlockRateUI();
         }
 
         public void OnBossHPLoss() {
@@ -403,6 +410,12 @@ namespace MicroUniverse {
         void UpdateCityHPUI() {
             float width = hpInitialWidth * bossBallController.LeftBuildings / bossBallController.TotalBuildings;
             cityHP.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+        }
+
+        void UpdateUnlockRateUI() {
+            float unlockRate = CurrRegion.unlockedPillarCount / (CurrRegion.AllPillarCount * pillarUnlockToSuccessRate);
+            float width = unlockRateInitialWidth * Mathf.Clamp01(unlockRate);
+            unlockRateIndicator.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         }
 
         void InitBoss() {
