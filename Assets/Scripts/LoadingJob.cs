@@ -348,8 +348,8 @@ namespace MicroUniverse {
             GameManager.Instance.ColoredTransparentTex = coloredTransparentTex;
 
             // debug:
-            DebugTex(coloredTex, 0);
-            DebugTex(coloredTransparentTex, 1);
+            // DebugTex(coloredTex, 0);
+            // DebugTex(coloredTransparentTex, 1);
 
             // ---------
             // Last: pass on all useful data to game controller...

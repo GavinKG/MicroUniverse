@@ -417,7 +417,8 @@ namespace MicroUniverse {
 
             // Step.9: Color Map tex:
             Material colorMat = new Material(Shader.Find("MicroUniverse/ColorRegion"));
-            colorMat.SetColor("_Color", themeMaterialHolder.theme.main);
+            Color color = themeMaterialHolder.theme.main;
+            colorMat.SetColor("_Color", color.linear); // gamma correction...
             RenderTexture rt = RenderTexture.GetTemporary(Map.GetLength(0), Map.GetLength(1), 0);
             Graphics.Blit(MapTex, rt, colorMat);
             ColoredTransparentMapTex = Util.RT2Tex(rt);
