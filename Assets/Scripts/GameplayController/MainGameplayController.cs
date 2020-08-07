@@ -276,7 +276,7 @@ namespace MicroUniverse {
         void Update() {
 
             // debug:
-            if (GameManager.Instance.showDebugInfo) {
+            if (GameManager.Instance.showDebugInfo && CurrRegion != null) {
                 debugCoreSMStateText.text = "Core FSM State: " + currState.ToString();
                 debugRegionSMStateText.text = "Region FSM State: " + CurrRegion.currState.ToString();
                 debugBallStateText.text = "Player ball State: " + ballGO.GetComponent<BallController>().currState.ToString();
