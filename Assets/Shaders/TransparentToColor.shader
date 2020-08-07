@@ -1,8 +1,9 @@
-﻿Shader "MicroUniverse/TransparentToWhite"
+﻿Shader "MicroUniverse/TransparentToColor"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _Color ("Color", color) = (1, 1, 1, 1)
     }
     SubShader
     {
@@ -38,12 +39,13 @@
             }
 
             sampler2D _MainTex;
+            fixed4 _Color;
 
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
                 if (col.a < 0.5) {
-                    col = fixed4(1, 1, 1, 1);
+                    col = fixed4(1, 1, 1, 1) * _Color;
                 }
                 return col;
             }

@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -4405,6 +4405,7 @@ MonoBehaviour:
   portalPrefab: {fileID: 4448100067130439451, guid: 9f5dc6ac6e6787e48923b1259870ec33,
     type: 3}
   groundMeshRenderer: {fileID: 2120364407}
+  groundColor: {r: 0.6132076, g: 0.6132076, b: 0.6132076, a: 1}
   debugImages:
   - {fileID: 1176948277}
   - {fileID: 1373616944}
@@ -6228,7 +6229,7 @@ MonoBehaviour:
   damageMaxSpeedHPLoss: 6
   indicator: {fileID: 630522145}
   currState: 0
-  currSpeed: 0.08107291
+  currSpeed: 1.959216
 --- !u!135 &8996153153341454440
 SphereCollider:
   m_ObjectHideFlags: 0

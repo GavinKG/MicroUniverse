@@ -69,6 +69,7 @@ namespace MicroUniverse {
 
         [Header("Step.10: coloring")]
         public MeshRenderer groundMeshRenderer; // for changing its world-UV sampled diffuse tex.
+        public Color groundColor = Color.white;
 
         [Header("Debug")]
         public List<RawImage> debugImages;
@@ -334,7 +335,8 @@ namespace MicroUniverse {
 
             coloredTransparentTex = Util.RT2Tex(pp[ppIndex]);
 
-            Material mat = new Material(Shader.Find("MicroUniverse/TransparentToWhite"));
+            Material mat = new Material(Shader.Find("MicroUniverse/TransparentToColor"));
+            mat.SetColor("_Color", groundColor);
             Graphics.Blit(pp[ppIndex], pp[1 - ppIndex], mat);
 
             coloredTex = Util.RT2Tex(pp[1 - ppIndex]);
