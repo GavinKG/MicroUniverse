@@ -315,7 +315,7 @@ namespace MicroUniverse {
 
 
             // ---------
-            // Step.10 Combine ColoredTex -> floor
+            // Step.10 Combine ColoredTex -> floor / Outro scene.
             RenderTexture rt0 = RenderTexture.GetTemporary(fillMapWidth, fillMapHeight);
             RenderTexture rt1 = RenderTexture.GetTemporary(fillMapWidth, fillMapHeight);
             RenderTexture prevRT = RenderTexture.active;
@@ -335,6 +335,7 @@ namespace MicroUniverse {
             RenderTexture.ReleaseTemporary(rt0);
             RenderTexture.ReleaseTemporary(rt1);
             groundMeshRenderer.material.SetTexture("_DiffuseTex", coloredTransparentTex);
+            GameManager.Instance.ColoredTex = coloredTransparentTex;
             // DebugTex(coloredTex, 0);
 
             // ---------

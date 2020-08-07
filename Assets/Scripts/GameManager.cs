@@ -26,6 +26,9 @@ namespace MicroUniverse {
         // Start -> Main.
         public Texture2D KaleidoTex { get; set; }
 
+        // Main -> Outro.
+        public Texture2D ColoredTex { get; set; }
+
         // ------- GLOBAL SETTINGS -------
 
         public bool preferSensorControl = false;
