@@ -27,7 +27,7 @@ namespace MicroUniverse {
         public Texture2D KaleidoTex { get; set; }
 
         // Main -> Outro.
-        public Texture2D ColoredTex { get; set; }
+        public Texture2D ColoredTransparentTex { get; set; }
 
         // ------- GLOBAL SETTINGS -------
 

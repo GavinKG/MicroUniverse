@@ -97,6 +97,7 @@ namespace MicroUniverse {
 
         // Step.10:
         private Texture2D coloredTransparentTex;
+        private Texture2D coloredTex; // with white background.
 
         private bool loaded = false;
 
@@ -319,6 +320,7 @@ namespace MicroUniverse {
             RenderTexture rt0 = RenderTexture.GetTemporary(fillMapWidth, fillMapHeight);
             RenderTexture rt1 = RenderTexture.GetTemporary(fillMapWidth, fillMapHeight);
             RenderTexture prevRT = RenderTexture.active;
+
             Material texAddMat = new Material(Shader.Find("MicroUniverse/TexAdd"));
             int ppIndex = 0;
             RenderTexture[] pp = new RenderTexture[2] { rt0, rt1 };
@@ -331,12 +333,21 @@ namespace MicroUniverse {
             }
 
             coloredTransparentTex = Util.RT2Tex(pp[ppIndex]);
+
+            Material mat = new Material(Shader.Find("MicroUniverse/TransparentToWhite"));
+            Graphics.Blit(pp[ppIndex], pp[1 - ppIndex], mat);
+
+            coloredTex = Util.RT2Tex(pp[1 - ppIndex]);
+
             RenderTexture.active = prevRT;
             RenderTexture.ReleaseTemporary(rt0);
             RenderTexture.ReleaseTemporary(rt1);
-            groundMeshRenderer.material.SetTexture("_DiffuseTex", coloredTransparentTex);
-            GameManager.Instance.ColoredTex = coloredTransparentTex;
-            // DebugTex(coloredTex, 0);
+            groundMeshRenderer.material.SetTexture("_DiffuseTex", coloredTex);
+            GameManager.Instance.ColoredTransparentTex = coloredTransparentTex;
+
+            // debug:
+            DebugTex(coloredTex, 0);
+            DebugTex(coloredTransparentTex, 1);
 
             // ---------
             // Last: pass on all useful data to game controller...
