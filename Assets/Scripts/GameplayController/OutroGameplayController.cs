@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 using UnityEngine.Timeline;
 
 namespace MicroUniverse {
@@ -33,7 +34,7 @@ namespace MicroUniverse {
         }
 
         public void OnTimelineFinished() {
-            
+            SceneManager.LoadScene("Intro");
         }
     }
 

@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1664,6 +1664,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 07d4602c3cb83874bb5136ecd70f700b, type: 2}
     - {fileID: 11400000, guid: d8c7b8548fe4da44aa4a49cf857b6944, type: 2}
     - {fileID: 11400000, guid: 38d501c06dbaa8e489f73f69a4ca68ee, type: 2}
+    - {fileID: 11400000, guid: 50d2f6a0139de4b4aba5835fea719cd7, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls:
@@ -1708,6 +1709,19 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 578662494}
           m_MethodName: LightUpCity
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 578662494}
+          m_MethodName: OnOutroTimelineFinished
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -4866,7 +4880,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 41, y: -24.999847}
+  m_AnchoredPosition: {x: 41, y: -24.999878}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1651060799

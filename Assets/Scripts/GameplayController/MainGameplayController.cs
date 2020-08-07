@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 using UnityEngine.Timeline;
 using UnityEngine.UI;
 
@@ -370,7 +371,7 @@ namespace MicroUniverse {
         }
 
         public void OnOutroTimelineFinished() {
-            // switch scene
+            SceneManager.LoadScene("Outro");
         }
 
         public void KillBossNow() {
