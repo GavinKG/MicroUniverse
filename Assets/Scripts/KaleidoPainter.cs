@@ -206,11 +206,11 @@ namespace MicroUniverse {
                         }
                     } else if (hit.transform.gameObject == canvas) {
                         if (currState == State.InnerMask && resetCanvasOnDraw) {
-                                ResetCanvas();
+                            ResetCanvas();
                         }
                         if (currState == State.InnerMask || currState == State.Drawing) {
                             currState = State.Drawing;
-                            
+
                             Vector2 mousePosWS = hit.point;
                             CurrentBrush(mousePosWS);
                         } else {
@@ -218,8 +218,12 @@ namespace MicroUniverse {
                         }
 
                     } else if (hit.transform.gameObject == outerMask) {
-                        if (currState == State.Drawing || currState == State.OuterMask) {
+                        if (currState == State.Drawing) {
+                            Vector2 mousePosWS = hit.point;
+                            CurrentBrush(mousePosWS); // last point
                             currState = State.OuterMask;
+                        } else if (currState == State.OuterMask) {
+                            // Do nothing
                         } else {
                             shouldTriggerFailed = true;
                         }
@@ -236,7 +240,7 @@ namespace MicroUniverse {
                         DrawingSuccess();
                     } else {
                         shouldTriggerFailed = true;
-                    }  
+                    }
                 }
             }
 
