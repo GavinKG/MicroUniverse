@@ -32,7 +32,6 @@ namespace MicroUniverse {
         // ------- GLOBAL SETTINGS -------
 
         public bool preferSensorControl = false;
-        public bool exampleKaleido = false;
         public bool realtimeShadow = true;
         public bool gameOverAfterBossFight = true;
         public bool showDebugInfo = true;

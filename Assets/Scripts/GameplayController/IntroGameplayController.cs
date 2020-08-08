@@ -15,7 +15,6 @@ namespace MicroUniverse {
 
         [Header("Settings Ref")]
         public Toggle preferGravitySensorToggle;
-        public Toggle enableKaleidoscopeToggle;
         public Toggle realtimeShadowToggle;
         public Toggle gameOverAfterBossFightToggle;
         public Toggle showDebugInfoToggle;
@@ -36,7 +35,6 @@ namespace MicroUniverse {
         // Refresh whole settings based on GameManager's value:
         public void RefreshSettingsUI() {
             preferGravitySensorToggle.isOn = GameManager.Instance.preferSensorControl;
-            enableKaleidoscopeToggle.isOn = GameManager.Instance.exampleKaleido;
             realtimeShadowToggle.isOn = GameManager.Instance.realtimeShadow;
             gameOverAfterBossFightToggle.isOn = GameManager.Instance.gameOverAfterBossFight;
             showDebugInfoToggle.isOn = GameManager.Instance.showDebugInfo;
@@ -98,10 +96,6 @@ namespace MicroUniverse {
 
         public void OnPreferSensorClick(bool value) {
             GameManager.Instance.preferSensorControl = value;
-        }
-
-        public void OnExampleKaleidoPatternClick(bool value) {
-            GameManager.Instance.exampleKaleido = value;
         }
 
         public void OnRealtimeShadowClick(bool value) {
