@@ -351,9 +351,9 @@ namespace MicroUniverse {
 
             coloredTex = Util.RT2Tex(pp[1 - ppIndex]);
 
-            // Gaussian blur:
-            coloredTex = GaussianBlur.Blur(coloredTex, 0, 0.25f, 1);
-            coloredTransparentTex = GaussianBlur.Blur(coloredTransparentTex, 0, 0.25f, 1);
+            // Gaussian blur: (disabled due to gamma error)
+            // coloredTex = GaussianBlur.Blur(coloredTex, 0, 0.25f, 1);
+            // coloredTransparentTex = GaussianBlur.Blur(coloredTransparentTex, 0, 0.25f, 1);
 
             RenderTexture.active = prevRT;
             RenderTexture.ReleaseTemporary(rt0);

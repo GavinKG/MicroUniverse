@@ -28,7 +28,7 @@ namespace MicroUniverse {
                 // blend kaleido:
                 Texture2D original = canvasSprite.texture; // RW enabled tex.
                 Texture2D colored = GameManager.Instance.ColoredTransparentTex;
-                // colored = GaussianBlur.Blur(colored, 0, 0.5f, 1);
+                colored = GaussianBlur.Blur(colored, 0, 0.25f, 1); // TODO: gaussian blur will whiten color due to lack of gamma correction, but whatever...
                 int width = original.width, height = original.height;
                 RenderTexture rt = RenderTexture.GetTemporary(width, height, 0);
                 RenderTexture prevRT = RenderTexture.active;
