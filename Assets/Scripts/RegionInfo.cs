@@ -170,13 +170,14 @@ namespace MicroUniverse {
 
             FlattenedMapId = wfc.Run(flattenedMapWidth, flattenedMapHeight, seed);
 
+            // Generate WFC mask:
             // expand road alongside border (for safety reason)
             int width = FlattenedMap.GetLength(0), height = FlattenedMap.GetLength(1);
             byte[,] mask = new byte[width, height];
             for (int x = 0; x < width; ++x) {
                 for (int y = 0; y < height; ++y) {
-                    if (FlattenedMap[x, y]) { // ground
-                        if (x == 0 || x == width - 1 || y == 0 || y == height - 1) { // on the edge
+                    if (FlattenedMap[x, y]) { // true = ground, false = wall
+                        if (x == 0 || x == width - 1 || y == 0 || y == height - 1) { // on the edge (and to prevent out-of-range)
                             mask[x, y] = id_road;
                         } else {
                             if (FlattenedMap[x - 1, y] &&
@@ -187,9 +188,9 @@ namespace MicroUniverse {
                                 FlattenedMap[x - 1, y - 1] &&
                                 FlattenedMap[x + 1, y + 1] &&
                                 FlattenedMap[x - 1, y + 1]) {
-                                mask[x, y] = id_empty;
+                                mask[x, y] = 0; // no mask
                             } else {
-                                mask[x, y] = id_road;
+                                mask[x, y] = id_road; // expand road
                             }
                         }
                     } else { // wall
@@ -197,6 +198,36 @@ namespace MicroUniverse {
                     }
                 }
             }
+
+
+            // Added: expand another round of road to compensate ring2flatten inaccuracy
+            byte[,] oldMask = new byte[width, height];
+            for (int x = 0; x < width; ++x) {
+                for (int y = 0; y < height; ++y) {
+                    oldMask[x, y] = mask[x, y];
+                }
+            }
+            for (int x = 0; x < width; ++x) {
+                for (int y = 0; y < height; ++y) {
+                    if (oldMask[x, y] == id_road) { // previously generated road block
+                        // expand around 3x3
+                        for (int offsetX = -1; offsetX <= 1; ++offsetX) {
+                            int subX = x + offsetX;
+                            if (subX < 0 || subX >= width) continue;
+                            for (int offsetY = -1; offsetY <= 1; ++offsetY) {
+                                int subY = y + offsetY;
+                                if (subY < 0 || subY >= height) continue;
+
+                                // expand:
+                                if (oldMask[subX, subY] == 0) { // if wild land
+                                    mask[subX, subY] = id_road;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
 
             // apply mask
             for (int y = 0; y < flattenedMapHeight; ++y) {
@@ -208,6 +239,7 @@ namespace MicroUniverse {
             }
 
             //debug:
+            /*
             // Debug.Log(Util.ByteMapWithSingleDigitToString(FlattenedMapWFC));
             HashSet<int> maskSet = new HashSet<int> {
                 id_road,
@@ -215,6 +247,7 @@ namespace MicroUniverse {
                 id_pillarRoad
             };
             // debugTex1 = Util.BoolMap2Tex(Util.ByteMapToBoolMap(FlattenedMapWFC, maskSet), true);
+            */
         }
 
         public void ConstructRegion(float scaleFactor, PropCollection collection, Transform propRoot, Transform autoBallRoot, float perlinFreq, float companionSpawnRatio, float badPillarRatio, ThemeMaterialHolder themeMaterialHolder) {
@@ -714,6 +747,12 @@ namespace MicroUniverse {
         /// </summary>
         private Vector2 TransformBack(Vector2 pos) {
 
+            /*
+            // Step.1: correct
+            pos.x = pos.x / flattenedMapWidth * FlattenedWidth;
+            pos.y = pos.y / flattenedMapHeight * FlattenedHeight;
+            */
+
             // Step.2: 2D -> radial coord r/theta
             float r = pos.x + BorderSectorNearRadius;
             float theta = pos.y / FlattenedHeight * occupiedAngle + BorderSectorLeftAngle;
@@ -724,7 +763,7 @@ namespace MicroUniverse {
 
             // step.4: rotate back (move left, rotate back, move back)
             pos -= Vector2.right * moveRightLength;
-            pos *= 0.9f; // The precision is not good, so shrink it down a little bit...It just works.
+            pos *= 0.95f; // The precision is not good, so shrink it down a little bit...It just works.
             pos = pos.Rotate(-angleFromFilledCenterToRight);
             pos -= filledCenterToMapCenter;
             pos += mapCenter;
