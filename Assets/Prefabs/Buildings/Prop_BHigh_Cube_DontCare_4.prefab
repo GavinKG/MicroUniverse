@@ -58,6 +58,7 @@ MonoBehaviour:
   buildingType: 5
   baseGO: {fileID: 0}
   destroyedPrefab: {fileID: 0}
+  tree: 0
 --- !u!65 &8694974609925836181
 BoxCollider:
   m_ObjectHideFlags: 0
