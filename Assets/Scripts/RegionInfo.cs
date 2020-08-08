@@ -13,6 +13,7 @@ namespace MicroUniverse {
         const byte id_masterPillarRoad = 3;
         const byte id_wall = 4;
         const byte id_building = 5;
+        const byte id_roadNotWalkable = 6; // roads that will not allow auto-ball to step on, and don't want to be populated with grass block.
 
         // ------------ PUBLIC PROPERTIES:
 
@@ -178,7 +179,7 @@ namespace MicroUniverse {
                 for (int y = 0; y < height; ++y) {
                     if (FlattenedMap[x, y]) { // true = ground, false = wall
                         if (x == 0 || x == width - 1 || y == 0 || y == height - 1) { // on the edge (and to prevent out-of-range)
-                            mask[x, y] = id_road;
+                            mask[x, y] = id_roadNotWalkable;
                         } else {
                             if (FlattenedMap[x - 1, y] &&
                                 FlattenedMap[x + 1, y] &&
@@ -190,7 +191,7 @@ namespace MicroUniverse {
                                 FlattenedMap[x - 1, y + 1]) {
                                 mask[x, y] = 0; // no mask
                             } else {
-                                mask[x, y] = id_road; // expand road
+                                mask[x, y] = id_roadNotWalkable; // expand road
                             }
                         }
                     } else { // wall
@@ -209,7 +210,7 @@ namespace MicroUniverse {
             }
             for (int x = 0; x < width; ++x) {
                 for (int y = 0; y < height; ++y) {
-                    if (oldMask[x, y] == id_road) { // previously generated road block
+                    if (oldMask[x, y] == id_roadNotWalkable) { // previously generated DUMMY road block
                         // expand around 3x3
                         for (int offsetX = -1; offsetX <= 1; ++offsetX) {
                             int subX = x + offsetX;
@@ -220,7 +221,7 @@ namespace MicroUniverse {
 
                                 // expand:
                                 if (oldMask[subX, subY] == 0) { // if wild land
-                                    mask[subX, subY] = id_road;
+                                    mask[subX, subY] = id_roadNotWalkable;
                                 }
                             }
                         }
