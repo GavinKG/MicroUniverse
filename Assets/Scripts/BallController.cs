@@ -330,10 +330,12 @@ namespace MicroUniverse {
             toHookingPillarDir = hookedPillarGO.transform.position - transform.position;
             toHookingPillarDir.y = 0;
             float distance = toHookingPillarDir.magnitude;
-            if (float.IsNaN(distance)) {
-                distance = 0.001f;
+            if (distance > 0.01f) {
+                toHookingPillarDir /= distance;
+            } else {
+                toHookingPillarDir = Vector3.zero; // prevent NaN
             }
-            toHookingPillarDir /= distance;
+            
 
             
             transform.position += toHookingPillarDir * hookingSpeed * Time.deltaTime;
