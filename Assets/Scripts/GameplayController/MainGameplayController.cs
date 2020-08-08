@@ -422,7 +422,12 @@ namespace MicroUniverse {
         }
 
         void UpdateUnlockRateUI() {
-            float unlockRate = CurrRegion.unlockedPillarCount / (CurrRegion.AllPillarCount * pillarUnlockToSuccessRate);
+            float unlockRate;
+            if (CurrRegion.AllPillarCount == 0) {
+                unlockRate = 1; // rare but you should not ignore.
+            } else {
+                unlockRate = CurrRegion.unlockedPillarCount / (CurrRegion.AllPillarCount * pillarUnlockToSuccessRate);
+            }
             float width = unlockRateInitialWidth * Mathf.Clamp01(unlockRate);
             unlockRateIndicator.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         }
@@ -448,6 +453,7 @@ namespace MicroUniverse {
 
 
         void CheckPillarStatus() {
+            if (bossfight) return;
             if (CurrRegion.AllPillarCount * pillarUnlockToSuccessRate <= CurrRegion.unlockedPillarCount) {
                 UnlockCurrRegion();
             }
