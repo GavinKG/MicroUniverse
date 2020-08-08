@@ -289,7 +289,8 @@ namespace MicroUniverse {
         }
 
         bool shouldFinishGame() {
-            return UnlockedRegionCount == Mathf.Min(RegionCount, GameManager.Instance.maxUnlockAreaBeforeEnd) || (bossfight && GameManager.Instance.gameOverAfterBossFight);
+            return (!bossfight && (UnlockedRegionCount == Mathf.Min(RegionCount, GameManager.Instance.maxUnlockAreaBeforeEnd)))
+                || (bossfight && bossBallController == null && GameManager.Instance.gameOverAfterBossFight);
         }
 
         #endregion
