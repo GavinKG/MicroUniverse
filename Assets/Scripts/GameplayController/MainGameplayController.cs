@@ -264,7 +264,12 @@ namespace MicroUniverse {
         void OnRegionUnlocking() {
             print("Region unlocking: #" + CurrRegion.RegionID.ToString());
             SetInteractive(false);
-            director.Play(unlockingTimeline);
+            if (shouldFinishGame()) {
+                TransitionState(GameplayState.Outro); // game finished.
+            } else {
+                director.Play(unlockingTimeline);
+            }
+            
             // play some timeline here...
         }
 
@@ -280,12 +285,11 @@ namespace MicroUniverse {
             CurrRegion.unlockedPillarCount = CurrRegion.AllPillarCount; // all unlocked!
             ++UnlockedRegionCount;
 
-            // When to do outro
-            if (UnlockedRegionCount == Mathf.Min(RegionCount, GameManager.Instance.maxUnlockAreaBeforeEnd) || (bossfight && GameManager.Instance.gameOverAfterBossFight)) {
-                TransitionState(GameplayState.Outro); // game over.
-            }
-
             bossfight = false; // of course.
+        }
+
+        bool shouldFinishGame() {
+            return UnlockedRegionCount == Mathf.Min(RegionCount, GameManager.Instance.maxUnlockAreaBeforeEnd) || (bossfight && GameManager.Instance.gameOverAfterBossFight);
         }
 
         #endregion
