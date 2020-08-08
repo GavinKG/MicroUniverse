@@ -32,6 +32,8 @@ namespace MicroUniverse {
 
         public GameObject indicator;
 
+        public Joystick movementJoystick;
+
         public Vector3 GravityDirection { get; private set; }
         public Vector3 GravityForce { get; private set; }
 
@@ -55,10 +57,14 @@ namespace MicroUniverse {
 
 
         public void OnPlayerMovementInput(InputAction.CallbackContext context) {
-            inputMovementAxis = context.ReadValue<Vector2>();
-            float sqrDistance = inputMovementAxis.sqrMagnitude;
-            if (sqrDistance > 1) {
-                inputMovementAxis.Normalize();
+
+            // when on-screen joystick is unused, use hardware device input
+            if (movementJoystick.Direction.x == 0 && movementJoystick.Direction.y == 0) {
+                inputMovementAxis = context.ReadValue<Vector2>();
+                float sqrDistance = inputMovementAxis.sqrMagnitude;
+                if (sqrDistance > 1) {
+                    inputMovementAxis.Normalize();
+                }
             }
         }
 
@@ -222,11 +228,26 @@ namespace MicroUniverse {
             shaker = GetComponent<CinemachineImpulseSource>();
         }
 
+        bool onJoystickFirstSetMovementZero = false;
+        void UpdateMovementJoystick() {
+            if (movementJoystick.Direction.x != 0 && movementJoystick.Direction.y != 0) {
+                inputMovementAxis = movementJoystick.Direction;
+                onJoystickFirstSetMovementZero = false;
+            } else {
+                if (!onJoystickFirstSetMovementZero) {
+                    inputMovementAxis = Vector2.zero;
+                    onJoystickFirstSetMovementZero = true;
+                }
+            }
+        }
+
         void Update() {
 
             if (currState == State.Freeze) {
                 return;
             }
+
+            UpdateMovementJoystick();
 
             sensor.transform.position = transform.position; // drive sensor around..
 
