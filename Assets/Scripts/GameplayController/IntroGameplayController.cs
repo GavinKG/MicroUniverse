@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 namespace MicroUniverse {
 
@@ -11,6 +13,15 @@ namespace MicroUniverse {
         public GameObject storyUI;
         public GameObject settingsUI;
 
+        [Header("Settings Ref")]
+        public Toggle preferGravitySensorToggle;
+        public Toggle enableKaleidoscopeToggle;
+        public Toggle realtimeShadowToggle;
+        public Toggle gameOverAfterBossFightToggle;
+        public Toggle showDebugInfoToggle;
+        public TMP_Text maximumPlayableRegionsText;
+        public TMP_Text bossFightAfterLargeRegionText;
+
         public override void Begin() {
             storyUI.SetActive(false);
             mainUI.SetActive(true);
@@ -19,6 +30,46 @@ namespace MicroUniverse {
 
         public override void Finish() {
             
+        }
+
+
+        // Refresh whole settings based on GameManager's value:
+        public void RefreshSettingsUI() {
+            preferGravitySensorToggle.isOn = GameManager.Instance.preferSensorControl;
+            enableKaleidoscopeToggle.isOn = GameManager.Instance.exampleKaleido;
+            realtimeShadowToggle.isOn = GameManager.Instance.realtimeShadow;
+            gameOverAfterBossFightToggle.isOn = GameManager.Instance.gameOverAfterBossFight;
+            showDebugInfoToggle.isOn = GameManager.Instance.showDebugInfo;
+
+            maximumPlayableRegionsText.text = GameManager.Instance.maxUnlockAreaBeforeEnd.ToString();
+            bossFightAfterLargeRegionText.text = GameManager.Instance.bossAfterArea.ToString();
+
+        }
+
+
+
+        public void OnMaximumPlayableRegionsMinusClick() {
+            if (GameManager.Instance.maxUnlockAreaBeforeEnd > 1) {
+                --GameManager.Instance.maxUnlockAreaBeforeEnd;
+            }
+            RefreshSettingsUI();
+        }
+
+        public void OnMaximumPlayableRegionsPlusClick() {
+            ++GameManager.Instance.maxUnlockAreaBeforeEnd;
+            RefreshSettingsUI();
+        }
+
+        public void OnBossFightAfterLargeRegionMinusClick() {
+            if (GameManager.Instance.bossAfterArea > 1) {
+                --GameManager.Instance.bossAfterArea;
+            }
+            RefreshSettingsUI();
+        }
+
+        public void OnBossFightAfterLargeRegionPlusClick() {
+            ++GameManager.Instance.bossAfterArea;
+            RefreshSettingsUI();
         }
 
         public void OnReturnClick() {
@@ -31,6 +82,7 @@ namespace MicroUniverse {
             storyUI.SetActive(false);
             mainUI.SetActive(false);
             settingsUI.SetActive(true);
+            RefreshSettingsUI();
         }
 
         public void OnStoryClick() {
