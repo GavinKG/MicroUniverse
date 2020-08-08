@@ -389,6 +389,10 @@ namespace MicroUniverse {
             bossBallController?.Damage(1000f);
         }
 
+        public void EndGameNow() {
+            TransitionState(GameplayState.Outro);
+        }
+
         public void GotoRegion(int regionId) {
             if (currState != GameplayState.Playing) {
                 return;
