@@ -40,7 +40,6 @@ namespace MicroUniverse {
         // Input related:
         Vector2 inputMovementAxis;
         Vector3 worldMovementDirection;
-        bool hooking = false;
         
         Vector3 lastLegalGravityDirection = Vector3.down;
 
@@ -70,11 +69,26 @@ namespace MicroUniverse {
 
         public void OnHookActionPressed(InputAction.CallbackContext context) {
             if (context.started) {
-                TransitionState(State.Hooking);
+                ProcessHookAction(down: true);
             } else if (context.canceled) {
+                ProcessHookAction(down: false);
+            }
+        }
+
+        public void OnOnscreenHookActionDown() {
+            ProcessHookAction(down: true);
+        }
+
+        public void OnOnscreenHookActionUp() {
+            ProcessHookAction(down: false);
+        }
+
+        void ProcessHookAction(bool down) {
+            if (down) {
+                TransitionState(State.Hooking);
+            } else {
                 TransitionState(State.Normal);
             }
-            hooking = context.performed;
         }
 
         public void KillVelocity() {
