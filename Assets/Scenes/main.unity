@@ -1537,7 +1537,7 @@ MonoBehaviour:
   pillarUnlockToSuccessRate: 0.8
   unlockRateIndicatorUIRoot: {fileID: 979095271}
   unlockRateIndicator: {fileID: 1997306402}
-  unlockRateInitialWidth: 400
+  unlockRateInitialWidth: 300
   bossFightUIRoot: {fileID: 1015277292}
   bossHP: {fileID: 932428352}
   cityHP: {fileID: 890955493}
@@ -5149,8 +5149,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -68}
-  m_SizeDelta: {x: 400, y: 13.293076}
+  m_AnchoredPosition: {x: -0.63, y: -66.04}
+  m_SizeDelta: {x: 300, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1779114680
 MonoBehaviour:
@@ -5165,7 +5165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.101960786}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.101960786}
   m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -5758,7 +5758,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -68}
-  m_SizeDelta: {x: 400, y: 13.293076}
+  m_SizeDelta: {x: 300, y: 13.293076}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1997306402
 MonoBehaviour:
