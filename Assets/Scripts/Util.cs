@@ -12,7 +12,7 @@ namespace MicroUniverse {
     /// Currently used in MST generation.
     /// </summary>
     public interface IGraphNode {
-        Vector2Int Center { get; }
+        Vector2 Center { get; }
         void RegisterConnected(IGraphNode other);
     }
 

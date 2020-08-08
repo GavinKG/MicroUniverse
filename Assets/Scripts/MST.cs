@@ -8,11 +8,11 @@ namespace MicroUniverse {
     public class SimpleGraphNode : IGraphNode {
         public string name;
         public List<SimpleGraphNode> connected;
-        public Vector2Int Center { get; set; }
+        public Vector2 Center { get; set; }
         public void RegisterConnected(IGraphNode other) {
             connected.Add(other as SimpleGraphNode);
         }
-        public SimpleGraphNode(Vector2Int center) {
+        public SimpleGraphNode(Vector2 center) {
             Center = center;
             connected = new List<SimpleGraphNode>();
         }
@@ -60,7 +60,7 @@ namespace MicroUniverse {
             edges = new List<Edge>();
             for (int i = 0; i < nodes.Count - 1; ++i) {
                 for (int j = i + 1; j < nodes.Count; ++j) {
-                    edges.Add(new Edge(i, j, Vector2Int.Distance(nodes[i].Center, nodes[j].Center)));
+                    edges.Add(new Edge(i, j, Vector2.Distance(nodes[i].Center, nodes[j].Center)));
                 }
             }
         }

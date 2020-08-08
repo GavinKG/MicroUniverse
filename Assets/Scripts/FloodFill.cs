@@ -20,7 +20,7 @@ namespace MicroUniverse {
             public int BorderXMax { get; private set; } = int.MinValue;
 
 
-            public Vector2Int FilledAreaCenterPoint { get; private set; }
+            public Vector2 FilledAreaCenterPoint { get; private set; }
             public Vector2Int MapCenterPoint { get { return new Vector2Int(MapWidth / 2, MapHeight / 2); } }
 
             public bool Finished { get; private set; } = false;
@@ -39,7 +39,7 @@ namespace MicroUniverse {
                 if (Finished) {
                     throw new System.Exception("Already finished.");
                 }
-                FilledAreaCenterPoint = new Vector2Int(accumulatePoint.x / FilledPoints.Count, accumulatePoint.y / FilledPoints.Count);
+                FilledAreaCenterPoint = new Vector2(accumulatePoint.x / (float)FilledPoints.Count, accumulatePoint.y / (float)FilledPoints.Count);
                 Finished = true;
             }
 

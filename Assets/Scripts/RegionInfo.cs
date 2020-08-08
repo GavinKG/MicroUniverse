@@ -23,7 +23,7 @@ namespace MicroUniverse {
         /// <summary>
         /// Region center point in filled space.
         /// </summary>
-        public Vector2Int Center { get { return fillResult.FilledAreaCenterPoint; } }
+        public Vector2 Center { get { return fillResult.FilledAreaCenterPoint; } }
 
         /// <summary>
         /// Region center point in world space (XZ).
