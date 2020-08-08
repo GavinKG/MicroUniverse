@@ -23,6 +23,9 @@ namespace MicroUniverse {
         public int penWidth = 3;
         public LayerMask drawingLayers;
 
+        public float innerRadius; // in metrics
+        public float outerRadius; // in metrics
+
         public bool resetCanvasOnPlay = true;
         public bool resetCanvasOnDraw = true;
         public Color canvasClearColor = new Color(0, 0, 0, 0);  // By default, reset the canvas to be transparent
@@ -193,7 +196,7 @@ namespace MicroUniverse {
         void Update() {
 
             bool shouldTriggerFailed = false;
-
+           
             if (pointerHeldDown) {
                 Ray ray = Camera.main.ScreenPointToRay(pointerPosPS);
                 RaycastHit2D hit = Physics2D.GetRayIntersection(ray, useLayer);
@@ -208,9 +211,14 @@ namespace MicroUniverse {
                         if (currState == State.InnerMask && resetCanvasOnDraw) {
                             ResetCanvas();
                         }
-                        if (currState == State.InnerMask || currState == State.Drawing) {
+                        if (currState == State.InnerMask) {
+                            Vector2 mousePosWS = hit.point;
+                            Vector2 canvasPosWS = new Vector2(canvas.transform.position.x, canvas.transform.position.y);
+                            Vector2 dir = (mousePosWS - canvasPosWS).normalized;
+                            mousePosWS = dir * innerRadius; // to prevent seam
+                            CurrentBrush(mousePosWS);
                             currState = State.Drawing;
-
+                        } else if (currState == State.Drawing) {
                             Vector2 mousePosWS = hit.point;
                             CurrentBrush(mousePosWS);
                         } else {
@@ -219,7 +227,12 @@ namespace MicroUniverse {
 
                     } else if (hit.transform.gameObject == outerMask) {
                         if (currState == State.Drawing) {
+
                             Vector2 mousePosWS = hit.point;
+                            Vector2 canvasPosWS = new Vector2(canvas.transform.position.x, canvas.transform.position.y);
+                            Vector2 dir = (mousePosWS - canvasPosWS).normalized;
+                            mousePosWS = dir * outerRadius; // to prevent seam
+
                             CurrentBrush(mousePosWS); // last point
                             currState = State.OuterMask;
                         } else if (currState == State.OuterMask) {

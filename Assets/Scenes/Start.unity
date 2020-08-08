@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1173,6 +1173,8 @@ MonoBehaviour:
   drawingLayers:
     serializedVersion: 2
     m_Bits: 131072
+  innerRadius: 1.3
+  outerRadius: 4.85
   resetCanvasOnPlay: 1
   resetCanvasOnDraw: 1
   canvasClearColor: {r: 0, g: 0, b: 0, a: 0}
@@ -3637,7 +3639,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.55
+  m_Radius: 0.6
 --- !u!4 &2073429706
 Transform:
   m_ObjectHideFlags: 0
