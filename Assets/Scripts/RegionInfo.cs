@@ -621,6 +621,7 @@ namespace MicroUniverse {
 
             // use float based Vector2 for highter accuracy.
             filledCenterToMapCenter = mapCenter - fillResult.FilledAreaCenterPoint;
+
             Vector2 mapCenterToFilledCenter = -filledCenterToMapCenter;
             Vector2 mapCenterToFilledCenterDirection = mapCenterToFilledCenter.normalized;
             moveRightLength = filledCenterToMapCenter.magnitude;
@@ -700,8 +701,9 @@ namespace MicroUniverse {
             }
 
             // Convert point list to bool map (can be optimized. seperate for-loop for easy understanding)
-            flattenedMapWidth = Mathf.CeilToInt(FlattenedWidth);
-            flattenedMapHeight = Mathf.CeilToInt(FlattenedHeight);
+            // Lose accuracy!! Pay attention!
+            flattenedMapWidth = Mathf.RoundToInt(FlattenedWidth);
+            flattenedMapHeight = Mathf.RoundToInt(FlattenedHeight);
             FlattenedMap = Util.PlotPointsToBoolMap(transformed, flattenedMapWidth, flattenedMapHeight, true);
 
         }

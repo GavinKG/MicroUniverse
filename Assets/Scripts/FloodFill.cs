@@ -21,7 +21,7 @@ namespace MicroUniverse {
 
 
             public Vector2 FilledAreaCenterPoint { get; private set; }
-            public Vector2Int MapCenterPoint { get { return new Vector2Int(MapWidth / 2, MapHeight / 2); } }
+            public Vector2 MapCenterPoint { get { return new Vector2(MapWidth / 2, MapHeight / 2); } }
 
             public bool Finished { get; private set; } = false;
 
