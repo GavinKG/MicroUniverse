@@ -48,8 +48,6 @@ namespace MicroUniverse {
         [Range(0f, 1f)] public float companionSpawnRatio = 0.4f;
         [Range(0f, 1f)] public float badPillarRatio = 0.3f;
         public List<Theme> themes;
-        public GameObject regionMaskPrefab;
-        [Range(1f, 2f)] public float regionMaskExtraScale = 1.2f;
 
         // Material templates:
         public Material buildingMat;

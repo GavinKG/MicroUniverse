@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -4519,7 +4519,7 @@ MonoBehaviour:
     buildingMHSep: 0.8
   propRoot: {fileID: 1002798681}
   companionSpawnRatio: 0.2
-  badPillarRatio: 0.1
+  badPillarRatio: 0.15
   themes:
   - {fileID: 4967564177144375026, guid: 544ec22e4095bb64485c434c53344065, type: 3}
   - {fileID: 4967564177144375026, guid: 681992e165672e2459c58a6632f9d978, type: 3}
@@ -4532,9 +4532,6 @@ MonoBehaviour:
   - {fileID: 4967564177144375026, guid: f9db716d8e609d040b1facfafcdf0c44, type: 3}
   - {fileID: 4967564177144375026, guid: 45ad6542424604847a44b2d95df7e32b, type: 3}
   - {fileID: 4967564177144375026, guid: 88faf20e8968e0643a6be4e08d3b7ac8, type: 3}
-  regionMaskPrefab: {fileID: 3407971468166204044, guid: 3e0cecc57db30f446b4fb4db77a464ab,
-    type: 3}
-  regionMaskExtraScale: 1.25
   buildingMat: {fileID: 2100000, guid: 1f3836c732d661b4eb0ae36d6b812be9, type: 2}
   baseMat: {fileID: 2100000, guid: 6934611e274493b4e85d7d9ddbf38842, type: 2}
   emptyMat: {fileID: 2100000, guid: 586b9243737c5c84286beddd1a1febab, type: 2}
@@ -4893,7 +4890,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -70.3, y: -23.2}
+  m_AnchoredPosition: {x: -70.30005, y: -23.199951}
   m_SizeDelta: {x: 100, y: 20}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1641774783
