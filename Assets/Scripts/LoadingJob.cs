@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace MicroUniverse {
     public class LoadingJob : MonoBehaviour {
@@ -132,6 +133,17 @@ namespace MicroUniverse {
         // --------------------
 
         public void Load() {
+            try {
+                TryLoad();
+            } catch (Exception e) {
+                print("Exception handled: ");
+                print(e);
+                print("Going back to start scene...");
+                SceneManager.LoadScene("Start");
+            }
+        }
+
+        public void TryLoad() {
 
             firstStamp = -1;
 
