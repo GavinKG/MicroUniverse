@@ -221,7 +221,7 @@ namespace MicroUniverse {
 
                                 // expand:
                                 if (oldMask[subX, subY] == 0) { // if wild land
-                                    mask[subX, subY] = id_roadNotWalkable;
+                                    mask[subX, subY] = id_road;
                                 }
                             }
                         }
