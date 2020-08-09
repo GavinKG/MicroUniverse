@@ -374,17 +374,26 @@ namespace MicroUniverse {
 
         // Triggered by OutroUnlockingWorldSignal in outro timeline.
         public void LightUpCity() {
+
+            foreach (RegionInfo regionInfo in RegionInfos) {
+                regionInfo.SetAutoBallRootActive(false);
+            }
+
             lightupValue = 0f;
             StartCoroutine(LightUpCityUpdate());
         }
         IEnumerator LightUpCityUpdate() {
             // linear light up
-            // TODO: consider ease in out.
             while (lightupValue <= 1f) {
                 lightupValue += lightupSpeed * Time.deltaTime;
                 float smoothed = Mathf.SmoothStep(0, 1, lightupValue);
                 maskCam.backgroundColor = new Color(smoothed, smoothed, smoothed);
                 yield return null; // jump a frame
+            }
+
+            // turn off all mask particle to save performance
+            foreach (RegionInfo regionInfo in RegionInfos) {
+                regionInfo.SetAllPillarsActiveWithoutNotifyingController(false);
             }
         }
 
