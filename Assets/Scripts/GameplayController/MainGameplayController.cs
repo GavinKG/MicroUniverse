@@ -12,7 +12,6 @@ namespace MicroUniverse {
 
         // Inspector:
         [Header("Ref")]
-        public GameObject mainCamGO;
         public LoadingJob loadingJob;
         public GameObject ballGO;
         public GameObject bossBallPrefab;
@@ -22,7 +21,7 @@ namespace MicroUniverse {
         public Camera maskCam;
         [Header("Gameplay")]
         [Range(0.1f, 1f)] public float pillarUnlockToSuccessRate = 0.8f;
-        public GameObject unlockRateIndicatorUIRoot;
+        public GameObject unlockRateIndicatorUIRoot; //  SetActive should only be called inside region FSM and timeline ending signal.
         public Image unlockRateIndicator;
         public float unlockRateInitialWidth;
         public float unlockRateIndicatorAlpha = 0.5f;
@@ -167,23 +166,20 @@ namespace MicroUniverse {
             // TODO: ball freeze
             onscreenControlCanvasGroup.alpha = value ? 1 : 0;
             onscreenControlCanvasGroup.blocksRaycasts = value;
-
-            unlockRateIndicatorUIRoot.SetActive(value);
         }
 
         void OnEnterIntroState() {
             SetInteractive(false);
-
             print("Play intro timeline...");
             OnFirstEnterWorld();
             director.Play(introTimeline);
+            unlockRateIndicatorUIRoot.SetActive(false);
         }
 
-        bool firstEnter = true;
+        bool firstEnter = true; // for when developer (me) turning on "skip intro".
         void OnFirstEnterWorld() {
             if (!firstEnter) return;
             // player first enters the whole new world...
-            mainCamGO.SetActive(true);
             CurrRegion = StartRegion;
             regionEnterPosition = StartRegion.portals[0].PortalSpawnPosition; // note that .y is set to 0. offset a little to prevent fall through floor.
             regionLeftoverForBossFight = GameManager.Instance.bossAfterArea;
@@ -202,7 +198,10 @@ namespace MicroUniverse {
 
         void OnEnterOutroState() {
             SetInteractive(false);
+            unlockRateIndicatorUIRoot.SetActive(false);
+            bossFightUIRoot.SetActive(false); // double check...
             director.Play(outroTimeline);
+            // dont care about region FSM anymore (should be in Unlocking state actually but timeline will not trigger needed signal for it to transfer to unlocked!!)
 
         }
 
@@ -243,7 +242,12 @@ namespace MicroUniverse {
         }
 
         void OnInitRegion() {
+
+            unlockRateIndicatorUIRoot.SetActive(true);
+
             CurrRegion.SetAutoBallRootActive(true);
+
+
             UpdateUnlockRateUI();
             unlockRateIndicator.color = new Color(CurrRegion.MainColor.r, CurrRegion.MainColor.g, CurrRegion.MainColor.b, unlockRateIndicatorAlpha);
 
@@ -253,11 +257,11 @@ namespace MicroUniverse {
                 print("Boss will appear after " + regionLeftoverForBossFight.ToString() + " big regions...");
                 if (regionLeftoverForBossFight == 0) {
                     InitBoss();
+                    unlockRateIndicatorUIRoot.SetActive(false); // manually override.
                 } else {
                     bossFightUIRoot.SetActive(false);
                 }
                 --regionLeftoverForBossFight;
-                unlockRateIndicatorUIRoot.SetActive(false); // manually override.
             }
         }
 
@@ -265,7 +269,10 @@ namespace MicroUniverse {
         void OnRegionUnlocking() {
             print("Region unlocking: #" + CurrRegion.RegionID.ToString());
             SetInteractive(false);
-            if (shouldFinishGame()) {
+            unlockRateIndicatorUIRoot.SetActive(false);
+            bool shouldFinishGame = (!bossfight && (UnlockedRegionCount + 1 == Mathf.Min(RegionCount, GameManager.Instance.maxUnlockAreaBeforeEnd))) || // why plus one: region not unlocked right now!
+                                    (bossfight && bossBallController == null && GameManager.Instance.gameOverAfterBossFight);
+            if (shouldFinishGame) {
                 TransitionState(GameplayState.Outro); // game finished.
             } else {
                 director.Play(unlockingTimeline);
@@ -287,11 +294,8 @@ namespace MicroUniverse {
             ++UnlockedRegionCount;
 
             bossfight = false; // of course.
-        }
 
-        bool shouldFinishGame() {
-            return (!bossfight && (UnlockedRegionCount == Mathf.Min(RegionCount, GameManager.Instance.maxUnlockAreaBeforeEnd)))
-                || (bossfight && bossBallController == null && GameManager.Instance.gameOverAfterBossFight);
+            unlockRateIndicatorUIRoot.SetActive(false);
         }
 
         #endregion
@@ -381,6 +385,9 @@ namespace MicroUniverse {
 
         public void OnIntroTimelineFinished() {
             TransitionState(GameplayState.Playing);
+            if (!bossfight) {
+                unlockRateIndicatorUIRoot.SetActive(true); // "In this case, root active will be set by timeline signal callback."
+            }
         }
 
         public void OnOutroTimelineFinished() {
