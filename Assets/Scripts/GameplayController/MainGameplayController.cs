@@ -25,6 +25,7 @@ namespace MicroUniverse {
         public GameObject unlockRateIndicatorUIRoot;
         public Image unlockRateIndicator;
         public float unlockRateInitialWidth;
+        public float unlockRateIndicatorAlpha = 0.5f;
         [Header("Boss Fight")]
         public GameObject bossFightUIRoot;
         public Image bossHP;
@@ -244,7 +245,7 @@ namespace MicroUniverse {
         void OnInitRegion() {
             CurrRegion.SetAutoBallRootActive(true);
             UpdateUnlockRateUI();
-            unlockRateIndicator.color = CurrRegion.MainColor;
+            unlockRateIndicator.color = new Color(CurrRegion.MainColor.r, CurrRegion.MainColor.g, CurrRegion.MainColor.b, unlockRateIndicatorAlpha);
 
             // boss fight logic.
             if (CurrRegion.BuildingCount > GameManager.Instance.bossMinAreaBuildingCount) {

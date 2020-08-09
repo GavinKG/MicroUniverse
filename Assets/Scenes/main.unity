@@ -1449,6 +1449,7 @@ MonoBehaviour:
   unlockRateIndicatorUIRoot: {fileID: 979095271}
   unlockRateIndicator: {fileID: 1997306402}
   unlockRateInitialWidth: 300
+  unlockRateIndicatorAlpha: 0.5
   bossFightUIRoot: {fileID: 1015277292}
   bossHP: {fileID: 932428352}
   cityHP: {fileID: 890955493}
@@ -5620,7 +5621,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6448024, g: 0.990566, b: 0.7013819, a: 0.8}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
   m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
