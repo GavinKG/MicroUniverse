@@ -294,6 +294,7 @@ namespace MicroUniverse {
         public void OnDyingTimelineTriggerBoom() {
             GetComponent<MeshRenderer>().enabled = false;
             glowLight.enabled = false;
+            boomParticle.transform.rotation = Quaternion.LookRotation(Vector3.up);
             boomParticle.Play();
             print("I boom...");
         }
