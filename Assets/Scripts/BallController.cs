@@ -101,10 +101,16 @@ namespace MicroUniverse {
             TransitionState(State.Freeze);
         }
 
+        public void UnFreeze() {
+            TransitionState(State.Normal);
+        }
+
         private void TransitionState(State newState) {
             switch (newState) {
                 case State.Freeze:
-                    KillVelocity();
+                    if (rb!= null) {
+                        rb.isKinematic = true;
+                    }
                     currState = newState;
                     
                     break;
@@ -130,7 +136,9 @@ namespace MicroUniverse {
                         OnAbandonHook();
                         currState = newState;
                     } else if (currState == State.Freeze) {
-                        // TODO
+                        if (rb != null) {
+                            rb.isKinematic = false;
+                        }
                         currState = newState;
                     }
                     break;

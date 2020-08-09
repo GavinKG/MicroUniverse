@@ -163,7 +163,12 @@ namespace MicroUniverse {
             // ballGO.GetComponent<BallController>().enabled = value;
             // inGameUIRoot.SetActive(value); // can't do that because it will cause the new input system to spit out tons of errors. Fuck it!
 
-            // TODO: ball freeze
+            if (value) {
+                ballGO.GetComponent<BallController>().UnFreeze();
+            } else {
+                ballGO.GetComponent<BallController>().Freeze();
+            }
+
             onscreenControlCanvasGroup.alpha = value ? 1 : 0;
             onscreenControlCanvasGroup.blocksRaycasts = value;
         }
