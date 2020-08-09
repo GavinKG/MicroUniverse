@@ -395,7 +395,7 @@ namespace MicroUniverse {
         }
 
         public void KillBossNow() {
-            bossBallController?.Damage(1000f);
+            bossBallController?.Damage(1000f, Vector3.up);
         }
 
         public void EndGameNow() {

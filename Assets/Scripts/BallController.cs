@@ -317,7 +317,7 @@ namespace MicroUniverse {
                     speedRange = 1;
                 }
                 if (speedRange > 0) {
-                    bossBallController.Damage(damageMaxSpeedHPLoss * speedRange);
+                    bossBallController.Damage(damageMaxSpeedHPLoss * speedRange, worldMovementDirection);
                     shaker.GenerateImpulse();
                 }
                 return;

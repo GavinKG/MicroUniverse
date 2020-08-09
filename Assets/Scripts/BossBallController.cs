@@ -26,10 +26,18 @@ namespace MicroUniverse {
         public float restFreezeRatio = 0.99f;
         public float readyJumpFreezeRatio = 0.95f;
 
+        public ParticleSystem splashParticle;
+        public ParticleSystem boomParticle;
+        public Light glowLight;
+
+        public float slowMotionTimescale = 0.5f;
+        public float slowMotionTime = 1f;
+        public float slowMotionSpeedup = 2f;
+
         [Header("Animations")]
         public TimelineAsset hurtTimeline;
         public TimelineAsset dyingTimeline;
-        public ParticleSystem boomParticle;
+        
 
         [Header("Debug")]
         public BuildingProp target = null;
@@ -93,6 +101,7 @@ namespace MicroUniverse {
             // any state ->
             if (newState == State.Dying) {
                 OnDying();
+                currState = newState;
             }
 
             switch (currState) {
@@ -123,9 +132,10 @@ namespace MicroUniverse {
                         currState = newState;
                     }
                     break;
-                case State.Die:
-                    if (currState == State.Dying) {
+                case State.Dying:
+                    if (newState == State.Die) {
                         OnDie();
+                        currState = newState;
                     }
                     break;
             }
@@ -135,7 +145,7 @@ namespace MicroUniverse {
         void OnDying() {
             rb.isKinematic = true; // disable physics.
             GetComponent<Collider>().enabled = false;
-
+            StartCoroutine(SlowMotion());
             director.Play(dyingTimeline);
         }
 
@@ -263,10 +273,16 @@ namespace MicroUniverse {
             }
         }
 
-        public void Damage(float value) {
+        public void Damage(float value, Vector3 splashDirection) {
             print(value.ToString() + " HP! It hurts!");
             HP -= value;
             director.Play(hurtTimeline);
+
+            Quaternion rot = Quaternion.LookRotation(splashDirection);
+            splashParticle.transform.rotation = rot;
+            splashParticle.Play();
+
+
             print("Now I only have " + HP.ToString() + " HP...");
             OnHPLossEvent?.Invoke();
             if (HP <= 0) {
@@ -277,11 +293,23 @@ namespace MicroUniverse {
 
         public void OnDyingTimelineTriggerBoom() {
             GetComponent<MeshRenderer>().enabled = false;
+            glowLight.enabled = false;
             boomParticle.Play();
+            print("I boom...");
         }
 
         public void OnDyingTimelineEnds() {
             TransitionState(State.Die);
+        }
+        
+        IEnumerator SlowMotion() {
+            Time.timeScale = slowMotionTimescale;
+            yield return new WaitForSecondsRealtime(slowMotionTime);
+            while (Time.timeScale <= 1f) {
+                Time.timeScale += Time.unscaledDeltaTime * slowMotionSpeedup;
+                yield return null;
+            }
+            Time.timeScale = 1f;
         }
 
 

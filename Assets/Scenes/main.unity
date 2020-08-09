@@ -1436,7 +1436,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b740858618a224d9d3c15af928e3ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamGO: {fileID: 150760874}
   loadingJob: {fileID: 1422580536}
   ballGO: {fileID: 8996153153341454443}
   bossBallPrefab: {fileID: 1080163922653158711, guid: 4099844aedfd9954d8455ca2f57b46b4,
@@ -1481,7 +1480,7 @@ PlayableDirector:
   m_GameObject: {fileID: 578662492}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 0}
+  m_PlayableAsset: {fileID: 11400000, guid: 17d8d07c697ed9546886cba07355d0ca, type: 2}
   m_InitialState: 0
   m_WrapMode: 0
   m_DirectorUpdateMode: 1
@@ -1545,6 +1544,10 @@ PlayableDirector:
     value: {fileID: 578662496}
   - key: {fileID: -6495474404532703205, guid: 07820bbdf27059444b8bb8a6ee37ffe0, type: 2}
     value: {fileID: 193467000}
+  - key: {fileID: -7793805783094956313, guid: 17d8d07c697ed9546886cba07355d0ca, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -8400247640842476660, guid: 17d8d07c697ed9546886cba07355d0ca, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References:
     - d026e4712905cb14fa55ddb3cdba1414: {fileID: 1231890895}
