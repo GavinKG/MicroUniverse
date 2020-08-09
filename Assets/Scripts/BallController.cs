@@ -139,6 +139,15 @@ namespace MicroUniverse {
                         currState = newState;
                     } else if (currState == State.Freeze) {
                         if (rb != null) {
+                            Vector3 ogPos = transform.position;
+                            ogPos.y = transform.position.y + 0.1f;
+                            transform.position = ogPos;
+
+
+                            // Hooking (without collider) / Hooked (without renderer) -> Freeze -> Normal bugfix:
+                            collider.enabled = true;
+                            GetComponent<MeshRenderer>().enabled = true;
+
                             rb.isKinematic = false;
                         }
                         currState = newState;
@@ -281,6 +290,13 @@ namespace MicroUniverse {
             }
 
             UpdateIndicator();
+
+            // prevent fall into the abyss:
+            if (transform.position.y <= 0.01f) {
+                Vector3 pos = transform.position;
+                pos.y = 0.01f;
+                transform.position = pos;
+            }
         }
 
         void FixedUpdate() {
