@@ -14,6 +14,9 @@ public class Button : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
         OnPointerDownEvent.Invoke();
     }
 
+    /// <summary>
+    /// Note that when holding the button while setActive(false), pointer up will still be triggered when your release the pointer.
+    /// </summary>
     public void OnPointerUp(PointerEventData eventData) {
         OnPointerUpEvent.Invoke();
     }

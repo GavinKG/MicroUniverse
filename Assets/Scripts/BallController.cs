@@ -87,7 +87,9 @@ namespace MicroUniverse {
             if (down) {
                 TransitionState(State.Hooking);
             } else {
-                TransitionState(State.Normal);
+                if (currState != State.Freeze) { // see button script's OnPointerUp for details.
+                    TransitionState(State.Normal);
+                }
             }
         }
 
