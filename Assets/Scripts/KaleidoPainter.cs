@@ -270,6 +270,7 @@ namespace MicroUniverse {
         void DrawingFailed() {
             currState = State.Idle;
             print("Failed.");
+            OnDrawFailed.Invoke();
             prevMousePosPS = Vector2.zero;
         }
 

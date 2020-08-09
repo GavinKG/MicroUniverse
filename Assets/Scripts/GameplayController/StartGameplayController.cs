@@ -24,6 +24,8 @@ namespace MicroUniverse {
         public Text debugPainterStateText;
 
         [Header("Animation")]
+        // public TimelineAsset kaleidoHandTimeline;
+        public TimelineAsset kaleidoNoGoTimeline;
         public TimelineAsset kaleidoFinishedTimeline;
         public TimelineAsset kaleidoClearTimeline;
         public TimelineAsset kaleidoStutterTimeline;
@@ -46,6 +48,8 @@ namespace MicroUniverse {
             clearButtonGO.SetActive(false);
             debugRoot.SetActive(GameManager.Instance.showDebugInfo);
             director = GetComponent<PlayableDirector>();
+            painter.ResetCanvas();
+            // director.Play(kaleidoHandTimeline);
         }
 
         public override void Finish() {
@@ -123,6 +127,11 @@ namespace MicroUniverse {
         // called by painter
         public void OnFinishedDrawing() {
             TransitionState(State.FinishedDrawing);
+        }
+        public void OnDrawingFailed() {
+            painter.ResetCanvas();
+            director.Stop();
+            director.Play(kaleidoNoGoTimeline);
         }
 
 
