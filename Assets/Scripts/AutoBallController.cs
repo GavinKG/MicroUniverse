@@ -10,10 +10,15 @@ namespace MicroUniverse {
     /// Logic:
     /// Find nearest activated pillar -> deactivate it -> find next
     /// </summary>
+    [RequireComponent(typeof(MeshRenderer))]
     public class AutoBallController : MonoBehaviour {
 
         public Vector2 speedRange = new Vector2(1f, 3f);
+        public ParticleSystem deathParticleSystem;
+        public float dyingTime = 0.25f;
 
+
+        // debug:
         public RoadProp currRoadProp;
         public RoadProp targetRoadProp;
         public float targetReachDistance = 0.05f;
@@ -26,7 +31,16 @@ namespace MicroUniverse {
         float ballRadius;
         private float speed;
 
-        public void Die() {
+        public void Die(Vector3 splashDirection) {
+            Quaternion rot = Quaternion.LookRotation(splashDirection);
+            deathParticleSystem.transform.rotation = rot;
+            deathParticleSystem.Play();
+            GetComponent<MeshRenderer>().enabled = false;
+            StartCoroutine(WaitAndDestroy(dyingTime));
+        }
+
+        IEnumerator WaitAndDestroy(float time) {
+            yield return new WaitForSeconds(time);
             Destroy(gameObject);
         }
 

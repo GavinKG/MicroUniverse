@@ -305,7 +305,7 @@ namespace MicroUniverse {
             if (autoBallController != null && !autoBallController.setPillarActive) { // bad ball
                 if (currSpeed > damageSpeed) {
                     shaker.GenerateImpulse();
-                    autoBallController.Die();
+                    autoBallController.Die(worldMovementDirection);
                 }
                 return;
             }

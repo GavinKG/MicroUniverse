@@ -231,7 +231,7 @@ namespace MicroUniverse {
             AutoBallController autoBallController = other.transform.GetComponent<AutoBallController>();
             if (autoBallController != null) {
                 print("Fuck off, little scum!");
-                autoBallController.Die();
+                autoBallController.Die(rb.velocity.normalized);
                 return;
             }
 
