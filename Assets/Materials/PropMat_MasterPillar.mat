@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: PropMat_MasterPillar
   m_Shader: {fileID: 4800000, guid: 9196e996c691c71408c187724b2d3ec3, type: 3}
-  m_ShaderKeywords: _EMISSION_ON
+  m_ShaderKeywords: _DIFFUSEUSEFOURGRID_ON _EMISSION_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -63,7 +63,8 @@ Material:
     - _DarkMask1: 0
     - _DarkMaskMinValue: 0.05
     - _DarkenDiffuseGrayscale: 0.05
-    - _DiffuseUseFourGrid: 0
+    - _DiffuseTexUseWorldUV: 0
+    - _DiffuseUseFourGrid: 1
     - _DiffuseUseTex: 0
     - _DstBlend: 0
     - _Emission: 1
@@ -110,11 +111,11 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Diffuse: {r: 1, g: 1, b: 1, a: 0}
     - _DiffuseColor: {r: 1, g: 1, b: 1, a: 0}
-    - _EmissionColor: {r: 0.5090335, g: 0.5301786, b: 0.8773585, a: 1}
-    - _NE: {r: 0, g: 0, b: 0, a: 0}
-    - _NW: {r: 0, g: 0, b: 0, a: 0}
+    - _EmissionColor: {r: 0.35154858, g: 0.35311884, b: 0.4716981, a: 1}
+    - _NE: {r: 0.39335188, g: 0.39248845, b: 0.8490566, a: 0}
+    - _NW: {r: 1, g: 1, b: 1, a: 0}
     - _ObjectCenterWS: {r: 0, g: 0, b: 0, a: 0}
-    - _SE: {r: 0, g: 0, b: 0, a: 0}
+    - _SE: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 0}
     - _SW: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
 --- !u!114 &4190761996120664289
