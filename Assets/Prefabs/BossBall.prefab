@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 7788379329137182926}
   - component: {fileID: 3783466397675242000}
   - component: {fileID: 7091470533861388939}
+  - component: {fileID: 8501876521979948031}
   m_Layer: 23
   m_Name: BossBall
   m_TagString: Untagged
@@ -63,6 +64,8 @@ MonoBehaviour:
   restFreezeRatio: 0.99
   readyJumpFreezeRatio: 0.95
   hurtTimeline: {fileID: 11400000, guid: f8e69d947d653ea45ab9ea827717952c, type: 2}
+  dyingTimeline: {fileID: 0}
+  boomParticle: {fileID: 0}
   target: {fileID: 0}
   currState: 1
 --- !u!33 &1080163922653158716
@@ -192,7 +195,7 @@ PlayableDirector:
   m_GameObject: {fileID: 1080163922653158711}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: f8e69d947d653ea45ab9ea827717952c, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: 17d8d07c697ed9546886cba07355d0ca, type: 2}
   m_InitialState: 1
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -202,8 +205,13 @@ PlayableDirector:
     value: {fileID: 3592424632193664271}
   - key: {fileID: 6317801262096950880, guid: f8e69d947d653ea45ab9ea827717952c, type: 2}
     value: {fileID: 7091470533861388939}
+  - key: {fileID: -7793805783094956313, guid: 17d8d07c697ed9546886cba07355d0ca, type: 2}
+    value: {fileID: 7091470533861388939}
+  - key: {fileID: -8400247640842476660, guid: 17d8d07c697ed9546886cba07355d0ca, type: 2}
+    value: {fileID: 8501876521979948031}
   m_ExposedReferences:
-    m_References: []
+    m_References:
+    - 3deb6d491de13c74e9ab4a8d38c6752e: {fileID: 1080163922653158711}
 --- !u!95 &7091470533861388939
 Animator:
   serializedVersion: 3
@@ -223,6 +231,49 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8501876521979948031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1080163922653158711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 9417655b40c1f9748bf30e7cf37c9adc, type: 2}
+    - {fileID: 11400000, guid: 0203b76032d86234fa7a8f9c042e5787, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3946293482458168696}
+          m_MethodName: OnDyingTimelineTriggerBoom
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3946293482458168696}
+          m_MethodName: OnDyingTimelineEnds
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7818898640783176920
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,8 +318,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_Intensity: 0.1
-  m_Range: 7
+  m_Intensity: 0.15
+  m_Range: 8
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10

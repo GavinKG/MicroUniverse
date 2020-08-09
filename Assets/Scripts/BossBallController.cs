@@ -28,6 +28,8 @@ namespace MicroUniverse {
 
         [Header("Animations")]
         public TimelineAsset hurtTimeline;
+        public TimelineAsset dyingTimeline;
+        public ParticleSystem boomParticle;
 
         [Header("Debug")]
         public BuildingProp target = null;
@@ -54,7 +56,7 @@ namespace MicroUniverse {
         public int LeftBuildings { get { return Buildings.Count; } }
 
         public enum State {
-            Idle, Move, ReadyJump, InAir, Die
+            Idle, Move, ReadyJump, InAir, Dying, Die
         }
 
 
@@ -89,8 +91,8 @@ namespace MicroUniverse {
         public void TransitionState(State newState) {
 
             // any state ->
-            if (newState == State.Die) {
-                OnDie();
+            if (newState == State.Dying) {
+                OnDying();
             }
 
             switch (currState) {
@@ -121,8 +123,20 @@ namespace MicroUniverse {
                         currState = newState;
                     }
                     break;
+                case State.Die:
+                    if (currState == State.Dying) {
+                        OnDie();
+                    }
+                    break;
             }
 
+        }
+
+        void OnDying() {
+            rb.isKinematic = true; // disable physics.
+            GetComponent<Collider>().enabled = false;
+
+            director.Play(dyingTimeline);
         }
 
         void OnDie() {
@@ -257,9 +271,19 @@ namespace MicroUniverse {
             OnHPLossEvent?.Invoke();
             if (HP <= 0) {
                 HP = 0;
-                TransitionState(State.Die);
+                TransitionState(State.Dying);
             }
         }
+
+        public void OnDyingTimelineTriggerBoom() {
+            GetComponent<MeshRenderer>().enabled = false;
+            boomParticle.Play();
+        }
+
+        public void OnDyingTimelineEnds() {
+            TransitionState(State.Die);
+        }
+
 
         void OnDrawGizmos() {
             if (target != null) {
