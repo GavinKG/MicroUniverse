@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -4326,8 +4326,8 @@ MonoBehaviour:
     - {fileID: 2155393276230795328, guid: 51ef1169f5d6cfc4a8108ac113ea4f69, type: 3}
     badBallPrefab: {fileID: 6542959102796597474, guid: 6c290ba8a34426e4394803f4e109ab19,
       type: 3}
-    buildingLMSep: 0.4
-    buildingMHSep: 0.8
+    buildingLMSep: 0.333
+    buildingMHSep: 0.667
   propRoot: {fileID: 1002798681}
   companionSpawnRatio: 0.2
   badPillarRatio: 0.15
