@@ -715,7 +715,7 @@ namespace MicroUniverse {
             Debug.Log("BorderSectorRightAngle: " + BorderSectorRightAngle.ToString());
             */
             if (BorderSectorNearRadius >= BorderSectorFarRadius || BorderSectorLeftAngle >= BorderSectorRightAngle || BorderSectorLeftAngle >= 0f || BorderSectorRightAngle <= 0f) {
-                throw new System.Exception("Something went wrong...");
+                throw new System.Exception("Something went wrong when doing ring2flatten transform. Game will restart.");
             }
 
             // calc flattened texture width / height

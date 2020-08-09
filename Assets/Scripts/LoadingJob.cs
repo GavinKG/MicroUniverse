@@ -276,6 +276,11 @@ namespace MicroUniverse {
                 // CONSTRUCT:
                 regionInfos[i].ConstructRegion(scaleFactor, propCollection, propRootGO.transform, autoBallRootGO.transform, perlinFreq, companionSpawnRatio, badPillarRatio, themeMaterialHolder);
 
+                // sanity check:
+                if (regionInfos[i].AllPillarCount == 0) {
+                    throw new Exception("Region #" + i.ToString() + " has zero pillars. Game will exit...");
+                }
+
                 // AFTER CONSTRUCT:
                 // region mask (move from regioninfo to here to save some params) (DISABLED)
                 /*
