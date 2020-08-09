@@ -138,10 +138,12 @@ namespace MicroUniverse {
         public void GenerateKaleidoTex() {
             Material blitMat = new Material(blitMaskShader);
             blitMat.SetTexture("_MaskTex", maskTex);
-            RenderTexture rt = new RenderTexture(maskTex.width, maskTex.height, 0);
+            RenderTexture rt = RenderTexture.GetTemporary(maskTex.width, maskTex.height, 0);
+            RenderTexture prevRT = RenderTexture.active;
             Graphics.Blit(painter.GetTexture(), rt, blitMat);
             GameManager.Instance.KaleidoTex = Util.RT2Tex(rt);
-            rt.Release();
+            RenderTexture.active = prevRT;
+            RenderTexture.ReleaseTemporary(rt);
         }
 
         public IEnumerator WaitAndSwitchState(float time, State newState) {
