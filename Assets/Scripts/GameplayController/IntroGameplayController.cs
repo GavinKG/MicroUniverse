@@ -135,18 +135,18 @@ namespace MicroUniverse {
             }
 
             tutorialImageUI.sprite = tutorialImages[currTutorial];
+
             if (currTutorial == 0) {
                 prevButtonGO.SetActive(false);
             } else {
                 prevButtonGO.SetActive(true);
-                if (currTutorial == tutorialImages.Count - 1) {
-                    nextButtonText.text = "> Exit <";
-                } else {
-                    nextButtonText.text = "Next >";
-                }
             }
 
-
+            if (currTutorial == tutorialImages.Count - 1) {
+                nextButtonText.text = "> Exit <";
+            } else {
+                nextButtonText.text = "Next >";
+            }
         }
 
         public void NextTutorial() {
