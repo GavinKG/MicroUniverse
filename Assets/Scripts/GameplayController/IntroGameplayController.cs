@@ -21,6 +21,15 @@ namespace MicroUniverse {
         public TMP_Text maximumPlayableRegionsText;
         public TMP_Text bossFightAfterLargeRegionText;
 
+        [Header("Game Overview")]
+        public List<Sprite> tutorialImages;
+        public Image tutorialImageUI;
+
+        public GameObject prevButtonGO;
+        public TMP_Text nextButtonText;
+
+
+
         public override void Begin() {
             storyUI.SetActive(false);
             mainUI.SetActive(true);
@@ -28,7 +37,7 @@ namespace MicroUniverse {
         }
 
         public override void Finish() {
-            
+
         }
 
 
@@ -87,12 +96,14 @@ namespace MicroUniverse {
             storyUI.SetActive(true);
             mainUI.SetActive(false);
             settingsUI.SetActive(false);
+            currTutorial = 0;
+            ShowTutorial();
         }
-        
+
         public void OnPlayClick() {
             SceneManager.LoadScene("Start");
         }
-        
+
 
         public void OnPreferSensorClick(bool value) {
             GameManager.Instance.preferSensorControl = value;
@@ -108,6 +119,44 @@ namespace MicroUniverse {
 
         public void OnShowDebugInfoClick(bool value) {
             GameManager.Instance.showDebugInfo = value;
+        }
+
+        int currTutorial = 0;
+        void ShowTutorial() {
+
+            if (tutorialImages.Count == 0) {
+                OnReturnClick();
+                return;
+            }
+
+            if (currTutorial >= tutorialImages.Count) {
+                OnReturnClick();
+                return;
+            }
+
+            tutorialImageUI.sprite = tutorialImages[currTutorial];
+            if (currTutorial == 0) {
+                prevButtonGO.SetActive(false);
+            } else {
+                prevButtonGO.SetActive(true);
+                if (currTutorial == tutorialImages.Count - 1) {
+                    nextButtonText.text = "> Exit <";
+                } else {
+                    nextButtonText.text = "Next >";
+                }
+            }
+
+
+        }
+
+        public void NextTutorial() {
+            ++currTutorial;
+            ShowTutorial();
+        }
+
+        public void PrevTutorial() {
+            --currTutorial;
+            ShowTutorial();
         }
     }
 
