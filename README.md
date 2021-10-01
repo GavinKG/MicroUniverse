@@ -8,7 +8,7 @@ A mobile minigame made under 20 days, focusing on runtime Procedural Content Gen
 
 游戏使用 Unity 引擎开发。
 
----
+
 
 ## 游戏演示视频
 
@@ -20,7 +20,7 @@ https://www.bilibili.com/video/BV1Zp4y1Y7wN
 
 ## 游戏剧情 & 玩法简介
 
-![](README/tutorial/幻灯片1.png)
+![]("README/tutorial/1.png")
 
 ![](README/tutorial/幻灯片2.png)
 
