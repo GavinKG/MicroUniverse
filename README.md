@@ -22,13 +22,13 @@ https://www.bilibili.com/video/BV1Zp4y1Y7wN
 
 ![]("README/tutorial/1.png")
 
-![](README/tutorial/幻灯片2.png)
+![](README/tutorial/2.png)
 
-![](README/tutorial/幻灯片3.png)
+![](README/tutorial/3.png)
 
-![](README/tutorial/幻灯片4.png)
+![](README/tutorial/4.png)
 
-![](README/tutorial/幻灯片5.png)
+![](README/tutorial/5.png)
 
 ## 使用到的动态 PCG 技术：
 
@@ -46,72 +46,72 @@ https://www.bilibili.com/video/BV1Zp4y1Y7wN
 
 #### (中期答辩)
 
-![](README/final/幻灯片1.jpg)
+![](README/final/1.jpg)
 
-![](README/midterm/幻灯片1.jpg)
+![](README/midterm/1.jpg)
 
-![](README/midterm/幻灯片2.jpg)
+![](README/midterm/2.jpg)
 
-![](README/midterm/幻灯片3.jpg)
+![](README/midterm/3.jpg)
 
-![](README/midterm/幻灯片4.jpg)
+![](README/midterm/4.jpg)
 
-![](README/midterm/幻灯片5.jpg)
+![](README/midterm/5.jpg)
 
-![](README/midterm/幻灯片6.jpg)
+![](README/midterm/6.jpg)
 
-![](README/midterm/幻灯片7.jpg)
+![](README/midterm/7.jpg)
 
-![](README/midterm/幻灯片8.jpg)
+![](README/midterm/8.jpg)
 
-![](README/midterm/幻灯片9.jpg)
+![](README/midterm/9.jpg)
 
-![](README/midterm/幻灯片10.jpg)
+![](README/midterm/10.jpg)
 
-![](README/midterm/幻灯片11.jpg)
+![](README/midterm/11.jpg)
 
-![](README/midterm/幻灯片12.jpg)
+![](README/midterm/12.jpg)
 
-![](README/midterm/幻灯片13.jpg)
+![](README/midterm/13.jpg)
 
 #### (最终答辩)
 
-![](README/final/幻灯片2.jpg)
+![](README/final/2.jpg)
 
-![](README/final/幻灯片3.jpg)
+![](README/final/3.jpg)
 
-![](README/final/幻灯片4.jpg)
+![](README/final/4.jpg)
 
-![](README/final/幻灯片5.jpg)
+![](README/final/5.jpg)
 
-![](README/final/幻灯片6.jpg)
+![](README/final/6.jpg)
 
-![](README/final/幻灯片7.jpg)
+![](README/final/7.jpg)
 
-![](README/final/幻灯片8.jpg)
+![](README/final/8.jpg)
 
-![](README/final/幻灯片9.jpg)
+![](README/final/9.jpg)
 
-![](README/final/幻灯片10.jpg)
+![](README/final/10.jpg)
 
-![](README/final/幻灯片11.jpg)
+![](README/final/11.jpg)
 
-![](README/final/幻灯片12.jpg)
+![](README/final/12.jpg)
 
-![](README/final/幻灯片13.jpg)
+![](README/final/13.jpg)
 
-![](README/final/幻灯片14.jpg)
+![](README/final/14.jpg)
 
-![](README/final/幻灯片15.jpg)
+![](README/final/15.jpg)
 
-![](README/final/幻灯片16.jpg)
+![](README/final/16.jpg)
 
-![](README/final/幻灯片17.jpg)
+![](README/final/17.jpg)
 
-![](README/final/幻灯片18.jpg)
+![](README/final/18.jpg)
 
-![](README/final/幻灯片19.jpg)
+![](README/final/19.jpg)
 
-![](README/final/幻灯片20.jpg)
+![](README/final/20.jpg)
 
 ![](README/final/幻灯片21.jpg)
